@@ -1,0 +1,1 @@
+This is an automobile sale app that brings sellers and buyers of automobiles together
