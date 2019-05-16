@@ -1,0 +1,256 @@
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: inherit;
+}
+
+  html {
+    font-size: 62.5%;
+}
+
+  body {
+  font-family: Arial, sans-serif;
+  box-sizing: border-box;
+  line-height: 1.7;
+  overflow: scroll;
+}
+  .nav-index {
+   display: flex;
+   justify-content: space-around;
+   align-items: center;
+   font-size: 1.5rem;
+   background: #260957;
+   height: 5rem;
+}
+  /* .nav-index > a, nav > ul > li > a {
+    margin-left: -10rem;
+    color: #B8BABB;
+    color: #A6BFE4;
+    color: #C6CEE4;
+  } */
+
+  .logo {
+    margin-right: auto;
+    margin-left: 8rem;
+  }
+
+  .nav-index a {
+   text-decoration: none;
+   color: #C6CEE4;
+}
+  .nav-index ul li {
+   display: inline;
+   margin-left: 3rem;
+}
+.nav-index ul li:last-child {
+  margin-right: 2rem;
+}
+
+.sign-up {
+  border-style: solid;
+  border-color: #fff;
+  border-width: 0.1rem;
+  padding: 0.7rem;
+  font-size: 1.2rem;
+  border-radius: 0.4rem;
+}
+
+svg {
+  background-color: transparent;
+  color: white;
+  margin-top: 0.5rem;
+  margin-right: 20rem;
+  cursor: pointer;
+}
+
+/* DROPDOWN */
+.none {
+  display: none;
+}
+.show {
+  display: block;
+}
+.arrow-up {
+  position: absolute;
+  margin-left: 113.5rem;
+  width: 0; 
+  height: 0; 
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  
+  border-bottom: 5px solid white;
+}
+.dropdown {
+  background-color: white;
+  position: absolute;
+  margin-left: 96rem;
+  margin-top: 0.5rem;
+  padding: 2rem;
+}
+.button-dropdown {
+  width: 14rem;
+  height: 3rem;
+  border: none;
+  border-radius: 0.3rem;
+  background-color: #A400B4;
+  color: #fff;
+}
+.para-dropdown {
+  color: black;
+  font-size: 1rem;
+}
+.nav-two {
+  background: #A400B4;
+
+}
+ 
+  .main-index div {
+   background-image: url("images/car2.jpg");
+   background-position: center;
+   background-size: cover;
+   height: 50rem;
+}
+
+.main-index h1 {
+  position: absolute;
+  margin-top: -30rem;
+  margin-left: 3rem;
+  color: white;
+}
+
+/* SIGN IN PAGE */
+.body-signin {
+}
+
+main.main-signin {
+  display: flex;
+  height: 60.6rem;
+}
+main.main-signin section:nth-child(1) {
+  flex-grow: 1;
+  align-items: stretch;
+  height: 100%;
+}
+
+main.main-signin section:nth-child(1) div {
+  background-image: url("images/cars3.webp");
+  background: linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("images/cars3.webp");
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  height: 100%;
+  padding-left: 3%;
+  padding-top: 3%: 
+  /* filter: contrast(30%); */
+  }
+  
+.main-signin section:nth-child(1) div > p {
+  padding-top: 30%;
+  color: white;
+  text-align: center;
+  font-size: 2rem;
+}
+.main-signin section:nth-child(1) div > a {
+  text-decoration: none;
+  text-decoration: none;
+  color: white;
+  opacity: 0.6;
+  display: block;
+  font-size: 1.2rem;
+  
+}
+.main-signin section:nth-child(1) div > h2 {
+  /*padding-top: 1rem;*/
+}
+
+main.main-signin section:nth-child(2) {
+  flex-grow: 0.5;
+  display: flex;
+}
+
+main.main-signin section:nth-child(2) div {
+  margin: auto;
+  align-items: center;
+}
+
+.fs-larger {
+  font-size: 2.2rem;
+}
+
+.fs-large {
+  font-size: 1.6rem;
+}
+.header {
+  margin-bottom: 5rem;
+}
+.header > h3 {
+  font-weight: 300;
+  /* opacity: ; */
+}
+.header > h4 {
+  font-weight: 200;
+  opacity: 0.5;
+}
+.p-signin {
+  margin-bottom: 0.3rem;
+  font-size: 1.2rem;
+}
+
+.p-signin-2 {
+    font-size: 1.2rem;
+}
+
+.p-signin-2 > span:nth-child(2) {
+  color: green;
+  margin-left: 15rem;
+  color: #D8681E;
+}
+
+.search-box {
+  padding: 1rem;
+  background-color: #ECEDEF;
+  border: none;
+  width: 35rem;
+}
+
+.search-box:hover {
+  background-color: #f9f9f9;
+}
+
+.search-box:not(:last-child) {
+  margin-bottom: 2rem;
+}
+
+.search-box::placeholder {
+  font-size: 1rem;
+}
+
+.input-button {
+  margin-top: -1rem;
+  padding: 0.9rem 2rem;
+  background-color: #D8681E;
+  border: none;
+  color: white;
+  display: block;
+  margin: auto;
+  border-radius: 0.5rem;
+  cursor: pointer;
+}
+
+.para-acc {
+  margin-top: 1.8rem;
+  text-align: center;
+}
+.para-acc a {
+  text-decoration: none;
+}
+
+.span-reg {
+  margin-left: 0.2rem;
+  color: #D8681E;
+}
+
+@media screen and (max-width: 425px){}
+@media screen and (min-width: 376px) and (max-width: 768px) {}
