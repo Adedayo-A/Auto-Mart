@@ -1,0 +1,26 @@
+  /* SELL CSS */
+  .sell-submit-button {
+  display: block;
+  margin-top: 2rem;
+  width: 15rem;
+  height: 3rem;
+  background-color: #A400B4;
+  color: rgba(255,255,255);
+  outline: none;
+  box-shadow: none;
+  border-style: solid;
+  border-width: 0.9px;
+  border-radius: 0.3rem;
+  }
+
+  .h-title-sell {
+      color: #532380;
+      font-size: 2rem;
+  }
+
+  fieldset {
+      border: 0;
+  }
+  .sect-sell {
+      margin-left: 4%;
+  }

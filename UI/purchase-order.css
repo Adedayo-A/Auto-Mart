@@ -1,0 +1,32 @@
+  /* PURCHASE ORDER */
+  fieldset {
+    border: none;
+  }
+  .section-purchase-order {
+      margin-left: 5%;
+  }
+
+  .purchase-order-main-heading {
+      color: #532380;
+      font-size: 2rem;
+  }
+  .width-input-po {
+      width: 15rem;
+  }
+
+  .p-po-btn button {
+    width: 13rem;
+    height: 3rem;
+    background-color:#A400B4;
+    color: white;
+  }
+  .p-po-pholder input {
+    width: 16rem;
+    height: 2rem;
+    
+    /* border-style: 1rem solid grey; */
+  }
+
+  .p-po-pholder input::placeholder {
+    text-align: center;
+  }
