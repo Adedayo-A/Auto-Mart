@@ -1,4 +1,8 @@
   /* SELL CSS */
+.sect-sell {
+    background: #efefef;
+}
+
   .backgrnd-image {
     background-image: url(images/sellcar.webp);
     background-position: center;
@@ -24,12 +28,51 @@
   .h-title-sell {
       color: #532380;
       font-size: 2rem;
+      margin-left: 10%;
+  }
+
+  h6 {
+    margin-left: 10%;
+    margin-bottom: 3rem;
+    color: #532380;
   }
 
   fieldset {
       border: 0;
-      margin-bottom: 2rem;
+      margin-bottom: 1.5rem;
   }
+
+  .placeholder::placeholder {
+    padding-left: 1rem;
+  }
+
   .sect-sell form {
       margin-left: 10%;
   }
+
+   select, input {
+    width: 350px;
+    height: 40px;
+    border-radius: 5px;
+    border: 0.9px solid #efefef;
+    box-shadow: none;
+    outline: none;
+    margin-bottom: 12px;
+    color:#532380;
+   }
+   
+   .contact-info, legend {
+    color: #532380;
+   }
+
+   legend {
+     font-size: 13px;
+     margin-bottom: 2rem;
+   }
+
+   textarea {
+    border-radius: 5px;
+    border: 0.9px solid #efefef;
+    box-shadow: none;
+    outline: none;
+   }
