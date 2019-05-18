@@ -87,7 +87,8 @@ svg {
   position: absolute;
   right: 100px;
   padding: 1rem;
-  border: 1px solid #efefef;
+  border: 1.5px solid #efefef;
+  animation: slide-bottom 2s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
 }
 .button-dropdown {
   width: 6rem;
@@ -104,11 +105,11 @@ svg {
 .para-dropdown {
   color: black;
   margin-top: 10px;
-  font-size: 13px;
+  font-size: 10px;
 }
 .para-dropdown a {
   text-decoration: none;
-  color: black;
+  /* color: black; */
 }
 
 .nav-two {
@@ -165,7 +166,7 @@ svg {
   display: block;
   width: 50px;
   height: 0.65rem;
-  background-color: #A400B4
+  background-color: #A400B4;
 }
 .line-two {
   position: absolute;
@@ -261,10 +262,6 @@ svg {
   border-radius: 5px;
   box-shadow: none;
 }
-
-.form-search {
-
-}
 .ul-search {
   background: #250858;
   color: white;
@@ -286,14 +283,8 @@ list-style: none;
 .div-sub-search-newness, .div-sub-search-usage {
   color: white;
 }
-.select-sub-search-newness {
-}
-
 .select-sub-search-make {
   background: lemonchiffon;
-}
-
-.select-sub-search-price {
 }
 .div-search-submit {
   display: inline-block;

@@ -93,10 +93,6 @@ transform: translateY(-1511px);
 z-index: 0;
 animation: slide-top 2s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
 }
-.section-result-index {
-  /* z-index: -1;
-  display: none; */
-}
 
 .hide{
   animation: slide-top 2s cubic-bezier(0.250, 0.460, 0.450, 0.940) both; 
