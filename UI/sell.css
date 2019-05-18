@@ -38,8 +38,8 @@
   }
 
   fieldset {
-      border: 0;
-      margin-bottom: 1.5rem;
+    border: 0;
+    margin-bottom: 1.5rem;
   }
 
   .placeholder::placeholder {
@@ -60,6 +60,12 @@
     margin-bottom: 12px;
     color:#532380;
    }
+
+   
+  input:focus::-webkit-input-placeholder { color:transparent; }
+  input:focus:-moz-placeholder { color:transparent; }
+  input:focus::-moz-placeholder { color:transparent; }
+  input:focus:-ms-input-placeholder { color:transparent; }
    
    .contact-info, legend {
     color: #532380;

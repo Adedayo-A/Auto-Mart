@@ -40,22 +40,21 @@
         <p class="para-dropdown"><a href="orders.html">My Orders</a></p> 
     </div>
     <section class="section-purchase-order">
+        <section class="backgrnd-image"></section>
         <h1 class="purchase-order-main-heading">PURCHASE ORDER FORM</h1>
         <form>
             <fieldset>
                     <label>Name:</label>
                     <div>
-                        <input type="text" name="buyer"  maxlength="35" required>
+                        <input type="text" name="buyer" maxlength="35" required placeholder="Name" />
                     </div>
             </fieldset>
             <fieldset>
                     <label>Email:</label>
                     <div>
-                        <input type="email" name="email_address">
+                        <input type="email" name="email_address" placeholder="Email Address" />
                     </div>
             </fieldset>
-        
-            <!-- <b class="b-po"> What are you looking for today? </b> -->
             <fieldset>
                     <label>Having a specific car in mind?</label>
                     <div>
@@ -86,7 +85,6 @@
                         </select>
                     </div>
             </fieldset>
-
             <fieldset>
                     <label>Usage</label>
                     <div>
@@ -98,7 +96,6 @@
                         </select>
                     </div>
             </fieldset>
-
             <fieldset>
                     <label>Price range</label>
                     <div>
@@ -111,16 +108,15 @@
                         </datalist>
                     </div>
             </fieldset>
-
             <fieldset>
                     <label>Other Requirements</label>
                     <div>
-                        <textarea name="comments" maxlength="500"></textarea>
+                        <textarea name="comments" rows="4" cols="50" maxlength="500"></textarea>
                     </div>
             </fieldset>
             <p class="p-po-btn"><button>Submit Order</button></p>
-            
         </form>
     </section>
+    <script src="script.js"></script>
 </body>
 </html>
