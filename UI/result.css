@@ -75,7 +75,7 @@
   margin-top: -0.5rem;
   display: flex;
 }
-.para-ext-card-stories > span:nth-child(1), .para-int-card-stories > span:nth-child(1), .para-status-card-stories > span:nth-child(1) {
+.para-int-card-stories > span:nth-child(1), .para-status-card-stories > span:nth-child(1) {
   margin-right: auto;
 }
 .para-ext-card-stories > span:nth-child(2), .para-int-card-stories > span:nth-child(2), .para-status-card-stories > span:nth-child(2) {
