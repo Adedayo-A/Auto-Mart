@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Auto Mart</title>
     <link rel="stylesheet" text="text/css" href="style.css" />
-    <link rel="stylesheet" text="text/css" href="result.css" />
+    <link rel="stylesheet" text="text/css" href="add.css" />
 </head>
 <body>
     <nav class="nav-index">
@@ -14,7 +14,7 @@
         <ul>
             <li><a href="sell.html">Post a car sale</a></li>
             <li><a href="purchase-order.html">Make a purchase order</a></li> 
-            <li><a href="#">Videos and Reviews</a></li> 
+            <li><a href="signinpage.html">Log in</a></li>
             <li class="sign-up"><a href="signinpage.html">Sign up</a></li>
         </ul>
         <svg class="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" id="avatar-line" width="2%" height="100%">
@@ -46,7 +46,7 @@
             <input type="checkbox" name="usage-of-cars" /> Used Cars <br>
             <input type="checkbox" name="usage-of-cars" /> New Cars <br>
         </div>
-        <div class="div-result-wrap">
+        <div class="div-result-wrap wrap-all">
             <div class="wrapper-result one">
                 <div class="card-pictures"></div>
                 <div class="card-stories">
@@ -54,10 +54,19 @@
                         <h4 class="first-heading-card-stories">NEW</h4>
                         <h3 class="heading-price-card-stories">2,000,000 naira</h3>
                         <h4 class="heading-make-card-stories">2019 Audi Q7</h4>
-                        <p class="para-ext-card-stories"><span>Ext. Color: Gray</span></p>
-                        <p class="para-int-card-stories"><span>Int. Color: Black</span><span>Transmission: Automatic</span></p>
+                        <p class="para-ext-card-stories"><span>Ext.Color: Gray</span></p>
+                        <p class="para-int-card-stories">
+                            <span class>Int.Color: Black</span>
+                            <span>Transmission: Automatic</span>
+                        </p>
                         <p class="para-contact-card-stories"><span>Davidson Motors (234)8132345678</span></p>
-                        <p class="para-status-card-stories"><span>Status:Sold</span><span><button>Edit</button></span></p>
+                        <p class="para-status-card-stories">
+                            <span>Status:Sold</span>
+                        </p>
+                        <p class="para-delete-card-stories">
+                            <button class="edit">Edit</button>
+                            <button>Delete my AD</button>
+                        </p>
                     </div>
                 </div>
             </div>
@@ -69,9 +78,18 @@
                         <h3 class="heading-price-card-stories">2,000,000 naira</h3>
                         <h4 class="heading-make-card-stories">2019 Audi Q7</h4>
                         <p class="para-ext-card-stories"><span>Ext. Color: Gray</span></p>
-                        <p class="para-int-card-stories"><span>Int. Color: Black</span><span>Transmission: Automatic</span></p>
+                        <p class="para-int-card-stories">
+                            <span>Int. Color: Black</span>
+                            <span>Transmission: Automatic</span>
+                        </p>
                         <p class="para-contact-card-stories"><span>Forda Motors (234)813456789</span></p>
-                        <p class="para-status-card-stories"><span>Status:Sold</span><span><button>Edit</button></span></p>
+                        <p class="para-status-card-stories">
+                            <span>Status:Sold</span>
+                        </p>
+                        <p class="para-delete-card-stories">
+                            <button class="edit">Edit</button>
+                            <button>Delete my AD</button>
+                        </p>
                     </div>
                 </div>
             </div>
@@ -83,9 +101,18 @@
                         <h3 class="heading-price-card-stories">2,000,000 naira</h3>
                         <h4 class="heading-make-card-stories">2019 Audi Q7</h4>
                         <p class="para-ext-card-stories"><span>Ext. Color: Gray</span></p>
-                        <p class="para-int-card-stories"><span>Int. Color: Black</span><span>Transmission: Automatic</span></p>
+                        <p class="para-int-card-stories">
+                            <span>Int. Color: Black</span>
+                            <span>Transmission: Automatic</span>
+                        </p>
                         <p class="para-contact-card-stories"><span>Bolly Motors (234)813456789</span></p>
-                        <p class="para-status-card-stories"><span>Status:Sold</span><span><button>Edit</button></span></p>
+                        <p class="para-status-card-stories">
+                            <span>Status:Sold</span>
+                        </p>
+                        <p class="para-delete-card-stories">
+                            <button class="edit">Edit</button>
+                            <button>Delete my AD</button>
+                        </p>
                     </div>
                 </div>
             </div>
@@ -97,25 +124,48 @@
                         <h3 class="heading-price-card-stories">2,000,000 naira</h3>
                         <h4 class="heading-make-card-stories">2019 Audi Q7</h4>
                         <p class="para-ext-card-stories"><span>Ext. Color: Gray</span></p>
-                        <p class="para-int-card-stories"><span>Int. Color: Black</span><span>Transmission: Automatic</span></p>
+                        <p class="para-int-card-stories">
+                            <span>Int. Color: Black</span>
+                            <span>Transmission: Automatic</span>
+                        </p>
                         <p class="para-contact-card-stories"><span>Forda Motors (234)813456789</span></p>
-                        <p class="para-status-card-stories"><span>Status:Unsold</span><span><button>Edit</button></span></p>
+                        <p class="para-status-card-stories">
+                            <span>Status:Unsold</span>
+                        </p>
+                        <p class="para-delete-card-stories">
+                            <button class="edit">Edit</button>
+                            <button>Delete my AD</button>
+                        </p>
                     </div>
                 </div>
             </div>
         </div>
     </section>
-    <form class="hid" id="hide">
-        <span class="close">x</span>
-        <div>
-            <label>Details about the Ad</label>
-            <div>
-                <textarea name="comments" maxlength="1000" class="text-area"></textarea>
-            </div>
-            <p>Thank you for reporting this problem</p>
-        </div>
-    </form>
 
+        <div class="wrapper-result four edit-pop-up">
+            <div class="card-pictures"></div>
+            <div class="card-stories">
+                <div class="div-inside-card">
+                    <h4 class="first-heading-card-stories">USED</h4>
+                    <h3 class="heading-price-card-stories">2,000,000 naira</h3>
+                    <h4 class="heading-make-card-stories">2019 Audi Q7</h4>
+                    <p class="para-ext-card-stories"><span>Ext. Color: Gray</span></p>
+                    <p class="para-int-card-stories">
+                        <span>Int. Color: Black</span>
+                        <span>Transmission: Automatic</span>
+                    </p>
+                    <p class="para-contact-card-stories"><span>Forda Motors (234)813456789</span></p>
+                    <p class="para-status-card-stories">
+                        <span>Status:Unsold</span>
+                    </p>
+                    <p class="para-delete-card-stories">
+                        <button class="edit">Edit</button>
+                        <button>Delete my AD</button>
+                    </p>
+                </div>
+            </div>
+        </div>
+\
     <script src="script.js"></script>
 </body>
 </html>
