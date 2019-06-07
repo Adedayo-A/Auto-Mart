@@ -1,0 +1,22 @@
+{
+  "name": "auto-mart",
+  "version": "1.0.0",
+  "description": "A car app that connects car sellers to prospective buyers",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Adedayo-A/Auto_Mart.git"
+  },
+  "author": "Adedayo",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Adedayo-A/Auto_Mart/issues"
+  },
+  "homepage": "https://github.com/Adedayo-A/Auto_Mart#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
