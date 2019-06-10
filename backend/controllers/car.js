@@ -20,6 +20,7 @@ class Controllers {
           res.status(400).json({ msg: `We could not find ${req.query.status} cars with  within the price range of ${req.query.min_price} and ${req.query.max_price}`})
       }
     } 
+    
     if(req.query.state && req.query.status){
       const foundState = allCars.some(car => car.state === req.query.state);
       if(foundState) {
@@ -35,6 +36,7 @@ class Controllers {
           res.status(400).json({ msg: `No car was found with the status of ${req.query.status}`})
       }
     }  
+    
     if(req.query.status){
       const found = allCars.some(car => car.status === req.query.status);
       if(found) {
@@ -44,6 +46,7 @@ class Controllers {
           res.status(400).json({ msg: `No car was found with the status of ${req.query.status}`})
       }
     }
+    
     if(req.query.body_type){
       const foundBodyType = allCars.some(car => car.body_type === req.query.body_type);
       if(foundBodyType) {
@@ -53,6 +56,17 @@ class Controllers {
           res.status(400).json({ msg: `No car was found with the body_type of ${req.query.body_type}`})
       }
     }
+
+    if(req.query.manufacturer){
+      const foundManufacturer = allCars.some(car => car.manufacturer === req.query.manufacturer);
+      if(foundManufacturer) {
+        allCars = allCars.filter(car => car.manufacturer === req.query.manufacturer);
+        res.status(200).json(allCars);
+      } else {
+          res.status(400).json({ msg: `No car was found with the make of ${req.query.manufacturer}`})
+      }
+    }
+
     res.status(200).json(cars)
   }
   static getCar(req,res) {
