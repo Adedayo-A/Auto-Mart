@@ -1,0 +1,80 @@
+const cars = require('../db/Cars.js');
+
+class Controllers {
+    // GET REQUESTS
+  static getCars(req,res) {
+    console.log(req.query);
+    let allCars = cars;
+    if(req.query.min_price && req.query.max_price && req.query.status){
+      const foundStatus = allCars.some(car => car.status === req.query.status);
+      if(foundStatus) {
+        allCars = allCars.filter(availableCar => availableCar.status === req.query.status);
+      } else {
+        res.status(400).json({ msg: `No car with the status of ${req.query.status}`})
+      }
+      const foundPrice = allCars.some(car => car.price >= parseInt(req.query.min_price) && car.price <= parseInt(req.query.max_price));
+      if(foundPrice) {
+        allCars = allCars.filter(car => car.price >= parseInt(req.query.min_price) && car.price <= parseInt(req.query.max_price))
+        res.status(200).json(allCars)
+      } else {
+          res.status(400).json({ msg: `We could not find ${req.query.status} cars with  within the price range of ${req.query.min_price} and ${req.query.max_price}`})
+      }
+    } 
+    if(req.query.state && req.query.status){
+      const foundState = allCars.some(car => car.state === req.query.state);
+      if(foundState) {
+        allCars = allCars.filter(car => car.state === req.query.state);
+      } else {
+          res.status(400).json({ msg: `No car with the state of ${req.query.state}`})
+      }
+      const foundStatus = allCars.some(car => car.status === req.query.status);
+      if(foundStatus) {
+        allCars = allCars.filter(car => car.status === req.query.status);
+        res.status(200).json(allCars);
+      } else {
+          res.status(400).json({ msg: `No car was found with the status of ${req.query.status}`})
+      }
+    }  
+    if(req.query.status){
+      const found = allCars.some(car => car.status === req.query.status);
+      if(found) {
+        allCars = allCars.filter(car => car.status === req.query.status);
+        res.status(200).json(allCars);
+      } else {
+          res.status(400).json({ msg: `No car was found with the status of ${req.query.status}`})
+      }
+    }
+    if(req.query.body_type){
+      const foundBodyType = allCars.some(car => car.body_type === req.query.body_type);
+      if(foundBodyType) {
+        allCars = allCars.filter(car => car.body_type === req.query.body_type);
+        res.status(200).json(allCars);
+      } else {
+          res.status(400).json({ msg: `No car was found with the body_type of ${req.query.body_type}`})
+      }
+    }
+    res.status(200).json(cars)
+  }
+  static getCar(req,res) {
+    const found = cars.some(car => car.id === parseInt(req.params.id));
+    if(found) {
+      const requestedCar = cars.filter(car => car.id === parseInt(req.params.id));
+      res.status(200).json(requestedCar);
+    } else {
+      res.status(400).json({ msg: `No car was found with the id of ${req.params.id}`})
+    }
+  }
+  static getDate(req,res) {
+    const found = cars.some(car => car.created_on === parseInt(req.params.created_on));
+    if(found) {
+      const requestedCar = cars.filter(car => car.created_on === parseInt(req.params.created_on));
+      res.status(200).json(requestedCar);
+    } else {
+      res.status(400).json({ msg: `No car was found with the date creation of ${req.params.created_on}`})
+    }
+  }
+}
+
+
+
+module.exports = Controllers;
