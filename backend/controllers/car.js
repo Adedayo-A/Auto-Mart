@@ -64,15 +64,6 @@ class Controllers {
       res.status(400).json({ msg: `No car was found with the id of ${req.params.id}`})
     }
   }
-  static getDate(req,res) {
-    const found = cars.some(car => car.created_on === parseInt(req.params.created_on));
-    if(found) {
-      const requestedCar = cars.filter(car => car.created_on === parseInt(req.params.created_on));
-      res.status(200).json(requestedCar);
-    } else {
-      res.status(400).json({ msg: `No car was found with the date creation of ${req.params.created_on}`})
-    }
-  }
 }
 
 
