@@ -8,7 +8,7 @@ const router = express.Router();
   
     // app.post('/api/v1/cars', controllers.addCars)
     // app.put('/api/v1/cars/:id', controllers.modifySaleOrder)
-    // app.delete('/api/v1/cars/:id', controllers.deleteSaleOder)
+  
   
 
 module.exports = router;
