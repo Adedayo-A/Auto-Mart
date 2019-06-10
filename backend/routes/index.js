@@ -11,10 +11,6 @@ const router = express.Router();
     // app.delete('/api/v1/cars/:id', controllers.deleteSaleOder)
     // app.get('/api/v1/cars/:status', controllers.getAllUnsoldCars);
     // app.get('/api/v1/cars/:priceRange', controllers.getCarsByPriceRange);
-    // router.get('/', book_controller.index);
-    
-// module.exports = (e) => {
-//      app.get('/api/v1/car/', controllers.getCars);
-// }
+    // router.get('/', book_controller.index)
 
 module.exports = router;
