@@ -3,7 +3,6 @@ const cars = require('../db/Cars.js');
 class Controllers {
     // GET REQUESTS
   static getCars(req,res) {
-    console.log(req.query);
     let allCars = cars;
     if(req.query.min_price && req.query.max_price && req.query.status){
       const foundStatus = allCars.some(car => car.status === req.query.status);
