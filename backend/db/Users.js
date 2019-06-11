@@ -1,38 +1,14 @@
+/* eslint-disable linebreak-style */
 const users = [
-    {   ​
-    "id":​ Integer​, 
-    "email":​ String​, 
-    ​"first_name":​ String​,
-    ​"last_name":​ ​String​,
-    "password":​ ​String​,
-    "address":​ ​String​, 
-    "is_admin": ​Boolean​
-    },
-    {
-    "id":​ Integer​, 
-    "email":​ String​, 
-    ​"first_name":​ String​,
-    ​"last_name":​ ​String​,
-    "password":​ ​String​,
-    "address":​ ​String​, 
-    "is_admin": ​Boolean​
-    },
-    {
-    "id":​ Integer​, 
-    "email":​ String​, 
-    ​"first_name":​ String​,
-    ​"last_name":​ ​String​,
-    "password":​ ​String​,
-    "address":​ ​String​, 
-    "is_admin": ​Boolean​
-    },
-    {
-    "id":​ Integer​, 
-    "email":​ String​, 
-    ​"first_name":​ String​,
-    ​"last_name":​ ​String​,
-    "password":​ ​String​,
-    "address":​ ​String​, 
-    "is_admin": ​Boolean​
-    }
-]
+  {
+    id: 1,
+    email: 'dayo@gmail.com',
+    first_name: 'Dayo',
+    last_name: 'Ade',
+    password: 12345,
+    address: '10, Ikeja, Lagos',
+    is_admin: true,
+  },
+];
+
+module.exports = users;

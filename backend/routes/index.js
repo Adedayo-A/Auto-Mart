@@ -1,8 +1,17 @@
-const controllers = require('../controllers/car.js')
 const express = require('express');
+const carControllers = require('../controllers/cars.js');
+const userControllers = require('../controllers/users.js');
+const tokenAuth = require('../middlewares/user');
+
 const router = express.Router();
 
-router.get('/api/v1/car/', controllers.getCars);
-router.get('/api/v1/car/:id', controllers.getCar);  
+// CARS API FUNCTIONS
+router.get('/api/v1/car/', carControllers.getCars);
+router.get('/api/v1/car/:id', carControllers.getCar);
+
+// USERS API FUNCTIONS
+router.post('/api/v1/users/login', userControllers.verifyUser);
+router.post('/api/v1/users/createpost', tokenAuth, userControllers.protectedRoute);
+router.post('/api/v1/users/auth/signup', userControllers.signUp);
 
 module.exports = router;
