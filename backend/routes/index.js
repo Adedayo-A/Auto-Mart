@@ -12,7 +12,6 @@ router.get('/api/v1/car/:id', carControllers.getCar);
 // USERS API FUNCTIONS
 router.post('/api/v1/users/login', userControllers.verifyUser);
 router.post('/api/v1/users/createpost', tokenAuth, userControllers.protectedRoute);
-router.post('/api/v1/users/signup', userControllers.signUp);
-router.post('/api/v1/users/signin', userControllers.verifyUser);
+router.post('/api/v1/users/auth/signup', userControllers.signUp);
 
 module.exports = router;
