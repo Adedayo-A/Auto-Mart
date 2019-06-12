@@ -3,11 +3,11 @@ const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const route = require('./routes/index.js');
+
 const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-
 app.use(route);
 
 // Setup a default catch-all route that sends back a welcome message in JSON format.
