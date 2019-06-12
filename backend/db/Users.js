@@ -5,7 +5,7 @@ const users = [
     email: 'dayo@gmail.com',
     first_name: 'Dayo',
     last_name: 'Ade',
-    password: 12345,
+    password: 12346,
     address: '10, Ikeja, Lagos',
     is_admin: true,
   },
