@@ -28,6 +28,7 @@ const verifyUser = (req, res) => {
       res.status(200).json({
         message: 'Signed in succesfully',
         token,
+        verifiedUser,
       });
     });
   } else {
