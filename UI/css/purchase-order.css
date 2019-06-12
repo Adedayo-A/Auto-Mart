@@ -1,0 +1,229 @@
+/* PURCHASE ORDER */  
+
+@media screen and (max-width: 320px) {
+  
+  /****** PAGE AND BODY STYLING ***********/
+  *,
+  *::before,
+  *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: inherit;
+  }
+
+  body {
+    font-family: Arial, sans-serif;
+    box-sizing: border-box;
+    line-height: 1.7;
+    overflow: scroll;
+  }
+
+  /****** NAV STYLING ***********/
+    .nav {
+      display: flex;
+      font-size: 0.8rem;
+      background-color: #260957;
+      height: 3.3rem;
+      align-items: center;
+    }
+
+    ul {
+      display: none;
+    }
+
+    .logo {
+      text-decoration: none;
+      margin-left: 2%;
+      color: #C6CEE4;
+    }
+    
+    .none {
+      display: none;
+    }
+
+    /****** HAMBURGER MENU *******/
+    #nav-toggle { 
+        display: block;
+        position: absolute;
+        right: 2%;
+      }
+
+    #nav-toggle {
+      cursor: pointer;
+      padding: 10px 35px 16px 0px;
+      }
+
+    #nav-toggle span, #nav-toggle span:before, #nav-toggle span:after {
+      cursor: pointer;
+      border-radius: 1px;
+      height: 1px;
+      width: 25px;
+      background: white;
+      position: absolute;
+      display: block;
+      content: '';
+      background-color: #beb6cd;
+    }
+
+    #nav-toggle span:before {
+      top: -8px;
+    }
+    #nav-toggle span:after {
+      bottom: -8px;
+    }
+
+    #nav-toggle span, #nav-toggle span:before, #nav-toggle span:after {
+      transition: all 500ms ease-in-out;
+    }
+    #nav-toggle.active span {
+      background-color: transparent;
+    }
+    #nav-toggle.active span:before, #nav-toggle.active span:after {
+      top: 0;
+    }
+
+    #nav-toggle.active span:before {
+      transform: rotate(45deg);
+    }
+
+    #nav-toggle.active span:after {
+      transform: rotate(-45deg);
+    }
+
+    /**** RESPONSIVENESS TOGGLE ******/
+  .nav.responsive {
+    position: relative;
+  }
+
+  .nav.responsive #nav-toggle {
+    /* position: absolute;
+    right: 0;
+    top: 0; */
+  }
+
+  .nav.responsive ul {
+    position: absolute;
+    width: 10rem;
+    top: 96%;
+    left: 45%;
+    right: 3%;
+    padding-left: 1.5%;
+    padding-top: 1.5%;
+    padding-bottom: 0%;
+    display: block;
+    float: none;
+    z-index: 1;
+    border: 2px solid;
+    border-color: #727170;
+    border-color: rgba(0, 0, 0, 0.3);
+    list-style: none;
+  }
+
+  .nav.responsive ul li {
+    margin-left: 1rem;
+    cursor: pointer;
+    margin-bottom: 4%;
+  }
+
+  /* .nav.responsive ul li:not(:nth-last-child(2)) {
+    margin-bottom: 10%;
+  } */
+
+  .nav.responsive ul li:nth-last-child(2) {
+    /* margin-bottom: -10%; */
+  }
+
+  .nav.responsive ul li a {
+    color: white;
+    text-decoration: none;
+    font-size: 0.95rem;
+    opacity: 0.7;
+  }
+
+  .nav.responsive ul.svg {
+    display: none;
+  }
+
+  /******* NAV END ******/
+
+  .section-purchase-order {
+      background: #efefef;
+  }
+
+  .purchase-order-main-heading {
+      color: #532380;
+      font-size: 1.7rem;
+      margin-left: 10%;
+      margin-bottom: 3rem;
+  }
+
+  form {
+    margin-left: 10%;
+  }
+
+  .backgrnd-image {
+    background-image: url(images/sellcar.webp);
+    background-position: center;
+    background-size: cover;
+    height: 10rem;
+    margin-bottom: 1rem;
+  }
+
+  .backgrnd-image.responsive {
+    background-image: url(images/sellcar.webp);
+    background-position: center;
+    background-size: cover;
+    height: 10rem;
+    margin-bottom: 1rem;
+    z-index: 0;
+    filter: contrast(15%);
+  }
+
+  select, input {
+    width: 350px;
+    height: 40px;
+    border-radius: 5px;
+    border: 0.9px solid #efefef;
+    box-shadow: none;
+    outline: none;
+    margin-bottom: 12px;
+    color:#532380;
+   }
+
+   input::placeholder {
+    padding-left: 5%;
+   }
+
+    input:focus::-webkit-input-placeholder { color:transparent; }
+    input:focus:-moz-placeholder { color:transparent; }
+    input:focus::-moz-placeholder { color:transparent; }
+    input:focus:-ms-input-placeholder { color:transparent; }
+
+   fieldset {
+    border: none;
+    margin-bottom: 1rem;
+  }
+
+  textarea {
+    border-radius: 5px;
+    border: 0.9px solid #efefef;
+    box-shadow: none;
+    outline: none;
+  }
+
+  form button {
+    display: block;
+    margin-top: 2rem;
+    width: 15rem;
+    height: 3rem;
+    background-color: #A400B4;
+    color: rgba(255,255,255);
+    outline: none;
+    box-shadow: none;
+    border-style: solid;
+    border-width: 0.9px;
+    border-radius: 0.3rem;
+    cursor: pointer;
+  }
+
+}

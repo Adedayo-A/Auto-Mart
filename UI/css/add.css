@@ -1,0 +1,184 @@
+.section-result {
+    display: flex;
+    margin-left: 2rem;
+    margin-top: 2rem;
+}
+.filter-results {
+    /* background: #A400B4; */
+    width: 20rem;
+    flex-grow: 0.3;
+    margin-right: 1rem;
+}
+.div-result-wrap {
+    width: 55rem;
+    display: flex;
+    flex-direction: column;
+}
+.wrapper-result {
+    display: flex;
+    width: 52rem;
+}
+.wrapper-result > div {
+    margin-bottom: 2rem;    
+}
+.card-pictures {
+    width: 26rem;
+    height: 15rem;
+}
+.one {
+   background-image: url("images/car-result1.webp");
+   background-repeat: no-repeat;
+}
+.two {
+  background-image: url("images/car-result2.webp");
+  background-repeat: no-repeat;
+}
+.three {
+  background-image: url("images/car-result3.webp");
+  background-repeat: no-repeat;
+}
+.four {
+  background-image: url("images/car-result4.webp");
+  background-repeat: no-repeat;
+}
+.card-stories {
+    padding-left: 2rem;
+    display: flex;
+}
+.div-inside-card {
+  line-height: 38px;
+}
+.first-heading-card-stories {
+  font-weight:400;
+  font-size: 0.7rem;
+}
+.heading-price-card-stories {
+  margin-top: -1%;
+  font-size: 1rem;
+  font-weight: 550;
+  opacity: 0.6;
+}
+.heading-make-card-stories {
+  margin-top: -1%;
+  font-size: 1rem;
+  opacity: 0.6;
+}
+.para-ext-card-stories {
+  margin-top: -2.5%;
+  display: flex;
+}
+.para-int-card-stories {
+  display: flex;
+  margin-top: -2%;
+  justify-content: space-evenly;
+}
+.para-status-card-stories {
+  font-size: 0.9rem;
+  margin-top: -0.5rem;
+  display: flex;
+}
+
+ .para-int-card-stories > span:nth-child(2) {
+    margin-left: 3rem;
+}
+
+ .para-status-card-stories > button {
+    margin-left: 6rem;
+}
+
+.edit {
+    height: 1.5rem;
+    width: 2.5rem;
+    cursor: pointer;
+    margin-top: 0.5rem;
+    padding-top: .1rem;
+    border-radius: 3px;
+}
+.para-contact-card-stories {
+  margin-top: -2%;
+}
+
+.para-delete-card-stories {
+  margin-top: -1.5%;
+}
+
+.para-delete-card-stories > button {
+  border-radius: 5px;
+  box-shadow: none;
+  color: white;
+  border-style: solid;
+}
+
+.para-delete-card-stories > button:nth-child(1) {
+  background-color: blue;
+  border-color: blue;
+  margin-right: 10%;
+  width: 3.5rem;
+  height: 32px;
+  cursor: pointer;
+}
+
+.para-delete-card-stories > button:nth-child(2) {
+  width: 6rem;
+  height: 32px;
+  background: rgba(255, 0, 0, 0.8);
+  border-color: red;
+  cursor: pointer;
+}
+
+
+.hid {
+transform: translateY(-1511px);
+z-index: 0;
+animation: slide-top 2s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+}
+
+.hide-edit{ 
+  z-index: -2;
+}
+
+.show {
+margin-left: 30%; 
+width: 20rem;
+padding: 2rem;
+padding-top: 0;
+color: white;
+position: relative;
+transform: translateY(-1212px);
+/* transform: translateX(102px); */
+background-color: #f8f4ed;
+background-color: #334E61;
+opacity: 1;
+z-index: 4;
+animation: slide-bottom 2s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+}
+
+.show > div {
+  height: 10rem;
+}
+.show > p {
+  font-size: 0.8rem;
+}
+.show > label {
+  font-size: 1.2rem;
+  font-weight: 100;
+  opacity: 0.8;
+}
+.text-area {
+  margin-top: 1rem;
+  width: 15rem;
+  height: 7rem;
+}
+.show > h3 {
+  margin-left: 100%;
+  cursor: pointer;
+}
+
+.edit-pop-up {
+  transform: translate(24rem, -98rem);
+}
+
+.edit-pop-down {
+  transform: translate(24rem, 0rem);
+  animation: slide-bottom 2s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+}

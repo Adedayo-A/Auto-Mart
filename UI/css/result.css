@@ -1,0 +1,286 @@
+@media screen and (min-width: 768px) and (max-width: 2560px) {
+  
+    *,
+    *::before,
+    *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: inherit;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      box-sizing: border-box;
+      line-height: 1.7;
+      overflow: scroll;
+    }
+
+    .nav {
+      display: flex;
+      /* justify-content: space-around; */
+      align-items: center;
+      font-size: 13px;
+      background: #260957;
+      height: 38px;
+    }
+
+    .logo {
+        margin-left: 3%;
+        margin-right: auto;
+    }
+
+    .nav ul {
+      margin-right: 10%;
+    }
+
+    .nav a {
+      text-decoration: none;
+      color: #C6CEE4;
+    }
+
+    .nav ul li {
+      display: inline;
+      margin-left: 1.5rem;
+    }
+
+    .sign-up {
+      border-style: solid;
+      border-color: #fff;
+      border-width: 0.1rem;
+      padding: 5px;
+      font-size: 13px;
+      border-radius: 0.2rem;
+    }
+
+    svg {
+      background-color: transparent;
+      fill: white;
+      margin-top: 1px;
+      cursor: pointer;
+      display: none;
+    }
+
+    #nav-toggle {
+      display: none;
+    }
+
+    /* DROPDOWN */
+    .none {
+      display: none;
+    }
+    .show {
+      display: block;
+    }
+    .arrow-up {
+      position: absolute;
+      right: 160px;
+      top: 33px;
+      width: 0;
+      height: 0;
+      border-left: 5px solid transparent;
+      border-right: 5px solid transparent;
+      border-bottom: 5px solid white;
+    }
+    .dropdown {
+      background-color: white;
+      position: absolute;
+      right: 100px;
+      padding: 1rem;
+      border: 1.5px solid #efefef;
+      animation: slide-bottom 2s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+    }
+    .button-dropdown {
+      width: 6rem;
+      height: 1.5rem;
+      border: none;
+      border-radius: 0.3rem;
+      background-color: #A400B4;
+      color: #fff;
+    }
+
+    .button-dropdown a {
+      text-decoration: none;
+      color: white;
+    }
+    .para-dropdown {
+      color: black;
+      margin-top: 10px;
+      font-size: 10px;
+    }
+    .para-dropdown a {
+      text-decoration: none;
+      color: #A400B4;
+    }
+    /*******  NAV ENDS **********/
+
+    /****** SECTION BEGINS ******/
+    .section-result {
+        display: flex;
+        margin-left: 2rem;
+        margin-top: 2rem;
+    }
+    .filter-results {
+        /* background: #A400B4; */
+        width: 20rem;
+        flex-grow: 0.3;
+        margin-right: 1rem;
+    }
+    .div-result-wrap {
+        width: 55rem;
+        display: flex;
+        flex-direction: column;
+    }
+    .wrapper-result {
+        display: flex;
+        width: 52rem;
+    }
+    .wrapper-result > div {
+        margin-bottom: 2rem;    
+    }
+    .card-pictures {
+        width: 26rem;
+        height: 15rem;
+    }
+    .one {
+      background-image: url("images/car-result1.webp");
+      background-repeat: no-repeat;
+    }
+    .two {
+      background-image: url("images/car-result2.webp");
+      background-repeat: no-repeat;
+    }
+    .three {
+      background-image: url("images/car-result3.webp");
+      background-repeat: no-repeat;
+    }
+    .four {
+      background-image: url("images/car-result4.webp");
+      background-repeat: no-repeat;
+    }
+    .card-stories {
+        padding-left: 2rem;
+    }
+    .div-inside-card {
+      line-height: 40px;
+    }
+    .first-heading-card-stories {
+      font-weight:400;
+      font-size: 0.7rem;
+    }
+    .heading-price-card-stories {
+      margin-top: -1%;
+      font-size: 1rem;
+      font-weight: 550;
+      opacity: 0.6;
+    }
+    .heading-make-card-stories {
+      margin-top: -1%;
+      font-size: 1rem;
+      opacity: 0.6;
+    }
+    .para-ext-card-stories {
+      margin-top: -2.5%;
+      display: flex;
+    }
+    .para-int-card-stories {
+      display: flex;
+      margin-top: -2%;
+    }
+    .para-status-card-stories {
+      font-size: 0.9rem;
+      margin-top: -0.5rem;
+      display: flex;
+    }
+    .para-int-card-stories > span:nth-child(1), .para-status-card-stories > span:nth-child(1) {
+      margin-right: auto;
+    }
+    .para-ext-card-stories > span:nth-child(2), .para-int-card-stories > span:nth-child(2), .para-status-card-stories > span:nth-child(2) {
+      margin-right: 2rem;
+    }
+    .para-contact-card-stories {
+      margin-top: -2%;
+    }
+    .para-status-card-stories > span:nth-child(2) {
+      color: red;
+      cursor: pointer;
+    }
+
+    /****** REPORT FORM *****/
+    .hid {
+    transform: translateY(-1511px);
+    z-index: 0;
+    animation: slide-top 2s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+    }
+
+    .report-form {
+      transform: translate( 50px, -2710px);
+      /* z-index: 0; */
+    }
+
+    @-webkit-keyframes slide-down {
+      0% {
+        transform: translate(50px, -2710px);
+      }
+
+      100% {
+        transform: translate(20px, 60px);
+      }
+    }
+
+    @keyframes slide-down {
+      0% {
+        transform: translate(50px, -2710px);
+      }
+
+      100% {
+        transform: translate(20px, 60px);
+      }
+    }
+
+    .report-form.show {
+      /* transform: translate(20px, 60px); */
+      animation: slide-down 1s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+      width: 15rem;
+    }
+
+    .report-form.show.responsive {
+      z-index: 0;
+      filter: contrast(15%);
+      display: none;
+    }
+
+    .report-form.show div {
+      margin-left: 20%;
+    }
+
+    .report-form.show textarea {
+      border-style: solid;
+      border-width: 1.5px;
+      justify-content: space-around;
+    }
+
+    .report-form.show p { 
+      font-size: 13px;
+    }
+
+    .report-form.show .report-submit {
+      background-color: blueviolet;
+      color: rgba(255,255, 255, 0.9);
+      height: 1.5rem;
+      width: 4rem;
+      border: none;
+      margin-right: 0.5rem;
+    }
+
+    .report-form.show .report-close {
+      background-color: blueviolet;
+      color: rgba(255,255, 255, 0.9);
+      height: 1.5rem;
+      width: 4rem;
+      border: none;
+    }
+
+    .report-form.show .report-para-note {
+      margin-top: 1.4rem;
+    }
+  }
