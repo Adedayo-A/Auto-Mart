@@ -110,111 +110,11 @@
       text-decoration: none;
       color: #A400B4;
     }
-    div.background-img {
-      background-image: url("../../images/car2.jpg");
-      background-position: center;
-      background-size: cover;
-      background-repeat: no-repeat;
-      height: 25rem;
-    }
+    /**********NAV ENDED********/
     
-    /* SEARCH SECTION */
-    .section-search {
-      width:24rem;
-      margin: 0 auto;
-    }
+    /*********SIGN IN PAGE******/
     
-    .input-section-search {
-      display: inline-block;
-      width: 240px;
-      height: 37px;
-      padding: 5px;
-      border-color: white;
-      margin-bottom: 16px;
-      margin-top: 60px;
-      border-radius: 5px;
-      box-shadow: none;
-    }
-
-    .div-search-submit {
-      display: inline-block;
-    }
-
-    .input-search-submit {
-      width: 130px;
-      height: 37px;
-      border-radius: 5px;
-      background: #A400B4;
-      border-color: #A400B4;
-      box-shadow: none;
-      color: #efefef;
-      border-style: solid;
-    }
-
-    .wrapper-search {
-      display: flex;
-      margin-bottom: 1rem;
-      margin-left: -15px;
-    }
-
-    .wrapper-search > div {
-      margin-right: 10px;
-    }
-
-    .div-sub-search-newness, .div-sub-search-usage {
-      color: white;
-    }
-
-    select {
-      background: lemonchiffon;
-      padding: 4px;
-    }
-
-    .label-price {
-      font-size: 18px;
-      display: block;
-      color: #333333;
-      text-align: center;
-      margin-bottom: 5px;
-    }
-
-    .search-price {
-      width: 9rem;
-      padding: 5px;
-      border-radius: 2px;
-      box-shadow: none;
-      border-style: solid;
-      border-color: #fff;
-      margin-bottom: 15px;
-      background-color: lemonchiffon;
-    }
-
-    .search-price:not(:last-child) {
-      margin-right: 25px;
-    }
-
-    .main-index h1 {
-      margin-left: 4rem;
-      color: white;
-      font-style: italic;
-      font-size: 20px;
-      opacity: 0.4;
-    }
-
-    .none {
-      display: none;
-    }
-    .show {
-      display: block;
-    }
-}    
-
-
-
-/* SIGN IN PAGE */
-    /* SIGN IN PAGE */
-
-    /* .li-style {
+    .li-style {
       color: white;
       margin-right: 50px;
     }
@@ -248,12 +148,9 @@
       margin-top: -1.1rem;
       height: 2px;
       opacity: 0.2;
-    } */
+    }
 
-    /* .no-line {
-      display: none;
-    } */
-/* 
+ 
     .line {
       position: absolute;
       margin-left: -57px;
@@ -280,7 +177,7 @@
     select {
       padding: 7px;
       border-radius: 3px;
-    } */
+    }
 
 
     /* .log-in:hover + .line {
@@ -309,7 +206,7 @@
       display: block;
     } */
 
-    /* .p-signin-page {
+     .p-signin-page {
         font-weight: 600;
         font-size: 16px;
         opacity: 0.6;
@@ -373,4 +270,5 @@
     }
     .signup-link {
       text-decoration: none;
-    } */
+    }
+}

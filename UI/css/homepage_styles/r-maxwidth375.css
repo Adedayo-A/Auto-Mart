@@ -262,7 +262,12 @@
           border-style: solid;
           cursor: pointer;
         }
+
         .none {
+          display: none;
+        }
+        
+        .second-background-image {
           display: none;
         }
   }

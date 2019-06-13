@@ -94,12 +94,6 @@
       position: relative;
     }
 
-    .nav.responsive #nav-toggle {
-      /* position: absolute;
-      right: 0;
-      top: 0; */
-    }
-
     .nav.responsive ul {
       position: absolute;
       width: 10rem;
@@ -124,13 +118,6 @@
       margin-bottom: 4%;
     }
 
-    /* .nav.responsive ul li:not(:nth-last-child(2)) {
-      margin-bottom: 10%;
-    } */
-
-    .nav.responsive ul li:nth-last-child(2) {
-      /* margin-bottom: -10%; */
-    }
 
     .nav.responsive ul li a {
       color: white;
@@ -149,7 +136,7 @@
   }
 
     .backgrnd-image {
-      background-image: url(images/sellcar.webp);
+      background-image: url("../../images/sellcar.webp");
       background-position: center;
       background-size: cover;
       height: 10rem;
@@ -157,7 +144,7 @@
     }
     
     .backgrnd-image.responsive {
-      background-image: url(images/sellcar.webp);
+      background-image: url("../../images/sellcar.webp");
       background-position: center;
       background-size: cover;
       height: 10rem;

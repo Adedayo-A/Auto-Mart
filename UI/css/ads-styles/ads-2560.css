@@ -1,0 +1,199 @@
+@media screen and (min-width: 769px) and (max-width: 2560px) {
+    *,
+    *::before,
+    *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: inherit;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      box-sizing: border-box;
+      line-height: 1.7;
+      overflow: scroll;
+    }
+
+    .nav {
+      display: flex;
+      /* justify-content: space-around; */
+      align-items: center;
+      font-size: 13px;
+      background: #260957;
+      height: 38px;
+    }
+
+    .logo {
+        margin-left: 3%;
+        margin-right: auto;
+    }
+
+    .nav ul {
+      margin-right: 10%;
+    }
+
+    .nav a {
+      text-decoration: none;
+      color: #C6CEE4;
+    }
+
+    .nav ul li {
+      display: inline;
+      margin-left: 1.5rem;
+    }
+
+    .sign-up {
+      border-style: solid;
+      border-color: #fff;
+      border-width: 0.1rem;
+      padding: 5px;
+      font-size: 13px;
+      border-radius: 0.2rem;
+    }
+
+    svg {
+      background-color: transparent;
+      fill: white;
+      margin-top: 1px;
+      cursor: pointer;
+      display: none;
+    }
+
+    #nav-toggle {
+      display: none;
+    }
+
+    /* DROPDOWN */
+    .none {
+      display: none;
+    }
+    .show {
+      display: block;
+    }
+    .arrow-up {
+      position: absolute;
+      right: 160px;
+      top: 33px;
+      width: 0;
+      height: 0;
+      border-left: 5px solid transparent;
+      border-right: 5px solid transparent;
+      border-bottom: 5px solid white;
+    }
+    .dropdown {
+      background-color: white;
+      position: absolute;
+      right: 100px;
+      padding: 1rem;
+      border: 1.5px solid #efefef;
+      animation: slide-bottom 2s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+    }
+    .button-dropdown {
+      width: 6rem;
+      height: 1.5rem;
+      border: none;
+      border-radius: 0.3rem;
+      background-color: #A400B4;
+      color: #fff;
+    }
+
+    .button-dropdown a {
+      text-decoration: none;
+      color: white;
+    }
+    .para-dropdown {
+      color: black;
+      margin-top: 10px;
+      font-size: 10px;
+    }
+    .para-dropdown a {
+      text-decoration: none;
+      color: #A400B4;
+    }
+    /**********NAV ENDED********/
+
+    .sect-sell {
+        background: #efefef;
+    }
+
+    .backgrnd-image {
+        background-image: url(images/sellcar.webp);
+        background-position: center;
+        background-size: cover;
+        height: 10rem;
+        margin-bottom: 1rem;
+    }
+    
+    .sell-submit-button {
+    display: block;
+    margin-top: 2rem;
+    width: 15rem;
+    height: 3rem;
+    background-color: #A400B4;
+    color: rgba(255,255,255);
+    outline: none;
+    box-shadow: none;
+    border-style: solid;
+    border-width: 0.9px;
+    border-radius: 0.3rem;
+    cursor: pointer;
+    }
+
+    .h-title-sell {
+        color: #532380;
+        font-size: 2rem;
+        margin-left: 10%;
+    }
+
+    h6 {
+        margin-left: 10%;
+        margin-bottom: 3rem;
+        color: #532380;
+    }
+
+    fieldset {
+        border: 0;
+        margin-bottom: 1.5rem;
+    }
+
+    .placeholder::placeholder {
+        padding-left: 1rem;
+    }
+
+    .sect-sell form {
+        margin-left: 10%;
+    }
+
+    select, input {
+        width: 350px;
+        height: 40px;
+        border-radius: 5px;
+        border: 0.9px solid #efefef;
+        box-shadow: none;
+        outline: none;
+        margin-bottom: 12px;
+        color:#532380;
+    }
+
+    
+    input:focus::-webkit-input-placeholder { color:transparent; }
+    input:focus:-moz-placeholder { color:transparent; }
+    input:focus::-moz-placeholder { color:transparent; }
+    input:focus:-ms-input-placeholder { color:transparent; }
+    
+    .contact-info, legend {
+        color: #532380;
+    }
+
+    legend {
+        font-size: 13px;
+        margin-bottom: 2rem;
+    }
+
+    textarea {
+        border-radius: 5px;
+        border: 0.9px solid #efefef;
+        box-shadow: none;
+        outline: none;
+    }
+}

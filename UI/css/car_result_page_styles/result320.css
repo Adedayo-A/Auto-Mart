@@ -97,12 +97,6 @@
       position: relative;
     }
 
-    .nav.responsive #nav-toggle {
-      /* position: absolute;
-      right: 0;
-      top: 0; */
-    }
-
     .nav.responsive ul {
       position: absolute;
       width: 10rem;
@@ -159,11 +153,7 @@
 
     .filter-results {
         display: flex;
-        /* width: 20rem; */
-        /* flex-grow: 0.3; */
         margin-left: 1rem;
-        /* height: 3rem; */
-        /* justify-content: space-around; */
         align-items: center;
     }
 
@@ -199,7 +189,6 @@
     .wrapper-result {
         display: flex;
         flex-direction: column;
-        /* width: 52rem; */
         background: #334E61;
     }
 
@@ -212,13 +201,13 @@
     }
 
     .one {
-      background-image: url("images/car-result1.webp");
+      background-image: url("../../images/car-result1.webp");
       background-repeat: no-repeat;
       background-position: center top;
     }
 
     .one.responsive {
-      background-image: url("images/car-result1.webp");
+      background-image: url("../../images/car-result1.webp");
       background-repeat: no-repeat;
       background-position: center top;
       z-index: 0;
@@ -226,20 +215,20 @@
     }
 
     .two {
-      background-image: url("images/car-result2.webp");
+      background-image: url("../../images/car-result2.webp");
       background-repeat: no-repeat;
       background-position: center;
       background-position: center top;
     }
 
     .three {
-      background-image: url("images/car-result3.webp");
+      background-image: url("../../images/car-result3.webp");
       background-repeat: no-repeat;
       background-position: center top;
     }
 
     .four {
-      background-image: url("images/car-result4.webp");
+      background-image: url("../../images/car-result4.webp");
       background-repeat: no-repeat;
       background-position: center top;
     }

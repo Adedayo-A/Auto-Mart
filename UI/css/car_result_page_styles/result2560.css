@@ -142,19 +142,19 @@
         height: 15rem;
     }
     .one {
-      background-image: url("images/car-result1.webp");
+      background-image: url("../../images/car-result1.webp");
       background-repeat: no-repeat;
     }
     .two {
-      background-image: url("images/car-result2.webp");
+      background-image: url("../../images/car-result2.webp");
       background-repeat: no-repeat;
     }
     .three {
-      background-image: url("images/car-result3.webp");
+      background-image: url("../../images/car-result3.webp");
       background-repeat: no-repeat;
     }
     .four {
-      background-image: url("images/car-result4.webp");
+      background-image: url("../../images/car-result4.webp");
       background-repeat: no-repeat;
     }
     .card-stories {
