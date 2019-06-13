@@ -1,0 +1,220 @@
+@media screen and (min-width: 426px) and (max-width: 768px) {
+    *,
+    *::before,
+    *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: inherit;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      box-sizing: border-box;
+      line-height: 1.7;
+      overflow: scroll;
+    }
+
+    .nav {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      font-size: 9px;
+      background: #260957;
+      height: 38px;
+    }
+
+    .logo {
+        margin-left: 3%;
+    }
+
+    .nav a {
+      text-decoration: none;
+      color: #C6CEE4;
+    }
+
+    .nav ul li {
+      display: inline;
+      margin-left: 1.5rem;
+    }
+
+    .sign-up {
+      border-style: solid;
+      border-color: #fff;
+      border-width: 0.1rem;
+      padding: 5px;
+      border-radius: 0.2rem;
+    }
+
+    svg {
+      background-color: transparent;
+      fill: white;
+      margin-top: 1px;
+      cursor: pointer;
+      display: none;
+    }
+
+    #nav-toggle {
+      display: none;
+    }
+
+    /* DROPDOWN */
+    .none {
+      display: none;
+    }
+    .show {
+      display: block;
+    }
+    
+
+    div.background-img {
+      background-image: url("../../images/car2.jpg");
+      background-position: center;
+      background-size: cover;
+      height: 40rem;
+    }
+    /* SEARCH SECTION */
+    .section-search {
+      width: 10rem;
+      margin: 0 auto;
+    }
+    .input-section-search {
+      display: inline-block;
+      width: 250px;
+      padding: 10px;
+      border-color: white;
+      margin-bottom: 16px;
+      margin-left: -3rem;
+      margin-top: 60px;
+      border-radius: 5px;
+      box-shadow: none;
+    }
+    .ul-search {
+      background: #250858;
+      color: white;
+      display: flex;
+      justify-content: space-around;
+      margin-bottom: 1rem;
+      padding: 1rem;
+    }
+    .ul-search li {
+    list-style: none;
+    }
+    .wrapper-search {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 1rem;
+      /* margin-left: 40px; */
+    }
+    .wrapper-search > div:not(:last-child) {
+      margin-bottom: 20px;
+    }
+
+    .div-sub-search-usage {
+      margin-bottom: 0px;
+    }
+
+    
+    select {
+      background: lemonchiffon;
+    }
+
+    .div-sub-search-newness, .div-sub-search-usage {
+      color: white;
+    }
+
+    .div-sub-search-price {
+      margin-top: 0px;
+      margin-left: -50px;
+    }
+
+    .label-price {
+      font-size: 15px;
+      display: block;
+      color: #303030;
+      text-align: center;
+    }
+
+    .search-price {
+      width: 14rem;
+      padding: 5px;
+      border-radius: 2px;
+      box-shadow: none;
+      border-style: solid;
+      border-color: #fff;
+      margin-bottom: 15px;
+      background-color: lemonchiffon;
+    }
+
+    .main-index h1 {
+      color: white;
+      opacity: 0.5;
+      text-align: center;
+      font-size: 25px;
+      margin-top: 80px;
+      font-style: italic;
+    }
+
+    .div-search-submit {
+      position: absolute;
+      margin-top: 16rem;
+      margin-left: -3rem;
+    }
+    .input-search-submit {
+      width: 13rem;
+      height: 37px;
+      border-radius: 5px;
+      background: #A400B4;
+      border-color: #A400B4;
+      box-shadow: none;
+      color: #efefef;
+      border-style: solid;
+    }
+
+    .none {
+      display: none;
+    }
+    .show {
+      display: block;
+    }
+}    
+
+/* .arrow-up {
+      position: absolute;
+      right: 160px;
+      top: 33px;
+      width: 0;
+      height: 0;
+      border-left: 5px solid transparent;
+      border-right: 5px solid transparent;
+      border-bottom: 5px solid white;
+    }
+    .dropdown {
+      background-color: white;
+      position: absolute;
+      right: 100px;
+      padding: 1rem;
+      border: 1.5px solid #efefef;
+      animation: slide-bottom 2s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+    }
+    .button-dropdown {
+      width: 6rem;
+      height: 1.5rem;
+      border: none;
+      border-radius: 0.3rem;
+      background-color: #A400B4;
+      color: #fff;
+    }
+
+    .button-dropdown a {
+      text-decoration: none;
+      color: white;
+    }
+    .para-dropdown {
+      color: black;
+      margin-top: 10px;
+      font-size: 10px;
+    }
+    .para-dropdown a {
+      text-decoration: none;
+      color: #A400B4;
+    } */
