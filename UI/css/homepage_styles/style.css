@@ -1,0 +1,242 @@
+@media screen and (min-width: 769px) and (max-width: 2560px) {
+    *,
+    *::before,
+    *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: inherit;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      box-sizing: border-box;
+      line-height: 1.7;
+      overflow: scroll;
+    }
+
+    .nav {
+      display: flex;
+      /* justify-content: space-around; */
+      align-items: center;
+      font-size: 13px;
+      background: #260957;
+      height: 38px;
+    }
+
+    .logo {
+        margin-left: 3%;
+        margin-right: auto;
+    }
+
+    .nav ul {
+      margin-right: 10%;
+    }
+
+    .nav a {
+      text-decoration: none;
+      color: #C6CEE4;
+    }
+
+    .nav ul li {
+      display: inline;
+      margin-left: 1.5rem;
+    }
+
+    .sign-up {
+      border-style: solid;
+      border-color: #fff;
+      border-width: 0.1rem;
+      padding: 5px;
+      font-size: 13px;
+      border-radius: 0.2rem;
+    }
+
+    svg {
+      background-color: transparent;
+      fill: white;
+      margin-top: 1px;
+      cursor: pointer;
+      display: none;
+    }
+
+    #nav-toggle {
+      display: none;
+    }
+
+    /* DROPDOWN */
+    .none {
+      display: none;
+    }
+    .show {
+      display: block;
+    }
+    .arrow-up {
+      position: absolute;
+      right: 160px;
+      top: 33px;
+      width: 0;
+      height: 0;
+      border-left: 5px solid transparent;
+      border-right: 5px solid transparent;
+      border-bottom: 5px solid white;
+    }
+    .dropdown {
+      background-color: white;
+      position: absolute;
+      right: 100px;
+      padding: 1rem;
+      border: 1.5px solid #efefef;
+      animation: slide-bottom 2s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+    }
+    .button-dropdown {
+      width: 6rem;
+      height: 1.5rem;
+      border: none;
+      border-radius: 0.3rem;
+      background-color: #A400B4;
+      color: #fff;
+    }
+
+    .button-dropdown a {
+      text-decoration: none;
+      color: white;
+    }
+    .para-dropdown {
+      color: black;
+      margin-top: 10px;
+      font-size: 10px;
+    }
+    .para-dropdown a {
+      text-decoration: none;
+      color: #A400B4;
+    }
+    /**********NAV ENDED********/
+
+    /**********BACKGROUND IMAGE********/
+
+    div.background-img {
+      background-image: url("../../images/car2.jpg");
+      background-position: center;
+      background-size: cover;
+      background-repeat: no-repeat;
+      height: 25rem;
+    }
+    
+    /* SEARCH SECTION */
+    .section-search {
+      width: 32rem;
+      margin: 0 auto;
+    }
+    
+    .input-section-search {
+      display: inline-block;
+      width: 300px;
+      height: 37px;
+      padding: 5px;
+      border-color: white;
+      margin-bottom: 36px;
+      margin-top: 80px;
+      border-radius: 5px;
+      box-shadow: none;
+    }
+
+    .div-search-submit {
+      display: inline-block;
+    }
+
+    .input-search-submit {
+      width: 130px;
+      height: 37px;
+      border-radius: 5px;
+      background: #A400B4;
+      border-color: #A400B4;
+      box-shadow: none;
+      color: #efefef;
+      border-style: solid;
+    }
+
+    .wrapper-search {
+      display: flex;
+      /* margin-top: 3rem; */
+      margin-bottom: 1rem;
+      margin-left: -15px;
+    }
+
+    .wrapper-search > div {
+      margin-right: 10px;
+    }
+
+    .div-sub-search-newness, .div-sub-search-usage {
+      color: white;
+    }
+
+    select {
+      background: lemonchiffon;
+      padding: 4px;
+    }
+
+    .div-sub-search-price {
+      margin-top: 40px;
+    }
+
+    .label-price {
+      font-size: 18px;
+      display: block;
+      color: #333333;
+      text-align: center;
+      margin-bottom: 5px;
+    }
+
+    .search-price {
+      width: 14rem;
+      padding: 5px;
+      border-radius: 2px;
+      box-shadow: none;
+      border-style: solid;
+      border-color: #fff;
+      margin-bottom: 15px;
+      background-color: lemonchiffon;
+    }
+
+    .search-price:not(:last-child) {
+      margin-right: 25px;
+    }
+
+    .main-index h1 {
+      margin-left: 4rem;
+      color: white;
+      font-style: italic;
+      font-size: 20px;
+      opacity: 0.4;
+    }
+
+    .none {
+      display: none;
+    }
+    .show {
+      display: block;
+    }
+
+    .second-img {
+      background-image: url("../../images/multiple_cars.webp");
+      background-position: center;
+      background-size: cover;
+      background-repeat: no-repeat;
+      height: 12rem;
+      /* filter: contrast(30%); */
+    }
+
+    .below_text {
+      text-align: center;
+      margin-top: 30px;
+      opacity: 0.5;
+    }
+
+    .below_p {
+      margin-top: -5px;
+      text-align: center;
+      opacity: 0.5;
+      font-weight: 600;
+      font-size: 14px;
+    }
+}

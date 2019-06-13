@@ -1,0 +1,149 @@
+ @media screen and (min-width: 768px) and (max-width: 900px) {
+  
+  /**** NAVIGATION ****/
+  .nav {
+      align-items: center;
+      font-size: 12px;
+      background: #260957;
+      height: 34px;
+  }
+  
+  .nav a {
+      text-decoration: none;
+      color: #C6CEE4;
+  }
+
+  
+  .nav ul li {
+      display: inline;
+      margin-left: 1.5rem;
+  }
+  
+  .nav ul li:last-child {
+    margin-right: 1rem;
+  }
+  
+  .sign-up {
+    border-style: solid;
+    border-color: #fff;
+    border-width: 0.1rem;
+    padding: 5px;
+    font-size: 13px;
+    border-radius: 0.2rem;
+  }
+  
+  svg {
+    background-color: transparent;
+    fill: white;
+    margin-top: 1px;
+    margin-right: 1rem;
+    cursor: pointer;
+  }
+  
+  #nav-toggle {
+    display: block;
+  }
+
+  /* DROPDOWN */
+  .none {
+    display: none;
+  }
+  .show {
+    display: block;
+  }
+
+  /***** SEARCH SECTION *****/
+  .section-search {
+    position: absolute;
+    top: 30%;
+    left: 30%;
+  }
+  .div-search {
+    width: 50rem;
+  }
+  .input-section-search {
+    display: inline-block;
+    width: 500px;
+    max-width: 80%;
+    padding: 10px;
+    border-color: white;
+    margin-bottom: 16px;
+    border-radius: 5px;
+    box-shadow: none;
+  }
+  .ul-search {
+    background: #250858;
+    color: white;
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 1rem;
+    padding: 1rem;
+  }
+  .ul-search li {
+  list-style: none;
+  }
+  .wrapper-search {
+    display: flex;
+    margin-bottom: 1rem;
+  }
+  .wrapper-search > div {
+    margin-right: 10px;
+  }
+  .div-sub-search-newness, .div-sub-search-usage {
+    color: white;
+  }
+  .select-sub-search-make {
+    background: lemonchiffon;
+  }
+  .div-search-submit {
+    display: inline-block;
+  }
+  .input-search-submit {
+    width: 10rem;
+    height: 37px;
+    border-radius: 5px;
+    background: #A400B4;
+    border-color: #A400B4;
+    box-shadow: none;
+    color: #efefef;
+    border-style: solid;
+  }
+}
+
+
+.show {
+  margin-left: 30%; 
+  width: 20rem;
+  padding: 2rem;
+  padding-top: 0;
+  color: white;
+  position: relative;
+  transform: translateY(-1212px);
+  /* transform: translateX(102px); */
+  background-color: #f8f4ed;
+  background-color: #334E61;
+  opacity: 1;
+  z-index: 4;
+  animation: slide-bottom 2s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+}
+
+.show > div {
+  height: 10rem;
+}
+.show > p {
+  font-size: 0.8rem;
+}
+.show > label {
+  font-size: 1.2rem;
+  font-weight: 100;
+  opacity: 0.8;
+}
+.text-area {
+  margin-top: 1rem;
+  width: 15rem;
+  height: 7rem;
+}
+.show > h3 {
+  margin-left: 100%;
+  cursor: pointer;
+}
