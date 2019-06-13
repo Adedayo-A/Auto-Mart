@@ -1,4 +1,4 @@
-@media screen and (min-width: 768px) and (max-width: 2560px) {
+@media screen and (min-width: 769px) and (max-width: 2560px) {
     *,
     *::before,
     *::after {
@@ -110,21 +110,10 @@
       text-decoration: none;
       color: #A400B4;
     }
-    .main-index div {
-      background-image: url("images/car2.jpg");
-      background-position: center;
-      background-size: cover;
-      height: 25rem;
-    }
-    .main-index h1 {
-      margin-top: -9rem;
-      margin-left: 4rem;
-      color: white;
-    }
-
-    /* SIGN IN PAGE */
-    /* SIGN IN PAGE */
-
+    /**********NAV ENDED********/
+    
+    /*********SIGN IN PAGE******/
+    
     .li-style {
       color: white;
       margin-right: 50px;
@@ -161,10 +150,7 @@
       opacity: 0.2;
     }
 
-    /* .no-line {
-      display: none;
-    } */
-
+ 
     .line {
       position: absolute;
       margin-left: -57px;
@@ -220,7 +206,7 @@
       display: block;
     } */
 
-    .p-signin-page {
+     .p-signin-page {
         font-weight: 600;
         font-size: 16px;
         opacity: 0.6;
@@ -285,71 +271,4 @@
     .signup-link {
       text-decoration: none;
     }
-
-    /* SEARCH SECTION */
-    .section-search {
-      position: absolute;
-      top: 30%;
-      left: 30%;
-    }
-    .div-search {
-      width: 50rem;
-    }
-    .input-section-search {
-      display: inline-block;
-      width: 500px;
-      max-width: 80%;
-      padding: 10px;
-      border-color: white;
-      margin-bottom: 16px;
-      border-radius: 5px;
-      box-shadow: none;
-    }
-    .ul-search {
-      background: #250858;
-      color: white;
-      display: flex;
-      justify-content: space-around;
-      margin-bottom: 1rem;
-      padding: 1rem;
-    }
-    .ul-search li {
-    list-style: none;
-    }
-    .wrapper-search {
-      display: flex;
-      margin-bottom: 1rem;
-    }
-    .wrapper-search > div {
-      margin-right: 10px;
-    }
-    .div-sub-search-newness, .div-sub-search-usage {
-      color: white;
-    }
-    .label-sub-search-usage, .label-sub-search-newness {
-      display: none;
-    }
-    .select-sub-search-make {
-      background: lemonchiffon;
-    }
-    .div-search-submit {
-      display: inline-block;
-    }
-    .input-search-submit {
-      width: 10rem;
-      height: 37px;
-      border-radius: 5px;
-      background: #A400B4;
-      border-color: #A400B4;
-      box-shadow: none;
-      color: #efefef;
-      border-style: solid;
-    }
-
-    .none {
-      display: none;
-    }
-    .show {
-      display: block;
-    }
-}    
+}
