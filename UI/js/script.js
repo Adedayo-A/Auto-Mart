@@ -1,4 +1,4 @@
-const svg = document.querySelector('.svg');
+const svg = document.querySelector('.svg-img');
 const arrowUp = document.querySelector('.arrow-up');
 const dropDown = document.querySelector('.dropdown');
 const bodySignup = document.querySelector('.body-signup');

@@ -1,5 +1,4 @@
 @media screen and (min-width: 768px) and (max-width: 2560px) {
-  
     *,
     *::before,
     *::after {
@@ -17,7 +16,6 @@
 
     .nav {
       display: flex;
-      /* justify-content: space-around; */
       align-items: center;
       font-size: 13px;
       background: #260957;
@@ -29,16 +27,12 @@
         margin-right: auto;
     }
 
-    .nav ul {
-      margin-right: 10%;
-    }
-
     .nav a {
       text-decoration: none;
       color: #C6CEE4;
     }
 
-    .nav ul li {
+    .nav ul.nav-links li {
       display: inline;
       margin-left: 1.5rem;
     }
@@ -50,14 +44,17 @@
       padding: 5px;
       font-size: 13px;
       border-radius: 0.2rem;
+      margin-right: 2rem;
     }
 
-    svg {
-      background-color: transparent;
-      fill: white;
-      margin-top: 1px;
+    .nav ul.svg {
+      margin-right: 20px;
+    }
+
+    .nav .svg .img-svg {
       cursor: pointer;
-      display: none;
+      width: 25px;
+      margin-top: 5px;
     }
 
     #nav-toggle {
@@ -215,6 +212,7 @@
     .report-form {
       transform: translate( 50px, -2710px);
       /* z-index: 0; */
+      display: none;
     }
 
     @-webkit-keyframes slide-down {
@@ -239,7 +237,7 @@
 
     .report-form.show {
       /* transform: translate(20px, 60px); */
-      animation: slide-down 1s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+      /* animation: slide-down 1s cubic-bezier(0.250, 0.460, 0.450, 0.940) both; */
       width: 15rem;
     }
 
