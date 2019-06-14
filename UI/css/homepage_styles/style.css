@@ -24,40 +24,39 @@
     }
 
     .logo {
-        margin-left: 3%;
-        margin-right: auto;
-    }
+      margin-left: 3%;
+      margin-right: auto;
+  }
 
-    .nav ul {
-      margin-right: 10%;
-    }
+  .nav a {
+    text-decoration: none;
+    color: #C6CEE4;
+  }
 
-    .nav a {
-      text-decoration: none;
-      color: #C6CEE4;
-    }
+  .nav ul.nav-links li {
+    display: inline;
+    margin-left: 1.5rem;
+  }
 
-    .nav ul li {
-      display: inline;
-      margin-left: 1.5rem;
-    }
+  .sign-up {
+    border-style: solid;
+    border-color: #fff;
+    border-width: 0.1rem;
+    padding: 5px;
+    font-size: 13px;
+    border-radius: 0.2rem;
+    margin-right: 2rem;
+  }
 
-    .sign-up {
-      border-style: solid;
-      border-color: #fff;
-      border-width: 0.1rem;
-      padding: 5px;
-      font-size: 13px;
-      border-radius: 0.2rem;
-    }
+  .nav ul.svg {
+    margin-right: 20px;
+  }
 
-    svg {
-      background-color: transparent;
-      fill: white;
-      margin-top: 1px;
-      cursor: pointer;
-      display: none;
-    }
+  .nav .svg .img-svg {
+    cursor: pointer;
+    width: 25px;
+    margin-top: 5px;
+  }
 
     #nav-toggle {
       display: none;
