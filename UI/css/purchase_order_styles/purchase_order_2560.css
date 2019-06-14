@@ -24,12 +24,8 @@
     }
 
     .logo {
-        margin-left: 3%;
-        margin-right: auto;
-    }
-
-    .nav ul {
-      margin-right: 10%;
+      margin-left: 3%;
+      margin-right: auto;
     }
 
     .nav a {
@@ -37,7 +33,7 @@
       color: #C6CEE4;
     }
 
-    .nav ul li {
+    .nav ul.nav-links li {
       display: inline;
       margin-left: 1.5rem;
     }
@@ -49,14 +45,17 @@
       padding: 5px;
       font-size: 13px;
       border-radius: 0.2rem;
+      margin-right: 2rem;
     }
 
-    svg {
-      background-color: transparent;
-      fill: white;
-      margin-top: 1px;
+    .nav ul.svg {
+      margin-right: 20px;
+    }
+
+    .nav .svg .img-svg {
       cursor: pointer;
-      display: none;
+      width: 25px;
+      margin-top: 5px;
     }
 
     #nav-toggle {
