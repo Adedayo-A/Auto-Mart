@@ -10,7 +10,7 @@ const secretkey = 'secretkeyofaccess';
 const signUp = (req, res) => {
   req.body.id = users.length + 1;
   const newUser = req.body;
-  users.push(req.body);
+  users.push(newUser);
   jwt.sign({ newUser }, secretkey, (err, token) => {
     res.status(200).json({
       message: 'Signed in succesfully',
@@ -24,7 +24,7 @@ const verifyUser = (req, res) => {
   const foundUser = users.some(user => user.email === req.body.email && user.password === parseInt(req.body.password, 10));
   if (foundUser) {
     const verifiedUser = users.filter(user => user.email === req.body.email && user.password === parseInt(req.body.password, 10));
-    jwt.sign({ verifiedUser }, secretkey, (err, token) => {
+    jwt.sign({ verifiedUser }, secretkey, { expiresIn: '1h' }, (err, token) => {
       res.status(200).json({
         message: 'Signed in succesfully',
         token,
