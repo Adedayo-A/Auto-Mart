@@ -9,6 +9,15 @@ const users = [
     address: '10, Ikeja, Lagos',
     is_admin: true,
   },
+  {
+    id: 2,
+    email: 'daya@gmail.com',
+    first_name: 'Daya',
+    last_name: 'Apy',
+    password: 12345,
+    address: '10, Maryland, Lagos',
+    is_admin: false,
+  },
 ];
 
 module.exports = users;

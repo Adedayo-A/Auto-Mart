@@ -1,19 +1,29 @@
 /* eslint-disable linebreak-style */
 /* eslint-disable no-undef */
 /* eslint-disable no-unused-vars */
+
 const orders = [
   {
-    id: Integer,
-    buyer: Integer, //  user id
-    car_id: Integer,
-    amount: Float, //   price offered
-    status: String, //   [pending, accepted, or rejected]
+    id: 1,
+    buyer: 'Paul',
+    car_id: 2,
+    amount: 500000,
+    status: 'available',
   },
   {
-    id: Integer,
-    buyer: Integer,
-    car_id: Integer,
-    amount: Float,
-    status: String,
+    id: 2,
+    buyer: 'Tan',
+    car_id: 4,
+    amount: 800000,
+    status: 'available',
   },
+  {
+    id: 3,
+    buyer: 'Bez',
+    car_id: 5,
+    amount: 600000,
+    status: 'available',
+  }
 ];
+
+module.exports = orders;

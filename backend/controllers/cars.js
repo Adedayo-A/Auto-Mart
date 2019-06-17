@@ -1,10 +1,13 @@
 /* eslint-disable linebreak-style */
+const jwt = require('jsonwebtoken');
 const cars = require('../db/Cars.js');
+const secretkey = 'secretkeyofaccess';
 
 // class carControllers {
 // GET REQUESTS
 const getCars = (req, res) => {
   let allCars = cars;
+
   // PRICE-RANGE
   if (req.query.min_price && req.query.max_price && req.query.status) {
     const foundStatus = allCars.some(car => car.status === req.query.status);
@@ -70,8 +73,9 @@ const getCars = (req, res) => {
   // REST
   res.status(200).json(cars);
 };
+// GET SPECIFIC CAR
 const getCar = (req, res) => {
-  const found = cars.some(car => car.id === parseInt(req.params.id, 16));
+  const found = cars.some(car => car.id === parseInt(req.params.id, 10));
   if (found) {
     // eslint-disable-next-line radix
     const requestedCar = cars.filter(car => car.id === parseInt(req.params.id));
@@ -80,8 +84,69 @@ const getCar = (req, res) => {
     res.status(400).json({ msg: `No car was found with the id of ${req.params.id}` });
   }
 };
+// POST CAR
+const postCar = (req, res) => {
+  const newAd = req.body;
+  newAd.id = cars.length + 1;
+  newAd.created_on = new Date();
+  jwt.verify(req.token, secretkey, (err, currentUser) => {
+    if (err) {
+      res.status(403).json({
+        message: 'error..incorrect Token',
+      });
+    } else {
+      cars.push(newAd);
+      res.json({
+        message: 'Posted successfully',
+        newAd,
+      });
+    }
+  });
+};
+
+// PATCH CAR
+const patchCar = (req, res) => {
+  jwt.verify(req.token, secretkey, (err, authData) => {
+    if (err) {
+      res.status(403).json({
+        message: 'error..incorrect Token',
+      });
+    } else {
+      const foundCar = cars.filter(car => car.id === parseInt(req.params.id, 10));
+      const editCar = foundCar[0];
+      editCar.status = req.body.status;
+      editCar.price = req.body.price;
+      res.json({
+        message: 'Edited successfully',
+        authData,
+        editCar,
+      });
+    }
+  })
+}
+
+// PATCH CAR
+const deleteCar = (req, res) => {
+  jwt.verify(req.token, secretkey, (err, authData) => {
+    if (err) {
+      res.status(403).json({
+        message: 'error..incorrect Token',
+      });
+    } else {
+      const carId = parseInt(req.params.id, 10);
+      cars.splice(carId - 1, 1);
+      res.json({
+        message: 'Deleted successfully',
+        cars,
+      });
+    }
+  })
+}
 
 module.exports = {
   getCars,
   getCar,
+  postCar,
+  patchCar,
+  deleteCar,
 };

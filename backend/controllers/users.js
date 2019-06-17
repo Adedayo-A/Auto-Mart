@@ -4,6 +4,8 @@
 const jwt = require('jsonwebtoken');
 const users = require('../db/Users.js');
 
+const cars = require('../db/Cars.js');
+
 const secretkey = 'secretkeyofaccess';
 
 // class userControllers { 
@@ -11,7 +13,7 @@ const signUp = (req, res) => {
   req.body.id = users.length + 1;
   const newUser = req.body;
   users.push(newUser);
-  jwt.sign({ newUser }, secretkey, (err, token) => {
+  jwt.sign({ newUser }, secretkey, { expiresIn: '10m' }, (err, token) => {
     res.status(200).json({
       message: 'Signed in succesfully',
       token,
@@ -23,8 +25,9 @@ const signUp = (req, res) => {
 const verifyUser = (req, res) => {
   const foundUser = users.some(user => user.email === req.body.email && user.password === parseInt(req.body.password, 10));
   if (foundUser) {
-    const verifiedUser = users.filter(user => user.email === req.body.email && user.password === parseInt(req.body.password, 10));
-    jwt.sign({ verifiedUser }, secretkey, { expiresIn: '1h' }, (err, token) => {
+    const regUser = users.filter(user => user.email === req.body.email && user.password === parseInt(req.body.password, 10));
+    const verifiedUser = regUser[0];
+    jwt.sign({ verifiedUser }, secretkey, { expiresIn: '10m' }, (err, token) => {
       res.status(200).json({
         message: 'Signed in succesfully',
         token,
@@ -52,6 +55,7 @@ const protectedRoute = (req, res) => {
     }
   });
 };
+
 module.exports = {
   signUp,
   verifyUser,

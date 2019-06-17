@@ -6,8 +6,8 @@ const cars = [
     manufacturer: 'toyota',
     model: 'avalon',
     body_type: 'cars',
-    owner: 1,
-    created_on: 2,
+    owner: 3,
+    created_on: new Date(),
     id: 1,
   },
   {
@@ -17,8 +17,8 @@ const cars = [
     manufacturer: 'lexus',
     model: 'jeep',
     body_type: 'cars',
-    owner: 1,
-    created_on: 21,
+    owner: 2,
+    created_on: new Date(),
     id: 2,
   },
   {
@@ -28,7 +28,7 @@ const cars = [
     manufacturer: 'mazda',
     model: 'mazda 106',
     body_type: 'cars',
-    owner: 1,
+    owner: 5,
     created_on: 21,
     id: 3,
   },
@@ -40,7 +40,7 @@ const cars = [
     model: 'Sienna 102',
     body_type: 'van',
     owner: 1,
-    created_on: 21,
+    created_on: new Date(),
     id: 4,
   },
   {
@@ -50,8 +50,8 @@ const cars = [
     manufacturer: 'Mercedez',
     model: 'M-2019',
     body_type: 'cars',
-    owner: 1,
-    created_on: 21,
+    owner: 6,
+    created_on: new Date(),
     id: 5,
   },
   {
@@ -61,35 +61,10 @@ const cars = [
     manufacturer: 'Mitsubushi',
     model: 'M-2019',
     body_type: 'van',
-    owner: 1,
-    created_on: 21,
+    owner: 4,
+    created_on: new Date(),
     id: 6,
   },
 ];
 
-
 module.exports = cars;
-
-// {
-//     "id":​ Integer​,
-//     "owner":​ Integer​, //user id
-//     ​"created_on":​ ​DateTime​,
-//     ​"state":​ ​String​, // new,used
-//     ​"status":​ String​, // sold,available - default is available
-//     "price":​ ​Float​,
-//     "manufacturer":​ ​String​,
-//     ​"model":​ ​String​,
-//     "body_type":​ String
-//     }
-
-// {
-//     ​"state": ​'new'​,
-//     ​"status":​ "sold"​,
-//     "price": ​100000,
-//     "manufacturer":​ ​"mercedez",
-//     "​model": ​"benz"​,
-//     "body_type": "cars"​,
-//     "owner":​ 1​,
-//     ​"created_on":​ ​"20"​,
-//     "id": 1
-// }
