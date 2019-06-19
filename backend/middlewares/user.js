@@ -11,7 +11,6 @@ const tokenAuth = (req, res, next) => {
   }
 };
 
-// const jwt = require('jsonwebtoken');
 // const tokenGen = (payload, cb) => {
 //   jwt.sign(
 //     payload,
