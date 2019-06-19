@@ -1,0 +1,292 @@
+@media screen and (min-width: 426px) and (max-width: 768px) {
+    *,
+    *::before,
+    *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: inherit;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      box-sizing: border-box;
+      line-height: 1.7;
+      overflow: scroll;
+    }
+
+    .nav {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      font-size: 9px;
+      background: #260957;
+      height: 38px;
+    }
+
+    .logo {
+      margin-left: 3%;
+      margin-right: auto;
+    }
+
+    .nav a {
+      text-decoration: none;
+      color: #C6CEE4;
+    }
+
+    .nav ul {
+      display: none;
+    }
+
+    .nav ul.nav-links {
+      margin-left: -20px;
+    }
+
+    .nav ul.nav-links li {
+      display: inline;
+      margin-left: 1.5rem;
+    }
+
+    .sign-up {
+      border-style: solid;
+      border-color: #fff;
+      border-width: 0.1rem;
+      padding: 5px;
+      font-size: 13px;
+      border-radius: 0.2rem;
+      margin-right: 2rem;
+    }
+
+    .nav ul.svg {
+      margin-right: 20px;
+    }
+
+    .nav .svg .img-svg {
+      cursor: pointer;
+      width: 25px;
+      margin-top: 2px;
+    }
+
+   
+    /****** HAMBURGER MENU *******/
+    #nav-toggle { 
+      display: block;
+      position: absolute;
+      right: 2%;
+    }
+
+  #nav-toggle {
+    cursor: pointer;
+    padding: 10px 35px 16px 0px;
+    }
+
+  #nav-toggle span, #nav-toggle span:before, #nav-toggle span:after {
+    cursor: pointer;
+    border-radius: 1px;
+    height: 1px;
+    width: 25px;
+    background: white;
+    position: absolute;
+    display: block;
+    content: '';
+    background-color: #beb6cd;
+  }
+
+  #nav-toggle span:before {
+    top: -8px;
+  }
+  #nav-toggle span:after {
+    bottom: -8px;
+  }
+
+  #nav-toggle span, #nav-toggle span:before, #nav-toggle span:after {
+    transition: all 500ms ease-in-out;
+  }
+  #nav-toggle.active span {
+    background-color: transparent;
+  }
+  #nav-toggle.active span:before, #nav-toggle.active span:after {
+    top: 0;
+  }
+
+  #nav-toggle.active span:before {
+    transform: rotate(45deg);
+  }
+
+  #nav-toggle.active span:after {
+    transform: rotate(-45deg);
+  }
+
+  /**** RESPONSIVENESS TOGGLE ******/
+    .nav.responsive {
+      position: relative;
+    }
+
+    .nav.responsive ul.nav-links {
+      position: absolute;
+      width: 10rem;
+      height: 20rem;
+      top: 96%;
+      left: 73%;
+      right: 3%;
+      padding-bottom: 0%;
+      display: block;
+      float: none;
+      z-index: 2;
+      background: #334E61;
+      border: 2px solid;
+      border-color: #334E61;
+      list-style: none;
+      color: white;
+    }
+
+    .nav.responsive ul.nav-links li {
+      margin-left: 1rem;
+      cursor: pointer;
+      display: block;
+      margin-top: 1rem;
+    }
+
+    .nav.responsive ul.nav-links li:last-child{
+      border: none;
+      margin-top: 6.5px;
+      margin-left: 0.65rem;
+    }
+
+    .nav.responsive ul li a {
+      color: white;
+      text-decoration: none;
+      font-size: 0.95rem;
+      opacity: 0.7;
+    }
+
+    .nav.responsive ul.svg {
+      display: none;
+    }
+    /******* NAV END ******/
+
+    /* DROPDOWN */
+    .none {
+      display: none;
+    }
+    .show {
+      display: block;
+    }
+    
+
+    div.background-img {
+      background-image: url("../../images/car2.jpg");
+      background-position: center;
+      background-size: cover;
+      height: 40rem;
+    }
+    /* SEARCH SECTION */
+    .section-search {
+      width: 10rem;
+      margin: 0 auto;
+    }
+    .input-section-search {
+      display: inline-block;
+      width: 250px;
+      padding: 10px;
+      border-color: white;
+      margin-bottom: 16px;
+      margin-left: -3rem;
+      margin-top: 60px;
+      border-radius: 5px;
+      box-shadow: none;
+    }
+    .ul-search {
+      background: #250858;
+      color: white;
+      display: flex;
+      justify-content: space-around;
+      margin-bottom: 1rem;
+      padding: 1rem;
+    }
+    .ul-search li {
+    list-style: none;
+    }
+    .wrapper-search {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 1rem;
+      /* margin-left: 40px; */
+    }
+    .wrapper-search > div:not(:last-child) {
+      margin-bottom: 20px;
+    }
+
+    .div-sub-search-usage {
+      margin-bottom: 0px;
+    }
+
+    
+    select {
+      background: lemonchiffon;
+    }
+
+    .div-sub-search-newness, .div-sub-search-usage {
+      color: white;
+    }
+
+    .div-sub-search-price {
+      margin-top: 0px;
+      margin-left: -50px;
+    }
+
+    .label-price {
+      font-size: 15px;
+      display: block;
+      color: #303030;
+      text-align: center;
+    }
+
+    .search-price {
+      width: 14rem;
+      padding: 5px;
+      border-radius: 2px;
+      box-shadow: none;
+      border-style: solid;
+      border-color: #fff;
+      margin-bottom: 15px;
+      background-color: lemonchiffon;
+    }
+
+    .main-index h1 {
+      color: white;
+      opacity: 0.5;
+      text-align: center;
+      font-size: 25px;
+      margin-top: 80px;
+      font-style: italic;
+    }
+
+    .div-search-submit {
+      position: absolute;
+      margin-top: 16rem;
+      margin-left: -3rem;
+    }
+    
+    .input-search-submit {
+      width: 13rem;
+      height: 37px;
+      border-radius: 5px;
+      background: #A400B4;
+      border-color: #A400B4;
+      box-shadow: none;
+      color: #efefef;
+      border-style: solid;
+    }
+
+    .none {
+      display: none;
+    }
+
+    .show {
+      display: block;
+    }
+
+    .second-background-image {
+      display: none;
+    }
+}    

@@ -18,24 +18,38 @@ document.addEventListener('DOMContentLoaded', () => {
             }
     }
 
-    const sectionResult = document.querySelector(".section-result");
-    const reportsAds = document.querySelectorAll(".report");
+    const arrowUp = document.querySelector('.arrow-up');
+    const dropDown = document.querySelector('.dropdown');
+    const body = document.querySelector('.body');
     
-    for(let i=0; i < reportsAds.length; i++) {
-        reportsAds[i].onclick = () => {
-            nav.style.pointerEvents = "none";
-            if(reportForm.className === "report-form") {
-                reportForm.className += " show";
-                sectionResult.className += " show";
-            } else {
-                reportForm.className = "report-form";
-                sectionResult.className = "section-result";
-            }
-        }        
+    document.querySelector('.img-svg').onclick = () => {
+        if(arrowUp.style.display == 'none' && dropDown.style.display == 'none') {
+            arrowUp.style.display = 'block';
+            dropDown.style.display = 'block';
+        } else {
+            dropDown.style.display = 'none';
+            arrowUp.style.display = 'none';
+        }
     }
+
+    // const sectionResult = document.querySelector(".section-result");
+    // const reportsAds = document.querySelectorAll(".report");
     
-    document.querySelector(".report-close").onclick = () => {
-        reportForm.className = "report-form";
-        sectionResult.className = "section-result"
-    }
+    // for(let i=0; i < reportsAds.length; i++) {
+    //     reportsAds[i].onclick = () => {
+    //         nav.style.pointerEvents = "none";
+    //         if(reportForm.className === "report-form") {
+    //             reportForm.className += " show";
+    //             sectionResult.className += " show";
+    //         } else {
+    //             reportForm.className = "report-form";
+    //             sectionResult.className = "section-result";
+    //         }
+    //     }        
+    // }
+    
+    // document.querySelector(".report-close").onclick = () => {
+    //     reportForm.className = "report-form";
+    //     sectionResult.className = "section-result"
+    // }
 })

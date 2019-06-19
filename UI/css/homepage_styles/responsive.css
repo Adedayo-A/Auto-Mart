@@ -89,12 +89,6 @@
       position: relative;
     }
 
-    .nav.responsive #nav-toggle {
-      /* position: absolute;
-      right: 0;
-      top: 0; */
-    }
-
     .nav.responsive ul {
       position: absolute;
       width: 10rem;
@@ -127,7 +121,7 @@
     }
 
     .nav.responsive ul li a {
-      color: white;
+      color: #fff;
       text-decoration: none;
       font-size: 0.95rem;
       opacity: 0.7;
@@ -141,8 +135,13 @@
 
       
   /****** MAIN DIV*****/
-    .main-index div {
-      background-image: url("images/mobile-image.webp");
+    .main-index {
+      background-color: #250858;
+      height: 50rem;
+    }
+
+    div.background-img {
+      background-image: url("../../images/mobile-image.webp");
       background-position: center;
       background-size: cover;
       height: 14rem;
@@ -151,23 +150,21 @@
       position: relative;
     }
 
-    .main-index.responsive div {
-      background-image: url("images/mobile-image.webp");
+    .main-index.responsive {
+      background-image: url("../../images/mobile-image.webp");
       background-position: center;
       background-size: cover;
-      height: 14rem;
+      height: 13rem;
       max-width: 1920px;
       transform: translate(0%,0%);
       position: relative;
-      z-index: 0;
       filter: contrast(15%);
     }
-      /****** MAIN DIV END*****/
 
       /****** PAGE TITLE H1*****/
-      .main-index > h1 {
-        position: relative;
-        margin-top: -11%;
+      .main-index h1 {
+        position: absolute;
+        top: 80%;
         margin-left: 3%;
         font-size: 16px;
         font-style: italic;
@@ -175,19 +172,13 @@
         opacity: 0.6;
         color: white;
       }
-
-      .main-index.responsive > h1 {
-        opacity: 0.1;
-      }
-
       /****** H1 TITLE END*****/
+      /****** MAIN DIV END*****/
 
       /* SEARCH SECTION */
       .section-search {
-        background: #250858;
         height: 30rem;
         margin-left: 0%;
-        margin-top: 2.4%
       }
       
       .input-section-search {
@@ -195,7 +186,7 @@
         border-color: white;
         border-radius: 5px;
         box-shadow: none;
-        margin-top: 9%;
+        margin-top: 75%;
         margin-left: 3rem;
         width: 50%;
         height: 2.2rem;
@@ -207,7 +198,6 @@
         margin-left: 3rem;
       }
       .wrapper-search > div {
-        /* margin-bottom: 2%; */
         width: 29%;
         margin-bottom: 7%;
       }
@@ -221,62 +211,47 @@
       }
 
       .div-sub-search-price {
-        /* margin-top: -58.8%;
-        margin-left: 45%; */
+        margin-left: 13%;
+        margin-top: -3%;
       }
 
-      .div-sub-search-usage {
-        /* margin-top: 5%;
-        margin-left: 45%; */
-        /* margin-bottom: 5%; */
-      }
-
-      .select-sub-search-make,.select-sub-search-price {
-        padding: 0.2rem;
-        cursor: pointer;
-        /* background: peru;
-        color: white;
-        border-color: peru; */
-      }
-      .label-sub-search-usage, .label-sub-search-newness {
+      .label-price {
+        font-size: 13px;
         display: block;
-        color: white;
-        /* height: 1.3rem;
-        font-size: 0.8rem; */
-        /* padding: 0.8rem;
-        padding-top: 0.3rem;
-        padding-bottom: 1.5rem; */
-        /* width: 8rem; */
-        /* background: peru; */
-        text-align: left;
+        color: #efefef;
+      }
+  
+      .search-price {
+        width: 14rem;
+        padding: 5px;
+        border-radius: 2px;
+        box-shadow: none;
+        border-style: solid;
+        border-color: #fff;
+        margin-bottom: 15px;
+        background-color: lemonchiffon;
+        cursor: pointer;
       }
 
-      .label-sub-search-newness, .label-sub-search-usage {
-        font-size: 0.8rem;
+      .search-price:not(:last-child) {
+        margin-bottom: 3%;
       }
 
-      input[type="checkbox"] + label {
-        font-size: 0.5rem;
-        margin-top: -5rem;
-      }
-
-      input[type="checkbox"] {
+      select {
+        padding: 0.2rem;
         cursor: pointer;
       }
 
       .div-search-submit {
         position: absolute;
-        /* display: block;
-        margin-top: 40%;
-        margin-left: 20%; */
-        width: 49%;
-        left: 3rem;
-        margin-top: 20rem;
+        width: 70%;
+        left: 2.7rem;
+        margin-top: 16rem;
       }
       
       .input-search-submit {
         width: 100%;
-        height: 30px;
+        height: 40px;
         border-radius: 5px;
         background: #A400B4;
         border-color: #A400B4;
@@ -285,27 +260,12 @@
         border-style: solid;
         cursor: pointer;
       }
+
       .none {
         display: none;
       }
-}
 
-/* .input-section-search {
-      /* display: inline-block; */
-      /* width: 100px; */
-      /* max-width: 80%; *
-      /* margin-bottom: 16px
-      border-radius: 5px;
-      box-shadow: none;
-    }
-    /* .ul-search {
-      background: #250858;
-      color: white;
-      display: flex;
-      justify-content: space-around;
-      margin-bottom: 1rem
-      padding: 1rem;
-    }
-    .ul-search li {
-    list-style: none;
-    } */
+      .second-background-image {
+        display: none;
+      }
+}

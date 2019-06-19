@@ -1,5 +1,4 @@
-@media screen and (min-width: 768px) and (max-width: 2560px) {
-  
+@media screen and (min-width: 769px) and (max-width: 2560px) {
     *,
     *::before,
     *::after {
@@ -17,20 +16,40 @@
 
     .nav {
       display: flex;
-      /* justify-content: space-around; */
       align-items: center;
       font-size: 13px;
-      background: #260957;
-      height: 38px;
+      background: hsl(262, 81%, 19%);
+      height: 45px;
     }
 
-    .logo {
-        margin-left: 3%;
-        margin-right: auto;
+    .nav a.logo {
+      margin-left: 3%;
+      margin-right: auto;
     }
 
-    .nav ul {
-      margin-right: 10%;
+    .nav ul.nav-links li {
+      display: inline;
+      margin-left: 1.5rem;
+    }
+
+    .nav ul.nav-links li.sign-up {
+      border-style: solid;
+      border-color: #fff;
+      border-width: 0.1rem;
+      padding: 5px;
+      font-size: 13px;
+      border-radius: 0.2rem;
+      margin-right: 2rem;
+    }
+
+    .nav ul.svg {
+      margin-right: 20px;
+    }
+
+    .nav .svg .img-svg {
+      cursor: pointer;
+      width: 25px;
+      margin-top: 5px;
     }
 
     .nav a {
@@ -38,27 +57,7 @@
       color: #C6CEE4;
     }
 
-    .nav ul li {
-      display: inline;
-      margin-left: 1.5rem;
-    }
-
-    .sign-up {
-      border-style: solid;
-      border-color: #fff;
-      border-width: 0.1rem;
-      padding: 5px;
-      font-size: 13px;
-      border-radius: 0.2rem;
-    }
-
-    svg {
-      background-color: transparent;
-      fill: white;
-      margin-top: 1px;
-      cursor: pointer;
-      display: none;
-    }
+    /********* NAV TOGGLING *********/
 
     #nav-toggle {
       display: none;
@@ -68,28 +67,30 @@
     .none {
       display: none;
     }
+
     .show {
       display: block;
     }
-    .arrow-up {
+
+    div.arrow-up {
       position: absolute;
-      right: 160px;
-      top: 33px;
+      right: 187px;
+      top: 36px;
       width: 0;
       height: 0;
       border-left: 5px solid transparent;
       border-right: 5px solid transparent;
       border-bottom: 5px solid white;
     }
-    .dropdown {
-      background-color: white;
+    div.dropdown {
+      background-color: black;
       position: absolute;
       right: 100px;
       padding: 1rem;
       border: 1.5px solid #efefef;
       animation: slide-bottom 2s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
     }
-    .button-dropdown {
+    div.dropdown button.button-dropdown {
       width: 6rem;
       height: 1.5rem;
       border: none;
@@ -98,29 +99,28 @@
       color: #fff;
     }
 
-    .button-dropdown a {
+    div.dropdown button.button-dropdown a {
       text-decoration: none;
       color: white;
     }
-    .para-dropdown {
-      color: black;
+    div.dropdown p.para-dropdown {
+      color: white;
       margin-top: 10px;
       font-size: 10px;
     }
-    .para-dropdown a {
+    div.dropdown .para-dropdown a {
       text-decoration: none;
       color: #A400B4;
     }
-    /*******  NAV ENDS **********/
+    /**********NAV ENDED********/
 
     /****** SECTION BEGINS ******/
     .section-result {
-        display: flex;
-        margin-left: 2rem;
-        margin-top: 2rem;
+      display: flex;
+      margin-left: 2rem;
+      margin-top: 2rem;
     }
     .filter-results {
-        /* background: #A400B4; */
         width: 20rem;
         flex-grow: 0.3;
         margin-right: 1rem;
@@ -142,19 +142,19 @@
         height: 15rem;
     }
     .one {
-      background-image: url("images/car-result1.webp");
+      background-image: url("../../images/car-result1.webp");
       background-repeat: no-repeat;
     }
     .two {
-      background-image: url("images/car-result2.webp");
+      background-image: url("../../images/car-result2.webp");
       background-repeat: no-repeat;
     }
     .three {
-      background-image: url("images/car-result3.webp");
+      background-image: url("../../images/car-result3.webp");
       background-repeat: no-repeat;
     }
     .four {
-      background-image: url("images/car-result4.webp");
+      background-image: url("../../images/car-result4.webp");
       background-repeat: no-repeat;
     }
     .card-stories {
@@ -200,87 +200,24 @@
     .para-contact-card-stories {
       margin-top: -2%;
     }
-    .para-status-card-stories > span:nth-child(2) {
-      color: red;
+    .para-delete-card-stories > button:nth-child(1) {
+      color: white;
       cursor: pointer;
-    }
-
-    /****** REPORT FORM *****/
-    .hid {
-    transform: translateY(-1511px);
-    z-index: 0;
-    animation: slide-top 2s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
-    }
-
-    .report-form {
-      transform: translate( 50px, -2710px);
-      /* z-index: 0; */
-    }
-
-    @-webkit-keyframes slide-down {
-      0% {
-        transform: translate(50px, -2710px);
-      }
-
-      100% {
-        transform: translate(20px, 60px);
-      }
-    }
-
-    @keyframes slide-down {
-      0% {
-        transform: translate(50px, -2710px);
-      }
-
-      100% {
-        transform: translate(20px, 60px);
-      }
-    }
-
-    .report-form.show {
-      /* transform: translate(20px, 60px); */
-      animation: slide-down 1s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
-      width: 15rem;
-    }
-
-    .report-form.show.responsive {
-      z-index: 0;
-      filter: contrast(15%);
-      display: none;
-    }
-
-    .report-form.show div {
-      margin-left: 20%;
-    }
-
-    .report-form.show textarea {
-      border-style: solid;
-      border-width: 1.5px;
-      justify-content: space-around;
-    }
-
-    .report-form.show p { 
-      font-size: 13px;
-    }
-
-    .report-form.show .report-submit {
-      background-color: blueviolet;
-      color: rgba(255,255, 255, 0.9);
-      height: 1.5rem;
-      width: 4rem;
+      background-color: blue;
+      box-shadow: none;
       border: none;
-      margin-right: 0.5rem;
+      padding: 6px;
+      border-radius: 3px;
+      width: 70px;
     }
 
-    .report-form.show .report-close {
-      background-color: blueviolet;
-      color: rgba(255,255, 255, 0.9);
-      height: 1.5rem;
-      width: 4rem;
+    .para-delete-card-stories > button:nth-child(2) {
+      color: white;
+      cursor: pointer;
+      background-color: red;
+      box-shadow: none;
       border: none;
+      padding: 6px;
+      border-radius: 3px;
     }
-
-    .report-form.show .report-para-note {
-      margin-top: 1.4rem;
-    }
-  }
+}
