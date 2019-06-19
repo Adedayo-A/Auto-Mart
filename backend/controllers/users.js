@@ -4,29 +4,32 @@
 const jwt = require('jsonwebtoken');
 const users = require('../db/Users.js');
 
-const secretkey = 'secretkeyofaccess';
+// const cars = require('../db/Cars.js');
 
 // class userControllers { 
 const signUp = (req, res) => {
   req.body.id = users.length + 1;
   const newUser = req.body;
-  users.push(req.body);
-  jwt.sign({ newUser }, secretkey, (err, token) => {
-    res.status(200).json({
-      message: 'Signed in succesfully',
-      token,
+  users.push(newUser);
+  jwt.sign({ newUser }, process.env.JWT_KEY, { expiresIn: '1h' }, (err, token) => {
+    res.status(200).send({
+      message: 'Signed up successful',
       newUser,
+      token,
     });
   });
 };
 
 const verifyUser = (req, res) => {
+  // eslint-disable-next-line max-len
   const foundUser = users.some(user => user.email === req.body.email && user.password === parseInt(req.body.password, 10));
   if (foundUser) {
-    const verifiedUser = users.filter(user => user.email === req.body.email && user.password === parseInt(req.body.password, 10));
-    jwt.sign({ verifiedUser }, secretkey, (err, token) => {
+    // eslint-disable-next-line max-len
+    const regUser = users.filter(user => user.email === req.body.email && user.password === parseInt(req.body.password, 10));
+    const verifiedUser = regUser[0];
+    jwt.sign({ verifiedUser }, process.env.JWT_KEY, { expiresIn: '1h' }, (err, token) => {  
       res.status(200).json({
-        message: 'Signed in succesfully',
+        message: 'Signed in successfully',
         token,
         verifiedUser,
       });
@@ -39,7 +42,7 @@ const verifyUser = (req, res) => {
 };
 
 const protectedRoute = (req, res) => {
-  jwt.verify(req.token, secretkey, (err, authData) => {
+  jwt.verify(req.token, process.env.JWT_KEY, (err, authData) => {
     if (err) {
       res.status(403).json({
         message: 'error',
@@ -52,8 +55,11 @@ const protectedRoute = (req, res) => {
     }
   });
 };
+
 module.exports = {
   signUp,
   verifyUser,
   protectedRoute,
-}
+};
+
+// jwt.sign({ newUser }, secretkey, { expiresIn: '10m' }, (err, token) => {

@@ -1,6 +1,5 @@
 {
     "env": {
-        "browser": true,
         "es6": true,
         "node": true
     },
@@ -14,5 +13,7 @@
         "sourceType": "module"
     },
     "rules": {
+        "linebreak-style": ["error", "windows"],
+        "import/no-extraneous-dependencies": ["error", {"devDependencies": true}]
     }
 }
