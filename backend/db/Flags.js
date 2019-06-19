@@ -20,7 +20,7 @@ const flags = [
     car_id: 6,
     created_on: new Date(),
     reason: 'pricing',
-  }
-]
+  },
+];
 
 module.exports = flags;

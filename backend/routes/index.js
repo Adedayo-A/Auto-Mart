@@ -2,17 +2,20 @@ const express = require('express');
 const carControllers = require('../controllers/cars.js');
 const userControllers = require('../controllers/users.js');
 const orderControllers = require('../controllers/orders.js');
-const flagControllers = require('../controllers/flags.js')
-const tokenAuth = require('../middlewares/user.js');
+const flagControllers = require('../controllers/flags.js');
+const middleControllers = require('../middlewares/user.js');
 
-const { getCar, getCars, postCar, patchCar, deleteCar } = carControllers;
+const tokenAuth = middleControllers;
+const {
+  getCar, getCars, postCar, patchCar, deleteCar,
+} = carControllers;
 const { signUp, verifyUser, protectedRoute } = userControllers;
 const { postOrder, patchOrder } = orderControllers;
 const { postFlag } = flagControllers;
 
 const router = express.Router();
 
-// CARS API ROUTES
+// CAR ADs API ROUTES
 router.get('/api/v1/car/', getCars);
 router.get('/api/v1/car/:id', getCar);
 router.post('/api/v1/car/', tokenAuth, postCar);

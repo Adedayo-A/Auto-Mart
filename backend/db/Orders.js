@@ -5,25 +5,25 @@
 const orders = [
   {
     id: 1,
-    buyer: 'Paul',
+    buyer: 1,
     car_id: 2,
     amount: 500000,
-    status: 'available',
+    status: 'pending',
   },
   {
     id: 2,
-    buyer: 'Tan',
+    buyer: 3,
     car_id: 4,
     amount: 800000,
-    status: 'available',
+    status: 'accepted',
   },
   {
     id: 3,
-    buyer: 'Bez',
+    buyer: 2,
     car_id: 5,
     amount: 600000,
-    status: 'available',
-  }
+    status: 'pending',
+  },
 ];
 
 module.exports = orders;

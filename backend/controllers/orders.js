@@ -2,14 +2,14 @@ const jwt = require('jsonwebtoken');
 const cars = require('../db/Cars.js');
 const orders = require('../db/Orders.js');
 
-const secretkey = 'secretkeyofaccess';
+// const jwtKey = require('../bin/www');
 
 const postOrder = (req, res) => {
   const newOrder = req.body;
   newOrder.id = orders.length + 1;
   newOrder.created_on = new Date();
   newOrder.status = 'available';
-  jwt.verify(req.token, secretkey, (err, authData) => {
+  jwt.verify(req.token, process.env.JWT_KEY, (err, authData) => {
     if (err) {
       res.status(403).json({
         message: 'error..Invalid Token',
@@ -26,7 +26,7 @@ const postOrder = (req, res) => {
 };
 
 const patchOrder = (req, res) => {
-  jwt.verify(req.token, secretkey, (err, authData) => {
+  jwt.verify(req.token, process.env.JWT_KEY, (err, authData) => {
     if (err) {
       res.status(403).json({
         message: 'error..incorrect Token',
@@ -34,17 +34,16 @@ const patchOrder = (req, res) => {
     } else {
       const foundOrder = orders.filter(order => order.id === parseInt(req.params.id, 10));
       const editOrder = foundOrder[0];
-      editOrder.price = req.body.price;
+      editOrder.amount = req.body.amount;
       res.json({
-        message: 'Edited successfully',
+        message: 'Updated successfully',
         authData,
         editOrder,
       });
     }
-  })
-}
-      
+  });
+};
 module.exports = {
   postOrder,
   patchOrder,
-}
+};

@@ -13,7 +13,7 @@ const cars = [
   {
     state: 'new',
     status: 'available',
-    price: 80000,
+    price: 800000,
     manufacturer: 'lexus',
     model: 'jeep',
     body_type: 'cars',
@@ -64,6 +64,17 @@ const cars = [
     owner: 4,
     created_on: new Date(),
     id: 6,
+  },
+  {
+    state: 'new',
+    status: 'available',
+    price: 900000,
+    manufacturer: 'toyota',
+    model: 'camry',
+    body_type: 'car',
+    owner: 2,
+    created_on: new Date(),
+    id: 7,
   },
 ];
 

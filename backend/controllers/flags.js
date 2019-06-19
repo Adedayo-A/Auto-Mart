@@ -9,8 +9,8 @@ const postFlag = (req, res) => {
     newFlag,
     message: 'Thank you for reporting this problem',
   });
-}
+};
 
 module.exports = {
   postFlag,
-}; 
+};
