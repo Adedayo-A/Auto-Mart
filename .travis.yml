@@ -5,3 +5,4 @@ scripts:
   - npm test
 after_success:
 - npm run coverage
+- npm run test-coverage-report
