@@ -6,6 +6,7 @@
   "scripts": {
     "lint": "eslint --fix",
     "test": "nyc ./node_modules/.bin/mocha --reporter spec ./backend/test/index.js",
+    "coverage": "nyc --reporter=lcov --reporter=text-lcov npm test",
     "start": "node ./backend/bin/www",
     "devstart": "nodemon ./backend/bin/www"
   },

@@ -1,7 +1,7 @@
 language: node_js
 node_js:
-  - "stable"
+  - "node"
 scripts:
   - npm test
 after_success:
-- nyc ./node_modules/.bin/mocha --reporter spec ./backend/test/index.js -R mocha-lcov-reporter | ./node_modules/coveralls/bin/coveralls.js
+- npm run coverage
