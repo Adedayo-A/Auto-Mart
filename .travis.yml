@@ -1,0 +1,19 @@
+language: node_js
+node_js:
+  - "node"
+env:
+  global:
+    - CC_TEST_REPORTER_ID=49376412b9594fa8630e855fbe49a22dd6cc051ba4777ac694abb77a1a4db7cb
+before_script:
+  - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+  - chmod +x ./cc-test-reporter
+  - ./cc-test-reporter before-build
+scripts:
+  - npm test
+  - nyc npm test && nyc report --reporter=text-lcov | coveralls
+after_success:
+  - npm run coverage
+  - istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage
+  - nyc npm test && nyc report --reporter=text-lcov | coveralls
+after_script:
+  - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
