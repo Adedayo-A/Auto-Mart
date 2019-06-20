@@ -5,11 +5,9 @@
   "main": "index.js",
   "scripts": {
     "lint": "eslint --fix",
+    "test": "nyc ./node_modules/.bin/mocha --reporter spec ./backend/test/index.js",
     "coverage": "nyc npm test",
-    "report": "nyc report --reporter=lcov",
-    "test-coverage-report": "npm run coverage && npm run report && npm test",
-    "test": "mocha --exit --require @babel/register ./backend/test/index.js",
-    "coveralls": "coveralls < coverage/lcov.info",
+    "coverage-report": "nyc report --reporter=text-lcov | coveralls",
     "start": "node ./backend/bin/www",
     "devstart": "nodemon ./backend/bin/www"
   },
