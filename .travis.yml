@@ -1,9 +1,16 @@
 language: node_js
 node_js:
   - "node"
+before_script:
+  - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+  - chmod +x ./cc-test-reporter
+  - ./cc-test-reporter before-build
 scripts:
   - npm test
+  - bundle exec rspec
 after_success:
-- npm run coverage
-- istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage
-- nyc npm test && nyc report --reporter=text-lcov | coveralls
+  - npm run coverage
+  - istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage
+  - nyc npm test && nyc report --reporter=text-lcov | coveralls
+after_script:
+  - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
