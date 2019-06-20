@@ -1,3 +1,6 @@
+env:
+  global:
+    - CC_TEST_REPORTER_ID=process.env.test_reporter
 language: node_js
 node_js:
   - "node"
