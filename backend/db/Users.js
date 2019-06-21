@@ -21,3 +21,23 @@ const users = [
 ];
 
 module.exports = users;
+
+// CREATE TABLE users (
+//   id serial PRIMARY KEY,
+//   email VARCHAR (355) UNIQUE NOT NULL,
+//   first_name VARCHAR (50) UNIQUE NOT NULL,
+//   last_name VARCHAR (50) UNIQUE NOT NULL,
+//   password VARCHAR (50) NOT NULL,
+//   address VARCHAR(500) NOT NULL,
+//   is_admin BOOLEAN NOT NULL
+// );
+
+// CREATE TABLE users(
+//   id serial PRIMARY KEY,
+//   email VARCHAR (355) UNIQUE NOT NULL,
+//   first_name VARCHAR (50) UNIQUE NOT NULL,
+//   first_name VARCHAR (50) UNIQUE NOT NULL,
+//   password VARCHAR (50) NOT NULL,
+//   address VARCHAR (500) NOT NULL,
+//   is_admin BOOLEAN NOT NULL
+// )
