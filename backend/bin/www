@@ -4,9 +4,8 @@ const port = parseInt(process.env.PORT, 10) || 8000;
 app.set('port', port);
 process.env.JWT_KEY = 'secretkey'
 process.env.test_reporter = '49376412b9594fa8630e855fbe49a22dd6cc051ba4777ac694abb77a1a4db7cb'
+process.env.db_URL = 'postgres://firulvau:pTPhhHcTt0aZTW0zZQ471t9k263B68W1@rogue.db.elephantsql.com:5432/firulvau'
 
 app.listen(port, ()=> {
 	console.log("App listening at port " + port +"!");
 });
-
-module.exports = port.JWT_KEY;

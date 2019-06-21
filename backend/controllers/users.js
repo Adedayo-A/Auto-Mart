@@ -1,23 +1,42 @@
 /* eslint-disable no-trailing-spaces */
 /* eslint-disable eol-last */
 /* eslint-disable linebreak-style */
+// eslint-disable-next-line import/no-extraneous-dependencies
+const { Client } = require('pg');
 const jwt = require('jsonwebtoken');
-const users = require('../db/Users.js');
 
-// const cars = require('../db/Cars.js');
+const users = require('../db/Users.js');
 
 // class userControllers { 
 const signUp = (req, res) => {
-  req.body.id = users.length + 1;
+  // req.body.id = users.length + 1;
   const newUser = req.body;
-  users.push(newUser);
-  jwt.sign({ newUser }, process.env.JWT_KEY, { expiresIn: '1h' }, (err, token) => {
-    res.status(200).send({
-      message: 'Signed up successful',
-      newUser,
-      token,
-    });
+  const pg = new Client({
+    connectionString: process.env.db_URL,
   });
+  pg.connect();
+  
+  // PG Connect
+  // eslint-disable-next-line consistent-return
+  pg.query('INSERT INTO users(email, first_name, last_name, password, address, is_admin) VALUES($1, $2, $3, $4, $5, $6)',
+    [newUser.email, newUser.first_name, newUser.last_name, newUser.password, 
+      newUser.address, newUser.is_admin], (err, dbRes) => {
+      if (err) {
+        console.log(err);
+        res.status(500).json({
+          message: 'error encountered',
+        });
+      } else {
+        console.log(dbRes);
+        jwt.sign({ newUser }, process.env.JWT_KEY, { expiresIn: '1h' }, (err, token) => {
+          res.status(200).send({
+            message: 'Signed up successful',
+            token,
+          });
+        });
+      }
+      pg.end();
+    });
 };
 
 const verifyUser = (req, res) => {
