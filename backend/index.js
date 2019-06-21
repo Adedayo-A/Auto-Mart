@@ -2,6 +2,7 @@
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
+// eslint-disable-next-line import/no-extraneous-dependencies
 const pg = require('pg');
 const route = require('./routes/index.js');
 
