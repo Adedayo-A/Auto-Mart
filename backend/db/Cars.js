@@ -79,3 +79,14 @@ const cars = [
 ];
 
 module.exports = cars;
+
+// CREATE TABLE carads(
+//   id serial PRIMARY KEY,
+//   status VARCHAR (50) NOT NULL,
+//   price NUMERIC NOT NULL,
+//   manufacturer VARCHAR (100) NOT NULL,
+//   model VARCHAR (100) NOT NULL,
+//   body_type VARCHAR (60) NOT NULL,
+//   owner INT NOT NULL,
+//   created_on DATE NOT NULL DEFAULT CURRENT_DATE
+// );

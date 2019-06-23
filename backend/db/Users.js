@@ -32,7 +32,7 @@ module.exports = users;
 //   is_admin BOOLEAN NOT NULL
 // );
 
-// CREATE TABLE users(
+// CREATE TABLE carAds(
 //   id serial PRIMARY KEY,
 //   email VARCHAR (355) UNIQUE NOT NULL,
 //   first_name VARCHAR (50) UNIQUE NOT NULL,

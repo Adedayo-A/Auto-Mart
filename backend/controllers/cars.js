@@ -1,4 +1,8 @@
 /* eslint-disable linebreak-style */
+// eslint-disable-next-line import/no-extraneous-dependencies
+const bcrypt = require('bcrypt');
+const { Client } = require('pg');
+
 const jwt = require('jsonwebtoken');
 const cars = require('../db/Cars.js');
 
@@ -87,18 +91,36 @@ const getCar = (req, res) => {
 // POST CAR
 const postCar = (req, res) => {
   const newAd = req.body;
-  newAd.id = cars.length + 1;
-  newAd.created_on = new Date();
   jwt.verify(req.token, process.env.JWT_KEY, (err) => {
     if (err) {
       res.status(403).json({
-        message: 'error..incorrect Token',
+        message: 'error..invalid Token',
       });
     } else {
-      cars.push(newAd);
-      res.status(200).json({
-        message: 'Posted successfully',
-        newAd,
+      const pg = new Client({
+        connectionString: process.env.db_URL,
+      });
+      // PG Connect
+      pg.connect();
+
+      const query = 'INSERT INTO carads(status, price, manufacturer, model, body_type, owner) VALUES($1, $2, $3, $4, $5, $6)';
+      const value = [newAd.status, newAd.price, newAd.manufacturer, newAd.model, newAd.body_type, newAd.owner];
+      // eslint-disable-next-line consistent-return
+      // PG Query
+      pg.query(query, value, (err, dbRes) => {
+        if (err) {
+          console.error(err);
+          res.status(403).json({
+            message: 'Input error, Please check input!!!',
+            newAd,
+          });
+        } else {
+          console.log(dbRes);
+          res.status(200).json({
+            message: 'Posted successfully',
+            newAd,
+          });
+        }
       });
     }
   });

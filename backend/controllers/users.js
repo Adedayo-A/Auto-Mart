@@ -7,11 +7,9 @@ const jwt = require('jsonwebtoken');
 // eslint-disable-next-line import/no-extraneous-dependencies
 const bcrypt = require('bcrypt');
 
-const users = require('../db/Users.js');
-
+// const users = require('../db/Users.js');
 // class userControllers { 
 const signUp = (req, res) => {
-  // req.body.id = users.length + 1;
   const newUser = req.body;
   const myPassword = req.body.password;
   bcrypt.hash(myPassword, 10, (err, hash) => {
@@ -20,33 +18,33 @@ const signUp = (req, res) => {
       console.log(err);
     } else {
       const hashedPassword = hash;
-      console.log(hashedPassword.length, 'rrrrrrr');
       const pg = new Client({
         connectionString: process.env.db_URL,
       });
       pg.connect();
+      const query = 'INSERT INTO users(email, first_name, last_name, password, address, is_admin) VALUES($1, $2, $3, $4, $5, $6)';
+      const value = [newUser.email, newUser.first_name, newUser.last_name, hashedPassword, 
+        newUser.address, newUser.is_admin];
       
       // PG Connect
       // eslint-disable-next-line consistent-return
-      pg.query('INSERT INTO users(email, first_name, last_name, password, address, is_admin) VALUES($1, $2, $3, $4, $5, $6)',
-        [newUser.email, newUser.first_name, newUser.last_name, hashedPassword, 
-          newUser.address, newUser.is_admin], (err, dbRes) => {
-          if (err) {
-            console.log(err);
-            res.status(500).json({
-              message: 'error encountered',
+      pg.query(query, value, (err, dbRes) => {
+        if (err) {
+          console.log(err);
+          res.status(500).json({
+            message: 'error encountered',
+          });
+        } else {
+          console.log(dbRes);
+          jwt.sign({ newUser }, process.env.JWT_KEY, { expiresIn: '1h' }, (err, token) => {
+            res.status(200).send({
+              message: 'Signed up successful',
+              token,
             });
-          } else {
-            console.log(dbRes);
-            jwt.sign({ newUser }, process.env.JWT_KEY, { expiresIn: '1h' }, (err, token) => {
-              res.status(200).send({
-                message: 'Signed up successful',
-                token,
-              });
-            });
-          }
-          pg.end();
-        });
+          });
+        }
+        pg.end();
+      });
     }
   });
 };
@@ -74,7 +72,7 @@ const verifyUser = (req, res) => {
         message: 'error encountered',
       });
     } else if (dbres.rows.length === 0) {
-      res.status(500).json({
+      res.status(403).json({
         message: 'error encountered, Invalid Email',
       });
     } else {
@@ -84,7 +82,7 @@ const verifyUser = (req, res) => {
         if (err) {
           console.log(err.stack);
         } else if (!match) {
-          res.status(500).json({
+          res.status(403).json({
             message: 'error encountered, Invalid password',
           });   
         } else {
@@ -121,5 +119,3 @@ module.exports = {
   verifyUser,
   protectedRoute,
 };
-
-// jwt.sign({ newUser }, secretkey, { expiresIn: '10m' }, (err, token) => {
