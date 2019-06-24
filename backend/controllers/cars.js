@@ -78,15 +78,39 @@ const getCars = (req, res) => {
 };
 // GET SPECIFIC CAR
 const getCar = (req, res) => {
-  const found = cars.some(car => car.id === parseInt(req.params.id, 10));
-  if (found) {
-    // eslint-disable-next-line radix
-    const requestedCar = cars.filter(car => car.id === parseInt(req.params.id));
-    res.status(200).json(requestedCar);
-  } else {
-    res.status(404).json({ msg: `No car was found with the id of ${req.params.id}` });
-  }
+  const ad = req.params;
+  console.log(ad);
+  const pg = new Client({
+    connectionString: process.env.db_URL,
+  });
+  pg.connect();
+  // PG Connect
+  // eslint-disable-next-line consistent-return
+  const query = 'SELECT * FROM carads WHERE id = $1';
+  const value = [ad.id];
+
+  pg.query(query, value, (err, dbres) => {
+    console.log(dbres);
+    if (err) {
+      console.log(err.stack);
+      res.status(500).json({
+        message: 'error encountered',
+      });
+    } else if (dbres.rows.length === 0) {
+      res.status(403).json({
+        message: 'error encountered, Invalid car selection',
+      });
+    } else {
+      const carad = dbres.rows;
+      res.status(200).json({
+        message: 'result completed',
+        carad,
+      });
+    }
+  });
 };
+
+
 // POST CAR
 const postCar = (req, res) => {
   const newAd = req.body;
