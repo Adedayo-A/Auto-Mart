@@ -27,3 +27,11 @@ const orders = [
 ];
 
 module.exports = orders;
+
+// CREATE TABLE order(
+//   id serial PRIMARY KEY,
+//   status VARCHAR (50) NOT NULL,
+//   amount NUMERIC NOT NULL,
+//   car_id INT NOT NULL,
+//   buyer INT NOT NULL,
+// );
