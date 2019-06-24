@@ -69,6 +69,10 @@ const patchOrder = (req, res) => {
           res.status(403).json({
             message: 'An error occured, Please check input!!!',
           });
+        } else if (dbres.rowCount === 0) {
+          res.status(401).json({
+            message: 'You are not permiited to update this order!!!',
+          });
         } else {
           res.status(200).json({
             message: 'Updated successfully',
