@@ -11,7 +11,7 @@ const postOrder = (req, res) => {
   jwt.verify(req.token, process.env.JWT_KEY, (err, authData) => {
     if (err) {
       res.status(403).json({
-        message: 'error..Invalid Token',
+        message: 'error..invalid Token',
       });
     } else {
       newOrder.status = 'pending';
@@ -48,7 +48,7 @@ const patchOrder = (req, res) => {
   jwt.verify(req.token, process.env.JWT_KEY, (err, authData) => {
     if (err) {
       res.status(403).json({
-        message: 'error..incorrect Token',
+        message: 'error..invalid Token',
       });
     } else {
       const editedOrder = req.body;
@@ -58,8 +58,8 @@ const patchOrder = (req, res) => {
       // PG Connect
       pg.connect();
 
-      const query = 'UPDATE purchaseorder SET amount=$1 WHERE buyer = $2';
-      const value = [editedOrder.amount, editedOrder.buyer];
+      const query = 'UPDATE purchaseorder SET amount=$1 WHERE buyer = $2 AND id =  $3';
+      const value = [editedOrder.amount, editedOrder.buyer, editedOrder.id];
       // eslint-disable-next-line consistent-return
       // PG Query
       // eslint-disable-next-line no-unused-vars
@@ -68,6 +68,10 @@ const patchOrder = (req, res) => {
           console.error(err);
           res.status(403).json({
             message: 'An error occured, Please check input!!!',
+          });
+        } else if (dbres.rowCount === 0) {
+          res.status(401).json({
+            message: 'You are not permiited to update this order!!!',
           });
         } else {
           res.status(200).json({

@@ -77,6 +77,7 @@ const verifyUser = (req, res) => {
       });
     } else {
       const dbPsw = dbres.rows[0].password;
+      const username = dbres.rows[0].first_name;
       console.log(dbPsw);
       bcrypt.compare(myPassword, dbPsw, (err, match) => {
         if (err) {
@@ -88,7 +89,7 @@ const verifyUser = (req, res) => {
         } else {
           jwt.sign({ newUser }, process.env.JWT_KEY, { expiresIn: '1h' }, (err, token) => {
             res.status(200).send({
-              message: 'Signed in successful',
+              message: `Welcome Back ${username}`,
               token,
             });
           });
