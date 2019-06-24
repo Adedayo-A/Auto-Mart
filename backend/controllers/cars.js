@@ -1,6 +1,5 @@
 /* eslint-disable linebreak-style */
 // eslint-disable-next-line import/no-extraneous-dependencies
-const bcrypt = require('bcrypt');
 const { Client } = require('pg');
 
 const jwt = require('jsonwebtoken');
