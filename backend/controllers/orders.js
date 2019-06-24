@@ -1,8 +1,8 @@
 const jwt = require('jsonwebtoken');
 // eslint-disable-next-line import/no-extraneous-dependencies
 const { Client } = require('pg');
-const cars = require('../db/Cars.js');
-const orders = require('../db/Orders.js');
+// const cars = require('../db/Cars.js');
+// const orders = require('../db/Orders.js');
 
 // const jwtKey = require('../bin/www');
 
@@ -51,13 +51,30 @@ const patchOrder = (req, res) => {
         message: 'error..incorrect Token',
       });
     } else {
-      const foundOrder = orders.filter(order => order.id === parseInt(req.params.id, 10));
-      const editOrder = foundOrder[0];
-      editOrder.amount = req.body.amount;
-      res.json({
-        message: 'Updated successfully',
-        authData,
-        editOrder,
+      const editedOrder = req.body;
+      const pg = new Client({
+        connectionString: process.env.db_URL,
+      });
+      // PG Connect
+      pg.connect();
+
+      const query = 'UPDATE purchaseorder SET amount=$1 WHERE buyer = $2';
+      const value = [editedOrder.amount, editedOrder.buyer];
+      // eslint-disable-next-line consistent-return
+      // PG Query
+      // eslint-disable-next-line no-unused-vars
+      pg.query(query, value, (err, dbres) => {
+        if (err) {
+          console.error(err);
+          res.status(403).json({
+            message: 'An error occured, Please check input!!!',
+          });
+        } else {
+          res.status(200).json({
+            message: 'Updated successfully',
+            editedOrder,
+          });
+        }
       });
     }
   });
