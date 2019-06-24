@@ -4,10 +4,9 @@ const { Client } = require('pg');
 // const cars = require('../db/Cars.js');
 // const orders = require('../db/Orders.js');
 
-// const jwtKey = require('../bin/www');
-
 const postOrder = (req, res) => {
   const newOrder = req.body;
+  // eslint-disable-next-line no-unused-vars
   jwt.verify(req.token, process.env.JWT_KEY, (err, authData) => {
     if (err) {
       res.status(403).json({
@@ -45,6 +44,7 @@ const postOrder = (req, res) => {
 };
 
 const patchOrder = (req, res) => {
+  // eslint-disable-next-line no-unused-vars
   jwt.verify(req.token, process.env.JWT_KEY, (err, authData) => {
     if (err) {
       res.status(403).json({

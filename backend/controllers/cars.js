@@ -8,38 +8,67 @@ const cars = require('../db/Cars.js');
 // GET REQUESTS
 const getCars = (req, res) => {
   // PRICE-RANGE AND STATUS-AVAILABLE
-  const pg = new Client({
-    connectionString: process.env.db_URL,
-  });
-  pg.connect();
-  // PG Connect
-  // eslint-disable-next-line consistent-return
-  const query = 'SELECT * FROM carads WHERE status = $1';
-  const value = ['available'];
-  pg.query(query, value, (err, dbres) => {
-    if (err) {
-      console.log(err.stack);
-      res.status(500).json({
-        message: 'error encountered',
-      });
-    } else if (dbres.rows.length === 0) {
-      res.status(404).json({
-        message: 'No car found!!!',
-      });
-    } else {
-      const carad = dbres.rows;
-      res.status(200).json({
-        message: 'result completed',
-        carad,
-      });
-    }
-  });
+  if (req.query.min_price && req.query.max_price && req.query.status) {
+    const pg = new Client({
+      connectionString: process.env.db_URL,
+    });
+    pg.connect();
+    // PG Connect
+    // eslint-disable-next-line consistent-return
+    const query = 'SELECT * FROM carads WHERE price BETWEEN $1 AND $2 AND status = $3';
+    const value = [req.query.min_price, req.query.max_price, 'available'];
+    pg.query(query, value, (err, dbres) => {
+      console.log(dbres);
+      if (err) {
+        console.log(err.stack);
+        res.status(500).json({
+          message: 'error encountered',
+        });
+      } else if (dbres.rows.length === 0) {
+        res.status(404).json({
+          message: 'No car found!!',
+        });
+      } else {
+        const carad = dbres.rows;
+        res.status(200).json({
+          message: 'result completed',
+          carad,
+        });
+      }
+    });
+  } else {
+    const pg = new Client({
+      connectionString: process.env.db_URL,
+    });
+    pg.connect();
+    // PG Connect
+    // eslint-disable-next-line consistent-return
+    const query = 'SELECT * FROM carads WHERE status = $1';
+    const value = ['available'];
+    pg.query(query, value, (err, dbres) => {
+      if (err) {
+        console.log(err.stack);
+        res.status(500).json({
+          message: 'error encountered',
+        });
+      } else if (dbres.rows.length === 0) {
+        res.status(404).json({
+          message: 'No car found!!!',
+        });
+      } else {
+        const carad = dbres.rows;
+        res.status(200).json({
+          message: 'result completed',
+          carad,
+        });
+      }
+    });
+  }
 };
 
 // GET SPECIFIC CAR
 const getCar = (req, res) => {
   const ad = req.params;
-  console.log(ad);
   const pg = new Client({
     connectionString: process.env.db_URL,
   });
@@ -87,7 +116,8 @@ const postCar = (req, res) => {
       pg.connect();
 
       const query = 'INSERT INTO carads(status, price, manufacturer, model, body_type, owner) VALUES($1, $2, $3, $4, $5, $6)';
-      const value = [newAd.status, newAd.price, newAd.manufacturer, newAd.model, newAd.body_type, newAd.owner];
+      const value = [newAd.status, newAd.price, newAd.manufacturer,
+        newAd.model, newAd.body_type, newAd.owner];
       // eslint-disable-next-line consistent-return
       // PG Query
       pg.query(query, value, (err, dbRes) => {
@@ -175,4 +205,4 @@ module.exports = {
   postCar,
   patchCar,
   deleteCar,
-}
+};
