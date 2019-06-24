@@ -66,11 +66,11 @@ const patchOrder = (req, res) => {
       pg.query(query, value, (err, dbres) => {
         if (err) {
           console.error(err);
-          res.status(403).json({
+          res.status(400).json({
             message: 'An error occured, Please check input!!!',
           });
         } else if (dbres.rowCount === 0) {
-          res.status(401).json({
+          res.status(403).json({
             message: 'You are not permiited to update this order!!!',
           });
         } else {

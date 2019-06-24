@@ -125,22 +125,43 @@ const postCar = (req, res) => {
   });
 };
 
-// PATCH CAR
+// PATCH CAR AD
 const patchCar = (req, res) => {
+  // eslint-disable-next-line no-unused-vars
   jwt.verify(req.token, process.env.JWT_KEY, (err, authData) => {
     if (err) {
       res.status(403).json({
-        message: 'error..incorrect Token',
+        message: 'error..invalid token',
       });
     } else {
-      const foundCar = cars.filter(car => car.id === parseInt(req.params.id, 10));
-      const editCar = foundCar[0];
-      editCar.status = req.body.status;
-      editCar.price = req.body.price;
-      res.json({
-        message: 'Updated successfully',
-        authData,
-        editCar,
+      const ad = req.body;
+      const pg = new Client({
+        connectionString: process.env.db_URL,
+      });
+      // PG Connect
+      pg.connect();
+
+      const query = 'UPDATE carads SET status=$1 WHERE owner = $2 AND id = $3';
+      const value = [ad.status, ad.owner, ad.id];
+      // eslint-disable-next-line consistent-return
+      // PG Query
+      // eslint-disable-next-line no-unused-vars
+      pg.query(query, value, (err, dbres) => {
+        if (err) {
+          console.error(err);
+          res.status(403).json({
+            message: 'An error occured, Please check input!!!',
+          });
+        } else if (dbres.rowCount === 0) {
+          res.status(403).json({
+            message: 'You are not permiited to update this ad!!!',
+          });
+        } else {
+          res.status(200).json({
+            message: 'AD Updated successfully',
+            ad,
+          });
+        }
       });
     }
   });
