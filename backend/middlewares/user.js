@@ -7,7 +7,9 @@ const tokenAuth = (req, res, next) => {
     req.token = token;
     next();
   } else {
-    res.sendStatus(403);
+    res.sendStatus(403).json({
+      message: 'A token is required for access',
+    });
   }
 };
 
