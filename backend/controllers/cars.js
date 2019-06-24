@@ -69,7 +69,6 @@ const getCars = (req, res) => {
 // GET SPECIFIC CAR
 const getCar = (req, res) => {
   const ad = req.params;
-  console.log(ad);
   const pg = new Client({
     connectionString: process.env.db_URL,
   });
