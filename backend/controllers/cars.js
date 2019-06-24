@@ -141,8 +141,8 @@ const patchCar = (req, res) => {
       // PG Connect
       pg.connect();
 
-      const query = 'UPDATE carads SET status=$1 WHERE owner = $2 AND id = $3';
-      const value = [ad.status, ad.owner, ad.id];
+      const query = 'UPDATE carads SET status=$1, price=$2 WHERE owner = $3 AND id = $4';
+      const value = [ad.status, ad.price, ad.owner, ad.id];
       // eslint-disable-next-line consistent-return
       // PG Query
       // eslint-disable-next-line no-unused-vars
