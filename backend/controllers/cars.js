@@ -125,7 +125,6 @@ const getCars = (req, res) => {
         connectionString: process.env.db_URL,
       });
       pg.connect();
-      // PG Connect
       // eslint-disable-next-line consistent-return
       const query = 'SELECT * FROM carads WHERE LOWER(manufacturer) = LOWER($1)';
       const value = [req.query.manufacturer];
@@ -153,12 +152,10 @@ const getCars = (req, res) => {
       const pg = new Client({
         connectionString: process.env.db_URL,
       });
-        // PG Connect
       pg.connect();
       let query = 'SELECT * FROM users WHERE LOWER(email) = LOWER($1)';
       const value = [email];
       // eslint-disable-next-line consistent-return
-      // PG Query
       pg.query(query, value, (err, dbres) => {
         if (err) {
           console.error(err);
@@ -168,7 +165,6 @@ const getCars = (req, res) => {
           });
         } else {
           query = 'SELECT * FROM LOWER(carads)';
-          // PG Query
           pg.query(query, (err, resdb) => {
             if (err) {
               console.error(err);
@@ -203,13 +199,11 @@ const getCar = (req, res) => {
         connectionString: process.env.db_URL,
       });
       pg.connect();
-      // PG Connect
       // eslint-disable-next-line consistent-return
       const query = 'SELECT * FROM carads WHERE LOWER(id) = LOWER($1)';
       const value = [ad.id];
 
       pg.query(query, value, (err, dbres) => {
-        console.log(dbres);
         if (err) {
           console.log(err.stack);
           res.status(500).json({
@@ -243,7 +237,6 @@ const postCar = (req, res) => {
       const pg = new Client({
         connectionString: process.env.db_URL,
       });
-      // PG Connect
       pg.connect();
 
       const query = 'INSERT INTO carads(status, price, manufacturer, model, body_type, owner, state) VALUES($1, $2, $3, $4, $5, $6, $7)';
@@ -251,6 +244,7 @@ const postCar = (req, res) => {
         newAd.model, newAd.body_type, newAd.owner, newAd.state];
       // eslint-disable-next-line consistent-return
       // PG Query
+      // eslint-disable-next-line no-unused-vars
       pg.query(query, value, (err, dbRes) => {
         if (err) {
           console.error(err);
@@ -259,7 +253,6 @@ const postCar = (req, res) => {
             newAd,
           });
         } else {
-          console.log(dbRes);
           res.status(200).json({
             message: 'Posted successfully',
             newAd,
@@ -283,13 +276,11 @@ const patchCar = (req, res) => {
       const pg = new Client({
         connectionString: process.env.db_URL,
       });
-      // PG Connect
       pg.connect();
 
       const query = 'UPDATE carads SET LOWER(status)=LOWER($1), price=$2 WHERE owner = $3 AND id = $4';
       const value = [ad.status, ad.price, ad.owner, ad.id];
       // eslint-disable-next-line consistent-return
-      // PG Query
       // eslint-disable-next-line no-unused-vars
       pg.query(query, value, (err, dbres) => {
         if (err) {
@@ -324,14 +315,11 @@ const deleteCar = (req, res) => {
     const pg = new Client({
       connectionString: process.env.db_URL,
     });
-    // PG Connect
     pg.connect();
     let query = 'SELECT * FROM users WHERE LOWER(email) = LOWER($1)';
     let value = [email];
     // eslint-disable-next-line consistent-return
-    // PG Query
     pg.query(query, value, (err, dbres) => {
-      console.log(dbres);
       if (err) {
         console.error(err);
       } else if (dbres.rows[0].is_admin === false) {
@@ -342,7 +330,6 @@ const deleteCar = (req, res) => {
         query = 'DELETE FROM carads WHERE id = $1';
         value = [req.params.id];
         // eslint-disable-next-line consistent-return
-        // PG Query
         // eslint-disable-next-line no-unused-vars
         pg.query(query, value, (err, resdb) => {
           if (err) {
