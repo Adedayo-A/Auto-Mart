@@ -9,92 +9,148 @@ const jwt = require('jsonwebtoken');
 // GET REQUESTS
 const getCars = (req, res) => {
   // PRICE-RANGE AND STATUS-AVAILABLE
-  if (req.query.min_price && req.query.max_price && req.query.status) {
-    const pg = new Client({
-      connectionString: process.env.db_URL,
-    });
-    pg.connect();
-    // PG Connect
-    // eslint-disable-next-line consistent-return
-    const query = 'SELECT * FROM carads WHERE price BETWEEN $1 AND $2 AND status = $3';
-    const value = [req.query.min_price, req.query.max_price, 'available'];
-    pg.query(query, value, (err, dbres) => {
-      console.log(dbres);
-      if (err) {
-        console.log(err.stack);
-        res.status(500).json({
-          message: 'error encountered',
-        });
-      } else if (dbres.rows.length === 0) {
-        res.status(404).json({
-          message: 'No car found!!',
-        });
-      } else {
-        const carad = dbres.rows;
-        res.status(200).json({
-          message: 'result completed',
-          carad,
-        });
-      }
-    });
-  } else {
-    const pg = new Client({
-      connectionString: process.env.db_URL,
-    });
-    pg.connect();
-    // PG Connect
-    // eslint-disable-next-line consistent-return
-    const query = 'SELECT * FROM carads WHERE status = $1';
-    const value = ['available'];
-    pg.query(query, value, (err, dbres) => {
-      if (err) {
-        console.log(err.stack);
-        res.status(500).json({
-          message: 'error encountered',
-        });
-      } else if (dbres.rows.length === 0) {
-        res.status(404).json({
-          message: 'No car found!!!',
-        });
-      } else {
-        const carad = dbres.rows;
-        res.status(200).json({
-          message: 'result completed',
-          carad,
-        });
-      }
-    });
-  }
+  jwt.verify(req.token, process.env.JWT_KEY, (err, authData) => {
+    console.log(req.token);
+    console.log(process.env.JWT_KEY);
+    if (err) {
+      res.status(403).json({
+        message: 'invalid token!!!',
+      });
+    } else if (req.query.min_price && req.query.max_price && req.query.status) {
+      const pg = new Client({
+        connectionString: process.env.db_URL,
+      });
+      pg.connect();
+      // PG Connect
+      // eslint-disable-next-line consistent-return
+      const query = 'SELECT * FROM carads WHERE price BETWEEN $1 AND $2 AND status = $3';
+      const value = [req.query.min_price, req.query.max_price, 'available'];
+      pg.query(query, value, (err, dbres) => {
+        console.log(dbres);
+        if (err) {
+          console.log(err.stack);
+          res.status(500).json({
+            message: 'error encountered',
+          });
+        } else if (dbres.rows.length === 0) {
+          res.status(404).json({
+            message: 'No car found!!',
+          });
+        } else {
+          const carad = dbres.rows;
+          res.status(200).json({
+            message: 'result completed',
+            carad,
+          });
+        }
+      });
+    } else if (req.query.status) {
+      const pg = new Client({
+        connectionString: process.env.db_URL,
+      });
+      pg.connect();
+      // PG Connect
+      // eslint-disable-next-line consistent-return
+      const query = 'SELECT * FROM carads WHERE status = $1';
+      const value = ['available'];
+      pg.query(query, value, (err, dbres) => {
+        if (err) {
+          console.log(err.stack);
+          res.status(500).json({
+            message: 'error encountered',
+          });
+        } else if (dbres.rows.length === 0) {
+          res.status(404).json({
+            message: 'No car found!!!',
+          });
+        } else {
+          const carad = dbres.rows;
+          res.status(200).json({
+            message: 'result completed',
+            carad,
+          });
+        }
+      });
+    } else {
+      const email = authData.user.email;
+      console.log(authData);
+      const pg = new Client({
+        connectionString: process.env.db_URL,
+      });
+        // PG Connect
+      pg.connect();
+      let query = 'SELECT * FROM users WHERE email = $1';
+      const value = [email];
+      // eslint-disable-next-line consistent-return
+      // PG Query
+      pg.query(query, value, (err, dbres) => {
+        console.log(dbres);
+        if (err) {
+          console.error(err);
+        } else if (dbres.rows[0].is_admin === false) {
+          res.status(403).json({
+            message: 'Access Denied!!!',
+          });
+        } else {
+          query = 'SELECT * FROM carads';
+          // PG Query
+          pg.query(query, (err, resdb) => {
+            if (err) {
+              console.error(err);
+            } else if (resdb.rows.length === 0) {
+              res.status(404).json({
+                message: 'No ads present!',
+              });
+            } else {
+              const carad = resdb.rows;
+              res.status(200).json({
+                message: 'result completed',
+                carad,
+              });
+            }
+          });
+        }
+      });
+    }
+  });
 };
 
 // GET SPECIFIC CAR
 const getCar = (req, res) => {
   const ad = req.params;
-  const pg = new Client({
-    connectionString: process.env.db_URL,
-  });
-  pg.connect();
-  // PG Connect
-  // eslint-disable-next-line consistent-return
-  const query = 'SELECT * FROM carads WHERE id = $1';
-  const value = [ad.id];
-
-  pg.query(query, value, (err, dbres) => {
-    console.log(dbres);
+  jwt.verify(req.token, process.env.JWT_KEY, (err) => {
     if (err) {
-      console.log(err.stack);
-      res.status(500).json({
-        message: 'error encountered',
-      });
-    } else if (dbres.rows.length === 0) {
-      res.status(404).json({
-        message: 'No car found!!',
+      res.status(403).json({
+        message: 'error..invalid Token',
       });
     } else {
-      const carad = dbres.rows;
-      res.status(200).json({
-        message: 'result completed',
-        carad,
+      const pg = new Client({
+        connectionString: process.env.db_URL,
+      });
+      pg.connect();
+      // PG Connect
+      // eslint-disable-next-line consistent-return
+      const query = 'SELECT * FROM carads WHERE id = $1';
+      const value = [ad.id];
+
+      pg.query(query, value, (err, dbres) => {
+        console.log(dbres);
+        if (err) {
+          console.log(err.stack);
+          res.status(500).json({
+            message: 'error encountered',
+          });
+        } else if (dbres.rows.length === 0) {
+          res.status(404).json({
+            message: 'No car found!!',
+          });
+        } else {
+          const carad = dbres.rows;
+          res.status(200).json({
+            message: 'result completed',
+            carad,
+          });
+        }
       });
     }
   });
@@ -107,7 +163,7 @@ const postCar = (req, res) => {
   jwt.verify(req.token, process.env.JWT_KEY, (err) => {
     if (err) {
       res.status(403).json({
-        message: 'error..invalid Token',
+        message: 'error..invalid token',
       });
     } else {
       const pg = new Client({
@@ -185,11 +241,10 @@ const patchCar = (req, res) => {
 // DELETE CAR
 const deleteCar = (req, res) => {
   jwt.verify(req.token, process.env.JWT_KEY, (err, authData) => {
-    console.log(authData);
     const email = authData.user.email;
     if (err) {
       res.status(403).json({
-        message: 'error..invalid Token',
+        message: 'error..invalid token',
       });
     }
     const pg = new Client({
@@ -199,10 +254,8 @@ const deleteCar = (req, res) => {
     pg.connect();
     let query = 'SELECT * FROM users WHERE email = $1';
     let value = [email];
-    console.log(value);
     // eslint-disable-next-line consistent-return
     // PG Query
-    // eslint-disable-next-line no-unused-vars
     pg.query(query, value, (err, dbres) => {
       console.log(dbres);
       if (err) {
