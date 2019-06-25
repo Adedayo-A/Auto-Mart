@@ -4,7 +4,6 @@
 const { Client } = require('pg');
 
 const jwt = require('jsonwebtoken');
-// const cars = require('../db/Cars.js');
 
 // GET REQUESTS
 const getCars = (req, res) => {
@@ -100,7 +99,6 @@ const getCars = (req, res) => {
         connectionString: process.env.db_URL,
       });
       pg.connect();
-      // PG Connect
       // eslint-disable-next-line consistent-return
       const query = 'SELECT * FROM carads WHERE LOWER(body_type) = LOWER($1)';
       const value = [req.query.body_type];
