@@ -87,7 +87,7 @@ const verifyUser = (req, res) => {
             message: 'error encountered, Invalid password',
           });   
         } else {
-          jwt.sign({ user }, process.env.JWT_KEY, { expiresIn: '1h' }, (err, token) => {
+          jwt.sign({ user }, process.env.JWT_KEY, { expiresIn: '2m' }, (err, token) => {
             res.status(200).send({
               message: `Welcome Back ${username}`,
               token,
