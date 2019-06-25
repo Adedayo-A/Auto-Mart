@@ -1,9 +1,10 @@
+/* eslint-disable prefer-destructuring */
 /* eslint-disable linebreak-style */
 // eslint-disable-next-line import/no-extraneous-dependencies
 const { Client } = require('pg');
 
 const jwt = require('jsonwebtoken');
-const cars = require('../db/Cars.js');
+// const cars = require('../db/Cars.js');
 
 // GET REQUESTS
 const getCars = (req, res) => {
@@ -183,19 +184,54 @@ const patchCar = (req, res) => {
 
 // DELETE CAR
 const deleteCar = (req, res) => {
-  jwt.verify(req.token, process.env.JWT_KEY, (err) => {
+  jwt.verify(req.token, process.env.JWT_KEY, (err, authData) => {
+    console.log(authData);
+    const email = authData.user.email;
     if (err) {
       res.status(403).json({
-        message: 'error..incorrect Token',
-      });
-    } else {
-      const carId = parseInt(req.params.id, 10);
-      cars.splice(carId - 1, 1);
-      res.json({
-        message: 'Deleted successfully',
-        cars,
+        message: 'error..invalid Token',
       });
     }
+    const pg = new Client({
+      connectionString: process.env.db_URL,
+    });
+    // PG Connect
+    pg.connect();
+    let query = 'SELECT * FROM users WHERE email = $1';
+    let value = [email];
+    console.log(value);
+    // eslint-disable-next-line consistent-return
+    // PG Query
+    // eslint-disable-next-line no-unused-vars
+    pg.query(query, value, (err, dbres) => {
+      console.log(dbres);
+      if (err) {
+        console.error(err);
+      } else if (dbres.rows[0].is_admin === false) {
+        res.status(403).json({
+          message: 'You are not permitted to delete this Ad!!!',
+        });
+      } else {
+        query = 'DELETE FROM carads WHERE id = $1';
+        value = [req.params.id];
+        // eslint-disable-next-line consistent-return
+        // PG Query
+        // eslint-disable-next-line no-unused-vars
+        pg.query(query, value, (err, resdb) => {
+          if (err) {
+            console.error(err);
+          } else if (resdb.rowCount === 0) {
+            res.status(403).json({
+              message: 'Ad not found!!',
+            });
+          } else {
+            res.status(200).json({
+              message: 'AD successfully deleted',
+            });
+          }
+        });
+      }
+    });
   });
 };
 
