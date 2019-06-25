@@ -71,6 +71,33 @@ const getCars = (req, res) => {
           });
         }
       });
+    } else if (req.query.body_type) {
+      const pg = new Client({
+        connectionString: process.env.db_URL,
+      });
+      pg.connect();
+      // PG Connect
+      // eslint-disable-next-line consistent-return
+      const query = 'SELECT * FROM carads WHERE body_type = $1';
+      const value = [req.query.body_type];
+      pg.query(query, value, (err, dbres) => {
+        if (err) {
+          console.log(err.stack);
+          res.status(500).json({
+            message: 'error encountered',
+          });
+        } else if (dbres.rows.length === 0) {
+          res.status(404).json({
+            message: 'No car found!!!',
+          });
+        } else {
+          const carad = dbres.rows;
+          res.status(200).json({
+            message: 'result completed',
+            carad,
+          });
+        }
+      });
     } else {
       const email = authData.user.email;
       console.log(authData);
