@@ -32,7 +32,7 @@ router.post('/api/v1/order/', tokenAuth, postOrder);
 router.patch('/api/v1/order/:id/price', tokenAuth, patchOrder);
 
 // FLAGS API ROUTES
-router.post('/api/v1/flag/', postFlag);
+router.post('/api/v1/flag/', tokenAuth, postFlag);
 
 
 module.exports = router;
