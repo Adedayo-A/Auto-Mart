@@ -211,7 +211,6 @@ const getCar = (req, res) => {
       const value = [ad.id];
 
       pg.query(query, value, (err, dbres) => {
-        console.log(dbres);
         if (err) {
           console.log(err.stack);
           res.status(500).json({
@@ -253,6 +252,7 @@ const postCar = (req, res) => {
         newAd.model, newAd.body_type, newAd.owner, newAd.state];
       // eslint-disable-next-line consistent-return
       // PG Query
+      // eslint-disable-next-line no-unused-vars
       pg.query(query, value, (err, dbRes) => {
         if (err) {
           console.error(err);
@@ -261,7 +261,6 @@ const postCar = (req, res) => {
             newAd,
           });
         } else {
-          console.log(dbRes);
           res.status(200).json({
             message: 'Posted successfully',
             newAd,
