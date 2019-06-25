@@ -10,8 +10,8 @@ const bcrypt = require('bcrypt');
 // const users = require('../db/Users.js');
 // class userControllers { 
 const signUp = (req, res) => {
-  const newUser = req.body;
-  const myPassword = req.body.password;
+  const user = req.body;
+  const myPassword = user.password;
   bcrypt.hash(myPassword, 10, (err, hash) => {
     // Store hash in database
     if (err) {
@@ -23,8 +23,8 @@ const signUp = (req, res) => {
       });
       pg.connect();
       const query = 'INSERT INTO users(email, first_name, last_name, password, address, is_admin) VALUES($1, $2, $3, $4, $5, $6)';
-      const value = [newUser.email, newUser.first_name, newUser.last_name, hashedPassword, 
-        newUser.address, newUser.is_admin];
+      const value = [user.email, user.first_name, user.last_name, hashedPassword, 
+        user.address, user.is_admin];
       
       // PG Connect
       // eslint-disable-next-line consistent-return
@@ -36,7 +36,7 @@ const signUp = (req, res) => {
           });
         } else {
           console.log(dbRes);
-          jwt.sign({ newUser }, process.env.JWT_KEY, { expiresIn: '1h' }, (err, token) => {
+          jwt.sign({ user }, process.env.JWT_KEY, { expiresIn: '1h' }, (err, token) => {
             res.status(200).send({
               message: 'Signed up successful',
               token,
@@ -51,9 +51,9 @@ const signUp = (req, res) => {
 
 const verifyUser = (req, res) => {
   // eslint-disable-next-line max-len
-  const newUser = req.body;
-  const myPassword = newUser.password;
-  const userEmail = newUser.email;
+  const user = req.body;
+  const myPassword = user.password;
+  const userEmail = user.email;
   
   const pg = new Client({
     connectionString: process.env.db_URL,
@@ -87,7 +87,7 @@ const verifyUser = (req, res) => {
             message: 'error encountered, Invalid password',
           });   
         } else {
-          jwt.sign({ newUser }, process.env.JWT_KEY, { expiresIn: '1h' }, (err, token) => {
+          jwt.sign({ user }, process.env.JWT_KEY, { expiresIn: '1h' }, (err, token) => {
             res.status(200).send({
               message: `Welcome Back ${username}`,
               token,
