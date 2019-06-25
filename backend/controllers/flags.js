@@ -27,8 +27,7 @@ const postFlag = (req, res) => {
         if (err) {
           console.error(err);
           res.status(403).json({
-            message: 'Input error, Please check input!!!',
-            newFlag,
+            message: 'error encountered, please check input!!!',
           });
         } else {
           res.status(200).json({
