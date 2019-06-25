@@ -24,3 +24,9 @@ const flags = [
 ];
 
 module.exports = flags;
+// CREATE TABLE flag(
+//   id serial PRIMARY KEY,
+//   car_id INT NOT NULL,
+//   reason TEXT,
+//   created_on DATE NOT NULL DEFAULT CURRENT_DATE
+// );
