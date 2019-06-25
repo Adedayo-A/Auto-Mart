@@ -26,7 +26,6 @@ const getCars = (req, res) => {
       const query = 'SELECT * FROM carads WHERE price BETWEEN $1 AND $2 AND status = $3';
       const value = [req.query.min_price, req.query.max_price, 'available'];
       pg.query(query, value, (err, dbres) => {
-        console.log(dbres);
         if (err) {
           console.log(err.stack);
           res.status(500).json({
@@ -111,7 +110,6 @@ const getCars = (req, res) => {
       // eslint-disable-next-line consistent-return
       // PG Query
       pg.query(query, value, (err, dbres) => {
-        console.log(dbres);
         if (err) {
           console.error(err);
         } else if (dbres.rows[0].is_admin === false) {
@@ -161,7 +159,6 @@ const getCar = (req, res) => {
       const value = [ad.id];
 
       pg.query(query, value, (err, dbres) => {
-        console.log(dbres);
         if (err) {
           console.log(err.stack);
           res.status(500).json({
@@ -183,7 +180,6 @@ const getCar = (req, res) => {
   });
 };
 
-
 // POST CAR
 const postCar = (req, res) => {
   const newAd = req.body;
@@ -204,6 +200,7 @@ const postCar = (req, res) => {
         newAd.model, newAd.body_type, newAd.owner];
       // eslint-disable-next-line consistent-return
       // PG Query
+      // eslint-disable-next-line no-unused-vars
       pg.query(query, value, (err, dbRes) => {
         if (err) {
           console.error(err);
@@ -212,7 +209,6 @@ const postCar = (req, res) => {
             newAd,
           });
         } else {
-          console.log(dbRes);
           res.status(200).json({
             message: 'Posted successfully',
             newAd,
