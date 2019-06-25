@@ -83,6 +83,7 @@ module.exports = cars;
 // CREATE TABLE carads(
 //   id serial PRIMARY KEY,
 //   status VARCHAR (50) NOT NULL,
+//   state VARCHAR (50) NOT NULL,
 //   price NUMERIC NOT NULL,
 //   manufacturer VARCHAR (100) NOT NULL,
 //   model VARCHAR (100) NOT NULL,
@@ -90,3 +91,9 @@ module.exports = cars;
 //   owner INT NOT NULL,
 //   created_on DATE NOT NULL DEFAULT CURRENT_DATE
 // );
+
+// ALTER TABLE table_name
+// ADD COLUMN new_column_name data_type;
+
+// ALTER TABLE carads
+// ADD COLUMN state VARCHAR (50) NOT NULL;
