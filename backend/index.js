@@ -12,7 +12,7 @@ const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(morgan('combined'));
+app.use(morgan);
 app.use(route);
 
 const apiDoc = 'https://automart12.docs.apiary.io/#';
