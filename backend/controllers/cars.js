@@ -24,12 +24,12 @@ const getCars = (req, res) => {
       const value = [req.query.min_price, req.query.max_price, 'available'];
       pg.query(query, value, (err, dbres) => {
         if (err) {
-          console.log(err.stack);
+          // console.log(err.stack);
           res.status(500).json({
             message: 'error encountered',
           });
         } else if (dbres.rows.length === 0) {
-          res.status(404).json({
+          res.status(200).json({
             message: 'No car found!!',
           });
         } else {
@@ -51,12 +51,12 @@ const getCars = (req, res) => {
       const value = ['available', req.query.state];
       pg.query(query, value, (err, dbres) => {
         if (err) {
-          console.log(err.stack);
+          // console.log(err.stack);
           res.status(500).json({
             message: 'error encountered',
           });
         } else if (dbres.rows.length === 0) {
-          res.status(404).json({
+          res.status(200).json({
             message: 'No car found!!!',
           });
         } else {
@@ -78,12 +78,12 @@ const getCars = (req, res) => {
       const value = ['available'];
       pg.query(query, value, (err, dbres) => {
         if (err) {
-          console.log(err.stack);
+          // console.log(err.stack);
           res.status(500).json({
             message: 'error encountered',
           });
         } else if (dbres.rows.length === 0) {
-          res.status(404).json({
+          res.status(200).json({
             message: 'No car found!!!',
           });
         } else {
@@ -104,12 +104,12 @@ const getCars = (req, res) => {
       const value = [req.query.body_type];
       pg.query(query, value, (err, dbres) => {
         if (err) {
-          console.log(err.stack);
+          // console.log(err.stack);
           res.status(500).json({
             message: 'error encountered',
           });
         } else if (dbres.rows.length === 0) {
-          res.status(404).json({
+          res.status(200).json({
             message: 'No car found!!!',
           });
         } else {
@@ -126,16 +126,16 @@ const getCars = (req, res) => {
       });
       pg.connect();
       // eslint-disable-next-line consistent-return
-      const query = 'SELECT * FROM carads WHERE LOWER(manufacturer) = LOWER($1)';
-      const value = [req.query.manufacturer];
+      const query = 'SELECT * FROM carads WHERE LOWER(manufacturer) = LOWER($1) AND LOWER(status)=LOWER($2)';
+      const value = [req.query.manufacturer, req.query.status];
       pg.query(query, value, (err, dbres) => {
         if (err) {
-          console.log(err.stack);
+          // console.log(err.stack);
           res.status(500).json({
             message: 'error encountered',
           });
         } else if (dbres.rows.length === 0) {
-          res.status(404).json({
+          res.status(200).json({
             message: 'No car found!!!',
           });
         } else {
@@ -167,7 +167,7 @@ const getCars = (req, res) => {
           query = 'SELECT * FROM LOWER(carads)';
           pg.query(query, (err, resdb) => {
             if (err) {
-              console.error(err);
+              // console.error(err);
             } else if (resdb.rows.length === 0) {
               res.status(404).json({
                 message: 'No ads present!',
@@ -205,7 +205,7 @@ const getCar = (req, res) => {
 
       pg.query(query, value, (err, dbres) => {
         if (err) {
-          console.log(err.stack);
+          // console.log(err.stack);
           res.status(500).json({
             message: 'error encountered',
           });
@@ -247,7 +247,7 @@ const postCar = (req, res) => {
       // eslint-disable-next-line no-unused-vars
       pg.query(query, value, (err, dbRes) => {
         if (err) {
-          console.error(err);
+          // console.error(err);
           res.status(403).json({
             message: 'Input error, Please check input!!!',
             newAd,
@@ -284,7 +284,7 @@ const patchCar = (req, res) => {
       // eslint-disable-next-line no-unused-vars
       pg.query(query, value, (err, dbres) => {
         if (err) {
-          console.error(err);
+          // console.error(err);
           res.status(403).json({
             message: 'An error occured, Please check input!!!',
           });
@@ -333,7 +333,7 @@ const deleteCar = (req, res) => {
         // eslint-disable-next-line no-unused-vars
         pg.query(query, value, (err, resdb) => {
           if (err) {
-            console.error(err);
+            // console.error(err);
           } else if (resdb.rowCount === 0) {
             res.status(403).json({
               message: 'Ad not found!!',
