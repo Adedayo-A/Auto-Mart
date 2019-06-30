@@ -63,9 +63,9 @@ const verifyUser = (req, res) => {
   // eslint-disable-next-line consistent-return
   const query = 'SELECT * FROM users WHERE email = $1';
   const value = [userEmail];
+ 
 
   pg.query(query, value, (err, dbres) => {
-    console.log(dbres);
     if (err) {
       console.log(err.stack);
       res.status(500).json({
@@ -78,7 +78,6 @@ const verifyUser = (req, res) => {
     } else {
       const dbPsw = dbres.rows[0].password;
       const username = dbres.rows[0].first_name;
-      console.log(dbPsw);
       bcrypt.compare(myPassword, dbPsw, (err, match) => {
         if (err) {
           console.log(err.stack);
