@@ -35,7 +35,6 @@ const signUp = (req, res) => {
             message: 'error encountered',
           });
         } else {
-          console.log(dbRes);
           jwt.sign({ user }, process.env.JWT_KEY, { expiresIn: '30m' }, (err, token) => {
             res.status(200).send({
               message: 'Signed up successful',
