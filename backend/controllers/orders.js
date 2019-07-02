@@ -26,7 +26,7 @@ const postOrder = (req, res) => {
       // PG Query
       pg.query(query, value, (err, dbRes) => {
         if (err) {
-          console.error(err);
+          // console.error(err);
           res.status(403).json({
             message: 'Input error, Please check input!!!',
             newOrder,
@@ -93,7 +93,7 @@ const patchOrder = (req, res) => {
             value = [order.amount];
             // eslint-disable-next-line consistent-return
             // eslint-disable-next-line no-unused-vars
-            pg.query(query, value, (err, dbres) => {
+            pg.query(query, value, (err, dbresponse) => {
               if (err) {
                 // console.error(err);
                 res.status(403).json({
@@ -117,7 +117,7 @@ const patchOrder = (req, res) => {
     }
   });
 };
-         
+
 
 module.exports = {
   postOrder,

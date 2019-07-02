@@ -303,6 +303,7 @@ const patchCar = (req, res) => {
         query = 'SELECT owner FROM carads WHERE id = $1';
         value = [req.params.id];
         // eslint-disable-next-line consistent-return
+        // eslint-disable-next-line no-shadow
         pg.query(query, value, (err, dbres) => {
           if (err) {
             console.error(err);
@@ -319,9 +320,9 @@ const patchCar = (req, res) => {
             value = [ad.status, ad.price];
             // eslint-disable-next-line consistent-return
             // eslint-disable-next-line no-unused-vars
-            pg.query(query, value, (err, dbres) => {
+            pg.query(query, value, (err, dbresponse) => {
               if (err) {
-                console.error(err);
+                // console.error(err);
                 res.status(403).json({
                   message: 'An error occured, Please check input!!!',
                 });

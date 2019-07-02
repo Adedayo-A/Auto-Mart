@@ -1,4 +1,4 @@
-/* global describe:false, it:false, before:false, beforeEach:false */
+/* global describe:false, it:false, before:false */
 const supertest = require('supertest');
 // eslint-disable-next-line no-unused-vars
 const should = require('should');
