@@ -92,6 +92,7 @@ const verifyUser = (req, res) => {
               token,
             });
           });
+          pg.end();
         }
       });
     }
