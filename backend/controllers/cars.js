@@ -39,6 +39,7 @@ const getCars = (req, res) => {
             carad,
           });
         }
+        pg.end();
       });
     } else if (req.query.state && req.query.status) {
       const pg = new Client({
@@ -66,6 +67,7 @@ const getCars = (req, res) => {
             carad,
           });
         }
+        pg.end();
       });
     } else if (req.query.status) {
       const pg = new Client({
@@ -93,6 +95,7 @@ const getCars = (req, res) => {
             carad,
           });
         }
+        pg.end();
       });
     } else if (req.query.body_type) {
       const pg = new Client({
@@ -119,6 +122,7 @@ const getCars = (req, res) => {
             carad,
           });
         }
+        pg.end();
       });
     } else if (req.query.manufacturer) {
       const pg = new Client({
@@ -145,6 +149,7 @@ const getCars = (req, res) => {
             carad,
           });
         }
+        pg.end();
       });
     } else {
       const email = authData.user.email;
@@ -179,6 +184,7 @@ const getCars = (req, res) => {
                 carad,
               });
             }
+            pg.end();
           });
         }
       });
@@ -200,7 +206,7 @@ const getCar = (req, res) => {
       });
       pg.connect();
       // eslint-disable-next-line consistent-return
-      const query = 'SELECT * FROM carads WHERE LOWER(id) = LOWER($1)';
+      const query = 'SELECT * FROM carads WHERE id = $1';
       const value = [ad.id];
 
       pg.query(query, value, (err, dbres) => {
@@ -210,7 +216,7 @@ const getCar = (req, res) => {
             message: 'error encountered',
           });
         } else if (dbres.rows.length === 0) {
-          res.status(404).json({
+          res.status(200).json({
             message: 'No car found!!',
           });
         } else {
@@ -220,6 +226,7 @@ const getCar = (req, res) => {
             carad,
           });
         }
+        pg.end();
       });
     }
   });
@@ -258,6 +265,7 @@ const postCar = (req, res) => {
             newAd,
           });
         }
+        pg.end();
       });
     }
   });
@@ -267,37 +275,70 @@ const postCar = (req, res) => {
 const patchCar = (req, res) => {
   // eslint-disable-next-line no-unused-vars
   jwt.verify(req.token, process.env.JWT_KEY, (err, authData) => {
+    const email = authData.user.email;
     if (err) {
       res.status(403).json({
         message: 'error..invalid token',
       });
     } else {
       const ad = req.body;
+      let query;
+      let value;
+      let currUser;
+      let owner;
+
       const pg = new Client({
         connectionString: process.env.db_URL,
       });
       pg.connect();
-
-      const query = 'UPDATE carads SET LOWER(status)=LOWER($1), price=$2 WHERE owner = $3 AND id = $4';
-      const value = [ad.status, ad.price, ad.owner, ad.id];
+      query = 'SELECT * FROM users WHERE LOWER(email) = LOWER($1)';
+      value = [email];
       // eslint-disable-next-line consistent-return
-      // eslint-disable-next-line no-unused-vars
       pg.query(query, value, (err, dbres) => {
         if (err) {
-          // console.error(err);
-          res.status(403).json({
-            message: 'An error occured, Please check input!!!',
-          });
-        } else if (dbres.rowCount === 0) {
-          res.status(403).json({
-            message: 'You are not permiited to update this ad!!!',
-          });
+          console.error(err);
         } else {
-          res.status(200).json({
-            message: 'AD Updated successfully',
-            ad,
-          });
+          currUser = dbres.rows[0].id;
         }
+        query = 'SELECT owner FROM carads WHERE id = $1';
+        value = [req.params.id];
+        // eslint-disable-next-line consistent-return
+        pg.query(query, value, (err, dbres) => {
+          if (err) {
+            console.error(err);
+          } else if (dbres.rows.length === 0) {
+            res.status(200).json({
+              message: 'No ad found',
+            });
+          } else {
+            owner = dbres.rows[0].owner;
+          }
+
+          if (currUser === owner) {
+            query = 'UPDATE carads SET status=$1, price=$2';
+            value = [ad.status, ad.price];
+            // eslint-disable-next-line consistent-return
+            // eslint-disable-next-line no-unused-vars
+            pg.query(query, value, (err, dbres) => {
+              if (err) {
+                console.error(err);
+                res.status(403).json({
+                  message: 'An error occured, Please check input!!!',
+                });
+              } else {
+                res.status(200).json({
+                  message: 'AD updated successfully!!',
+                  ad,
+                });
+              }
+            });
+          } else {
+            res.status(403).json({
+              message: 'You are not permiited to update this ad!!!',
+            });
+            pg.end();
+          }
+        });
       });
     }
   });
@@ -333,15 +374,16 @@ const deleteCar = (req, res) => {
         // eslint-disable-next-line no-unused-vars
         pg.query(query, value, (err, resdb) => {
           if (err) {
-            // console.error(err);
+            console.error(err);
           } else if (resdb.rowCount === 0) {
-            res.status(403).json({
+            res.status(200).json({
               message: 'Ad not found!!',
             });
           } else {
             res.status(200).json({
               message: 'AD successfully deleted',
             });
+            pg.end();
           }
         });
       }

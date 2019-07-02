@@ -37,6 +37,7 @@ const postOrder = (req, res) => {
             message: 'Posted successfully',
             newOrder,
           });
+          pg.end();
         }
       });
     }
@@ -46,43 +47,78 @@ const postOrder = (req, res) => {
 const patchOrder = (req, res) => {
   // eslint-disable-next-line no-unused-vars
   jwt.verify(req.token, process.env.JWT_KEY, (err, authData) => {
+    // eslint-disable-next-line prefer-destructuring
+    const email = authData.user.email;
     if (err) {
       res.status(403).json({
         message: 'error..invalid Token',
       });
     } else {
-      const editedOrder = req.body;
+      const order = req.body;
+      let query;
+      let value;
+      let currUser;
+      let buyer;
+
       const pg = new Client({
         connectionString: process.env.db_URL,
       });
-      // PG Connect
       pg.connect();
-
-      const query = 'UPDATE purchaseorder SET amount=$1 WHERE buyer = $2 AND id =  $3';
-      const value = [editedOrder.amount, editedOrder.buyer, editedOrder.id];
+      query = 'SELECT * FROM users WHERE LOWER(email) = LOWER($1)';
+      value = [email];
       // eslint-disable-next-line consistent-return
-      // PG Query
-      // eslint-disable-next-line no-unused-vars
       pg.query(query, value, (err, dbres) => {
         if (err) {
           console.error(err);
-          res.status(400).json({
-            message: 'An error occured, Please check input!!!',
-          });
-        } else if (dbres.rowCount === 0) {
-          res.status(403).json({
-            message: 'You are not permiited to update this order!!!',
-          });
         } else {
-          res.status(200).json({
-            message: 'Updated successfully',
-            editedOrder,
-          });
+          currUser = dbres.rows[0].id;
         }
+        query = 'SELECT buyer FROM purchaseorder WHERE id = $1';
+        value = [req.params.id];
+        // eslint-disable-next-line consistent-return
+        pg.query(query, value, (err, dbresp) => {
+          if (err) {
+            console.error(err);
+          } else if (dbresp.rows.length === 0) {
+            res.status(200).json({
+              message: 'No order found',
+            });
+          } else {
+            // eslint-disable-next-line prefer-destructuring
+            buyer = dbresp.rows[0].buyer;
+          }
+
+          if (currUser === buyer) {
+            query = 'UPDATE purchaseorder SET amount=$1';
+            value = [order.amount];
+            // eslint-disable-next-line consistent-return
+            // eslint-disable-next-line no-unused-vars
+            pg.query(query, value, (err, dbres) => {
+              if (err) {
+                // console.error(err);
+                res.status(403).json({
+                  message: 'An error occured, Please check input!!!',
+                });
+              } else {
+                res.status(200).json({
+                  message: 'Order updated successfully!!',
+                  order,
+                });
+              }
+            });
+          } else {
+            res.status(403).json({
+              message: 'You are not permiited to update this ad!!!',
+            });
+            pg.end();
+          }
+        });
       });
     }
   });
 };
+         
+
 module.exports = {
   postOrder,
   patchOrder,
