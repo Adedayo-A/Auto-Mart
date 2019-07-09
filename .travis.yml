@@ -10,7 +10,17 @@ env:
   - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
   - chmod +x ./cc-test-reporter
   - ./cc-test-reporter before-build
-  - psql -c 'create database travis_ci_test;' -U postgres
+  - psql --version
+    - psql -c 'create database travis_ci_test;' -U postgres
+addons:
+  postgresql: "11.4"
+  apt:
+    packages:
+    - postgresql-11.4
+    - postgresql-client-11.4
+env:
+  global:
+  - PGPORT=5432
 scripts:
   - npm test
   - nyc npm test && nyc report --reporter=text-lcov | coveralls
