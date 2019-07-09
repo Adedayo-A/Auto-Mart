@@ -6,11 +6,16 @@ env:
     - CC_TEST_REPORTER_ID=49376412b9594fa8630e855fbe49a22dd6cc051ba4777ac694abb77a1a4db7cb
   services:
     - postgresql
+  postgres:
+    - adapter: postgresql
+    - database: myapp_test
+    - username: postgres
   before_script:
     - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
     - chmod +x ./cc-test-reporter
     - ./cc-test-reporter before-build
     - psql -c 'create database travis_ci_test;' -U postgres
+    - rake db:migrate
 scripts:
   - npm test
   - nyc npm test && nyc report --reporter=text-lcov | coveralls
