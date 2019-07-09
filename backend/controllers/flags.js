@@ -29,6 +29,7 @@ const postFlag = (req, res) => {
           res.status(403).json({
             message: 'error encountered, please check input!!!',
           });
+          pg.end();
         } else {
           res.status(200).json({
             newFlag,

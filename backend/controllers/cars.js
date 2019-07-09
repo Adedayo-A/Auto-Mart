@@ -28,18 +28,20 @@ const getCars = (req, res) => {
           res.status(500).json({
             message: 'error encountered',
           });
+          pg.end();
         } else if (dbres.rows.length === 0) {
           res.status(200).json({
             message: 'No car found!!',
           });
+          pg.end();
         } else {
           const carad = dbres.rows;
           res.status(200).json({
             message: 'result completed',
             carad,
           });
+          pg.end();
         }
-        pg.end();
       });
     } else if (req.query.state && req.query.status) {
       const pg = new Client({
@@ -56,18 +58,20 @@ const getCars = (req, res) => {
           res.status(500).json({
             message: 'error encountered',
           });
+          pg.end();
         } else if (dbres.rows.length === 0) {
           res.status(200).json({
             message: 'No car found!!!',
           });
+          pg.end();
         } else {
           const carad = dbres.rows;
           res.status(200).json({
             message: 'result completed',
             carad,
           });
+          pg.end();
         }
-        pg.end();
       });
     } else if (req.query.status) {
       const pg = new Client({
@@ -84,18 +88,20 @@ const getCars = (req, res) => {
           res.status(500).json({
             message: 'error encountered',
           });
+          pg.end();
         } else if (dbres.rows.length === 0) {
           res.status(200).json({
             message: 'No car found!!!',
           });
+          pg.end();
         } else {
           const carad = dbres.rows;
           res.status(200).json({
             message: 'result completed',
             carad,
           });
+          pg.end();
         }
-        pg.end();
       });
     } else if (req.query.body_type) {
       const pg = new Client({
@@ -111,18 +117,20 @@ const getCars = (req, res) => {
           res.status(500).json({
             message: 'error encountered',
           });
+          pg.end();
         } else if (dbres.rows.length === 0) {
           res.status(200).json({
             message: 'No car found!!!',
           });
+          pg.end();
         } else {
           const carad = dbres.rows;
           res.status(200).json({
             message: 'result completed',
             carad,
           });
+          pg.end();
         }
-        pg.end();
       });
     } else if (req.query.manufacturer) {
       const pg = new Client({
@@ -138,18 +146,20 @@ const getCars = (req, res) => {
           res.status(500).json({
             message: 'error encountered',
           });
+          pg.end();
         } else if (dbres.rows.length === 0) {
           res.status(200).json({
             message: 'No car found!!!',
           });
+          pg.end();
         } else {
           const carad = dbres.rows;
           res.status(200).json({
             message: 'result completed',
             carad,
           });
+          pg.end();
         }
-        pg.end();
       });
     } else {
       const email = authData.user.email;
@@ -167,6 +177,7 @@ const getCars = (req, res) => {
           res.status(403).json({
             message: 'Access Denied!!!',
           });
+          pg.end();
         } else {
           query = 'SELECT * FROM LOWER(carads)';
           pg.query(query, (err, resdb) => {
@@ -176,14 +187,15 @@ const getCars = (req, res) => {
               res.status(404).json({
                 message: 'No ads present!',
               });
+              pg.end();
             } else {
               const carad = resdb.rows;
               res.status(200).json({
                 message: 'result completed',
                 carad,
               });
+              pg.end();
             }
-            pg.end();
           });
         }
       });
@@ -214,18 +226,20 @@ const getCar = (req, res) => {
           res.status(500).json({
             message: 'error encountered',
           });
+          pg.end();
         } else if (dbres.rows.length === 0) {
           res.status(200).json({
             message: 'No car found!!',
           });
+          pg.end();
         } else {
           const carad = dbres.rows;
           res.status(200).json({
             message: 'Success, result completed',
             carad,
           });
+          pg.end();
         }
-        pg.end();
       });
     }
   });
@@ -251,10 +265,12 @@ const postCar = (req, res) => {
       pg.query(query, value, (err, dbres) => {
         if (err) {
           console.error(err);
+          pg.end();
         } else if (dbres.rows[0].first_name === null) {
           res.status(200).json({
             message: 'Please complete your registration inorder to post a car!!',
           });
+          pg.end();
         } else {
           query = 'INSERT INTO carads(status, price, manufacturer, model, body_type, owner, state) VALUES($1, $2, $3, $4, $5, $6, $7)';
           value = [newAd.status, newAd.price, newAd.manufacturer,
@@ -269,13 +285,14 @@ const postCar = (req, res) => {
                 message: 'Input error, Please check input!!!',
                 newAd,
               });
+              pg.end();
             } else {
               res.status(200).json({
                 message: 'Posted successfully',
                 newAd,
               });
+              pg.end();
             }
-            pg.end();
           });
         }
       });
@@ -309,6 +326,7 @@ const patchCar = (req, res) => {
       pg.query(query, value, (err, dbres) => {
         if (err) {
           console.error(err);
+          pg.end();
         } else {
           currUser = dbres.rows[0].id;
         }
@@ -319,10 +337,12 @@ const patchCar = (req, res) => {
         pg.query(query, value, (err, dbres) => {
           if (err) {
             console.error(err);
+            pg.end();
           } else if (dbres.rows.length === 0) {
             res.status(200).json({
               message: 'No ad found',
             });
+            pg.end();
           } else {
             owner = dbres.rows[0].owner;
           }
@@ -338,11 +358,13 @@ const patchCar = (req, res) => {
                 res.status(403).json({
                   message: 'An error occured, Please check input!!!',
                 });
+                pg.end();
               } else {
                 res.status(200).json({
                   message: 'AD updated successfully!!',
                   ad,
                 });
+                pg.end();
               }
             });
           } else {
@@ -376,10 +398,12 @@ const deleteCar = (req, res) => {
     pg.query(query, value, (err, dbres) => {
       if (err) {
         console.error(err);
+        pg.end();
       } else if (dbres.rows[0].is_admin === false) {
         res.status(403).json({
           message: 'You are not permitted to delete this Ad!!!',
         });
+        pg.end();
       } else {
         query = 'DELETE FROM carads WHERE id = $1';
         value = [req.params.id];
@@ -388,10 +412,12 @@ const deleteCar = (req, res) => {
         pg.query(query, value, (err, resdb) => {
           if (err) {
             console.error(err);
+            pg.end();
           } else if (resdb.rowCount === 0) {
             res.status(200).json({
               message: 'Ad not found!!',
             });
+            pg.end();
           } else {
             res.status(200).json({
               message: 'AD successfully deleted',

@@ -100,7 +100,7 @@ const verifyUser = (req, res) => {
         } else {
           jwt.sign({ user }, process.env.JWT_KEY, { expiresIn: '30m' }, (err, token) => {
             res.status(200).json({
-              username: username,
+              username,
               status: 200,
               message: `Success..Welcome Back ${username}`,
               token,
@@ -135,17 +135,18 @@ const updateUser = (req, res) => {
       pg.query(query, value, (err, dbres) => {
         if (err) {
           console.error(err);
+          pg.end();
         } else if (dbres.rowCount === 0) {
-          console.log(dbres);
           res.status(403).json({
             message: 'An error occured, please check input',
           });
+          pg.end();
         } else {
           res.status(200).json({
             message: 'Profile updated',
           });
+          pg.end();
         }
-        pg.end();
       });
     }
   });

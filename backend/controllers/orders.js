@@ -24,13 +24,14 @@ const postOrder = (req, res) => {
       const value = [newOrder.status, newOrder.amount, newOrder.car_id, newOrder.buyer];
       // eslint-disable-next-line consistent-return
       // PG Query
-      pg.query(query, value, (err, dbRes) => {
+      pg.query(query, value, (err) => {
         if (err) {
           // console.error(err);
           res.status(403).json({
             message: 'Input error, Please check input!!!',
             newOrder,
           });
+          pg.end();
         } else {
           res.status(200).json({
             message: 'Posted successfully',
@@ -69,6 +70,7 @@ const patchOrder = (req, res) => {
       pg.query(query, value, (err, dbres) => {
         if (err) {
           console.error(err);
+          pg.end();
         } else {
           currUser = dbres.rows[0].id;
         }
@@ -78,10 +80,12 @@ const patchOrder = (req, res) => {
         pg.query(query, value, (err, dbresp) => {
           if (err) {
             console.error(err);
+            pg.end();
           } else if (dbresp.rows.length === 0) {
             res.status(200).json({
               message: 'No order found',
             });
+            pg.end();
           } else {
             // eslint-disable-next-line prefer-destructuring
             buyer = dbresp.rows[0].buyer;
@@ -98,11 +102,13 @@ const patchOrder = (req, res) => {
                 res.status(403).json({
                   message: 'An error occured, Please check input!!!',
                 });
+                pg.end();
               } else {
                 res.status(200).json({
                   message: 'Order updated successfully!!',
                   order,
                 });
+                pg.end();
               }
             });
           } else {
