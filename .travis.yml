@@ -12,7 +12,7 @@ env:
   - ./cc-test-reporter before-build
   - psql --version
   - psql -c 'CREATE DATABASE {{firulvau}};' -U postgres
-  - cp config/database.yml.travis config/database.yml3
+  - psql -c "CREATE USER root WITH PASSWORD '5432';" -U postgres
 addons:
   postgresql: "11.2"
 scripts:

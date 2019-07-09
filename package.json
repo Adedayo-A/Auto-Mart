@@ -4,7 +4,7 @@
   "description": "A car app that connects car sellers to prospective buyers",
   "main": "index.js",
   "scripts": {
-    "build": "./node_modules/.bin/babel src -d lib",
+    "build": "babel src -d lib",
     "lint": "eslint --fix",
     "test": "./node_modules/.bin/mocha --timeout 40000 --reporter spec ./backend/test/index.js",
     "coverage": "nyc npm test",
