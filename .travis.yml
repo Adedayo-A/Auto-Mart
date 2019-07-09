@@ -8,6 +8,14 @@ before_script:
   - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
   - chmod +x ./cc-test-reporter
   - ./cc-test-reporter before-build
+  - psql --version
+  - psql -c 'CREATE DATABASE {{firulvau}};' -U postgres
+  - psql -c 'CREATE ROLE travis SUPERUSER LOGIN CREATEDB;' -U postgres
+  - cp config/database.yml.travis config/database.yml3
+services:
+  - postgresql
+addons:
+  postgresql: "11.2"
 scripts:
   - npm test
   - nyc npm test && nyc report --reporter=text-lcov | coveralls
@@ -15,5 +23,5 @@ after_success:
   - npm run coverage
   - istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage
   - nyc npm test && nyc report --reporter=text-lcov | coveralls
-# after_script:
-#   - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
+after_script:
+  - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
