@@ -41,3 +41,10 @@ module.exports = users;
 //   address VARCHAR (500) NOT NULL,
 //   is_admin BOOLEAN NOT NULL
 // )
+
+// ALTER TABLE users
+//   ALTER COLUMN first_name DROP NOT NULL,
+//   ALTER COLUMN last_name DROP NOT NULL,
+//   ALTER COLUMN address DROP NOT NULL;
+// alter table users alter column email drop not null;
+

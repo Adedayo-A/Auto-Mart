@@ -32,7 +32,6 @@ const postOrder = (req, res) => {
             newOrder,
           });
         } else {
-          console.log(dbRes);
           res.status(200).json({
             message: 'Posted successfully',
             newOrder,

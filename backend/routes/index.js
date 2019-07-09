@@ -3,15 +3,19 @@ const carControllers = require('../controllers/cars.js');
 const userControllers = require('../controllers/users.js');
 const orderControllers = require('../controllers/orders.js');
 const flagControllers = require('../controllers/flags.js');
-const tokenAuth = require('../middlewares/user.js');
+const middlewares = require('../middlewares/user.js');
 
 // const { tokenAuth } = middleControllers;
 const {
   getCar, getCars, postCar, patchCar, deleteCar,
 } = carControllers;
-const { signUp, verifyUser, protectedRoute } = userControllers;
+const { signUp, verifyUser, updateUser } = userControllers;
 const { postOrder, patchOrder } = orderControllers;
 const { postFlag } = flagControllers;
+const {
+  tokenAuth, checkPwd, validateEmail,
+} = middlewares;
+
 
 const router = express.Router();
 
@@ -23,8 +27,8 @@ router.patch('/api/v1/car/:id/', tokenAuth, patchCar);
 router.delete('/api/v1/car/:id/', tokenAuth, deleteCar);
 
 // USERS API ROUTES
-router.post('/api/v1/users/createpost', protectedRoute);
-router.post('/api/v1/users/auth/signup', signUp);
+router.patch('/api/v1/users/auth/update', tokenAuth, updateUser);
+router.post('/api/v1/users/auth/signup', validateEmail, checkPwd, signUp);
 router.post('/api/v1/users/auth/signin', verifyUser);
 
 // ORDERS API ROUTES

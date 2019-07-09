@@ -15,27 +15,29 @@
     <nav class="nav">
         <a href="index.html" class="logo"><h2>Auto Mart</h2></a>
         <ul class="nav-links">
-            <li><a href="UI/sell.html">Post a sale Ad</a></li>
-            <li><a href="UI/purchase-order.html">Make a purchase order</a></li>
-            <li><a href="#">My Orders</a></li>
-            <li><a href="UI/ads.html">My Ads</a></li>
-            <li><a href="UI/signinpage.html">Log in</a></li>
-            <li class="sign-up"><a href="UI/signinpage.html">Sign up</a></li>
+            <li><a class="need-user-link" href="UI/sell.html">Post a sale Ad</a></li>
+            <li><a class="need-user-link" href="UI/purchase-order.html">Make a purchase order</a></li>
+            <li><a class="need-user-link" href="#">My Orders</a></li>
+            <li><a class="need-user-link" href="UI/ads.html">My Ads</a></li>
+            <li class="no-user"><a href="UI/signinpage.html">Log in</a></li>
+            <li class="sign-up no-user"><a href="UI/signinpage.html">Sign up</a></li>
         </ul>
-        <ul class="svg">
+        <ul class="svg need-user">
             <li>
                 <img src="UI/images/user.svg" class="img-svg"/>
             </li>
         </ul>
         <a id="nav-toggle" href="#"><span></span></a>
     </nav>
-    <div class="arrow-up none" id="arrowup"></div>
-    <div class="dropdown none" id="drpdown">
-        <button class="button-dropdown"><a href="UI/signinpage.html">Sign In</a></button>
-        <p class="para-dropdown">Don't have an account?<a href="UI/signinpage.html"> Sign Up </a></p>
+    <div class="arrow-up" id="arrowup"></div>
+    <div class="dropdown" id="drpdown">
+        <div class="dashboard-dropdown"></div>
+        <p class="para-dropdown"><a href="UI/ads.html" class="my-reg">Complete my profile</a></p>
         <hr>
         <p class="para-dropdown"><a href="UI/ads.html">My Ads</a></p>
         <p class="para-dropdown"><a href="UI/orders.html">My Orders</a></p>
+        <p class="para-dropdown"><a href="index.html" class="sign-out">Sign Out</a></p>
+        <hr>
     </div>
     <main class="main-index">
         <div class="background-img">
@@ -44,7 +46,7 @@
                     <form class="form-search">
                         <input type="search" class="input-section-search" placeholder="Type a search" />
                         <div class="div-search-submit">
-                            <a href="UI/result.html"><input type="button" value="Search" class="input-search-submit"/></a>
+                            <a class="need-user-link" href="UI/result.html"><input type="button" value="Search" class="input-search-submit"/></a>
                         </div>
                         <div class="wrapper-search">
                             <div class="div-sub-search-make">
@@ -92,6 +94,7 @@
             <div class="second-img"></div>
         </div>
     </main>
+    <script src="UI/js/request.js"></script>
     <script src="UI/js/responsive.js"></script>
 </body>
 </html>

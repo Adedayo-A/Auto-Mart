@@ -4,6 +4,8 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 // eslint-disable-next-line import/no-extraneous-dependencies
 const morgan = require('morgan');
+// eslint-disable-next-line import/no-extraneous-dependencies
+const cloudinary = require('cloudinary').v2;
 
 // eslint-disable-next-line import/no-extraneous-dependencies
 const route = require('./routes/index.js');

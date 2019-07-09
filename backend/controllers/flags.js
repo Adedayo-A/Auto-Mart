@@ -34,6 +34,7 @@ const postFlag = (req, res) => {
             newFlag,
             message: 'Thank you for reporting this problem',
           });
+          pg.end();
         }
       });
     }

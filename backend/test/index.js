@@ -195,7 +195,26 @@ describe('TEST API ENDPOINTS', () => {
         .send(user)
         .expect('Content-type', /json/)
         .end((err, res) => {
-          res.body.message.should.equal('Welcome Back Swede');
+          res.body.message.should.equal('Success..Welcome Back Swede');
+          res.status.should.equal(200);
+          res.error.should.equal(false);
+          done();
+        });
+    });
+    it('should update and register a user', (done) => {
+      const user = {
+        first_name: 'Obafemi',
+        last_name: 'James-Dele',
+        address: '33, Adeola Odeku, Lagos',
+      };
+      supertest(index)
+        .patch('/api/v1/users/auth/update')
+        .set('Authorization', `Bearer ${token}`)
+        .send(user)
+        .expect('Content-type', /json/)
+        .end((err, res) => {
+          // eslint-disable-next-line no-unused-vars
+          res.body.message.should.equal('Profile updated');
           res.status.should.equal(200);
           res.error.should.equal(false);
           done();

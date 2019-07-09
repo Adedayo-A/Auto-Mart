@@ -153,7 +153,6 @@ const getCars = (req, res) => {
       });
     } else {
       const email = authData.user.email;
-      console.log(authData);
       const pg = new Client({
         connectionString: process.env.db_URL,
       });
@@ -222,7 +221,7 @@ const getCar = (req, res) => {
         } else {
           const carad = dbres.rows;
           res.status(200).json({
-            message: 'result completed',
+            message: 'Success, result completed',
             carad,
           });
         }
@@ -235,37 +234,50 @@ const getCar = (req, res) => {
 // POST CAR
 const postCar = (req, res) => {
   const newAd = req.body;
-  jwt.verify(req.token, process.env.JWT_KEY, (err) => {
+  jwt.verify(req.token, process.env.JWT_KEY, (err, authData) => {
     if (err) {
       res.status(403).json({
         message: 'error..invalid token',
       });
     } else {
+      const email = authData.user.email;
       const pg = new Client({
         connectionString: process.env.db_URL,
       });
       pg.connect();
-
-      const query = 'INSERT INTO carads(status, price, manufacturer, model, body_type, owner, state) VALUES($1, $2, $3, $4, $5, $6, $7)';
-      const value = [newAd.status, newAd.price, newAd.manufacturer,
-        newAd.model, newAd.body_type, newAd.owner, newAd.state];
+      let query = 'SELECT * FROM users WHERE LOWER(email) = LOWER($1)';
+      let value = [email];
       // eslint-disable-next-line consistent-return
-      // PG Query
-      // eslint-disable-next-line no-unused-vars
-      pg.query(query, value, (err, dbRes) => {
+      pg.query(query, value, (err, dbres) => {
         if (err) {
-          // console.error(err);
-          res.status(403).json({
-            message: 'Input error, Please check input!!!',
-            newAd,
+          console.error(err);
+        } else if (dbres.rows[0].first_name === null) {
+          res.status(200).json({
+            message: 'Please complete your registration inorder to post a car!!',
           });
         } else {
-          res.status(200).json({
-            message: 'Posted successfully',
-            newAd,
+          query = 'INSERT INTO carads(status, price, manufacturer, model, body_type, owner, state) VALUES($1, $2, $3, $4, $5, $6, $7)';
+          value = [newAd.status, newAd.price, newAd.manufacturer,
+            newAd.model, newAd.body_type, newAd.owner, newAd.state];
+          // eslint-disable-next-line consistent-return
+          // PG Query
+          // eslint-disable-next-line no-unused-vars
+          pg.query(query, value, (err, dbRes) => {
+            if (err) {
+            // console.error(err);
+              res.status(403).json({
+                message: 'Input error, Please check input!!!',
+                newAd,
+              });
+            } else {
+              res.status(200).json({
+                message: 'Posted successfully',
+                newAd,
+              });
+            }
+            pg.end();
           });
         }
-        pg.end();
       });
     }
   });

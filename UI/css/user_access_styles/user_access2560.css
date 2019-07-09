@@ -28,14 +28,18 @@
         margin-right: auto;
     }
 
-    .nav a {
-      text-decoration: none;
-      color: #C6CEE4;
+    .nav ul.nav-links {
+      margin-right: 10rem;
     }
 
     .nav ul.nav-links li {
       display: inline;
       margin-left: 1.5rem;
+    }
+
+    .nav a {
+      text-decoration: none;
+      color: #C6CEE4;
     }
 
     .sign-up {
@@ -109,9 +113,12 @@
       text-decoration: none;
       color: #A400B4;
     }
+
     /**********NAV ENDED********/
-    
     /*********SIGN IN PAGE******/
+    .login-form, .update-info {
+      display: none;
+    }
     
     .li-style {
       color: white;
@@ -237,12 +244,9 @@
       text-decoration: none;
     }
 
-    .forgot-p {
-      display: none;
-    }
-
     .search {
         width: 350px;
+        padding: 20px;
         height: 40px;
         border-radius: 5px;
         border: 0.9px solid rgba(0,0, 0, 0.3);
@@ -250,7 +254,6 @@
         outline: none;
         margin-bottom: 12px;
     }
-
     .button {
         display: block;
         margin-top: 2rem;
