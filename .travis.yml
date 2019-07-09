@@ -4,16 +4,15 @@ node_js:
 env:
   global:
     - CC_TEST_REPORTER_ID=49376412b9594fa8630e855fbe49a22dd6cc051ba4777ac694abb77a1a4db7cb
-before_script:
+  services:
+  - postgresql
+  before_script:
   - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
   - chmod +x ./cc-test-reporter
   - ./cc-test-reporter before-build
   - psql --version
   - psql -c 'CREATE DATABASE {{firulvau}};' -U postgres
-  - psql -c 'CREATE ROLE travis SUPERUSER LOGIN CREATEDB;' -U postgres
   - cp config/database.yml.travis config/database.yml3
-services:
-  - postgresql
 addons:
   postgresql: "11.2"
 scripts:
