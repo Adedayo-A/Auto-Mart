@@ -33,6 +33,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+
+    
+
     const password = document.querySelector('.password-value');
     const searchBoxConfirmPassword = document.querySelector('.search-confirm-password');
     const email = document.querySelector('.email-value');
@@ -50,13 +53,17 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    const redirection = () => {
+        window.location.href = "../index.html";
+    }
+
     const checkform = () => {
-      if(email.value === "") {
+      if (email.value === "") {
         toastr.error("Error: Email cannot be blank!");
         email.focus();
         return false;
       }  
-      if(password.value !== "" && password.value == searchBoxConfirmPassword.value) {
+      if (password.value !== "" && password.value == searchBoxConfirmPassword.value) {
         if(password.value.length < 6) {
           toastr.error("Error: Password must contain at least six characters!");
           password.focus();
@@ -65,7 +72,7 @@ document.addEventListener('DOMContentLoaded', () => {
           return false;
         }
         let re = /[0-9]/;
-        if(!re.test(password.value)) {
+        if (!re.test(password.value)) {
           toastr.error("Error: password must contain at least one number (0-9)!");
           password.focus();
           document.querySelector('.message').style.color = 'red';
@@ -73,7 +80,7 @@ document.addEventListener('DOMContentLoaded', () => {
           return false;
         }
         re = /[a-z]/;
-        if(!re.test(password.value)) {
+        if (!re.test(password.value)) {
           toastr.error("Error: password must contain at least one lowercase letter (a-z)!");
           password.focus();
           document.querySelector('.message').style.color = 'red';
@@ -81,7 +88,7 @@ document.addEventListener('DOMContentLoaded', () => {
           return false;
         }
         re = /[A-Z]/;
-        if(!re.test(password.value)) {
+        if (!re.test(password.value)) {
           toastr.error("Error: password must contain at least one uppercase letter (A-Z)!");
           password.focus();
           document.querySelector('.message').style.color = 'red';
@@ -96,8 +103,8 @@ document.addEventListener('DOMContentLoaded', () => {
         return false;
       }
       toastr.success(password.value);
-      return true;
     }
+
 
     const signupForm = document.querySelector('.registration-form');    
     document.querySelector('.registration-form').onsubmit = (e) => {
@@ -111,20 +118,26 @@ document.addEventListener('DOMContentLoaded', () => {
         console.log(email.value);
         const path = '/api/v1/users/auth/signup';
         httpPost(path, data, (err, respData, xhttp) => {
+            console.log(respData);
             if (err) {
                 console.log(err);
             }  else if (respData.status === 200) {
-                localStorage.setItem('loggedInUser', JSON.stringify(respData));
                 document.querySelector('.response').innerHTML = respData;
-                window.location.href = "../../index.html";
+                document.querySelector('.response').style.color = 'green';
+                localStorage.setItem('loggedInUser', JSON.stringify(respData));
+                redirection();
             } else {
-                document.querySelector('.message').innerHTML = respData.message;
+                toastr.error(respData.message);
+                document.querySelector('.response').style.color = 'red';
             }
         });    
     }
 
-    // const password = document.querySelector('.password-value');
-    // const searchBoxConfirmPassword = document.querySelector('.search-confirm-password');
+    const response = (element, data) => {
+        element.innerHTML = data.message;
+    }
+
+    const notificationPort = document.querySelector('.response')
 
     document.querySelector('.login-form').onsubmit = (e) => {
         e.preventDefault();
@@ -141,11 +154,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 console.log(err);
             } else if (respData.status === 200) {
                 localStorage.setItem('loggedInUser', JSON.stringify(respData));
+                const inStore = JSON.parse(localStorage.getItem('loggedInUser'));
+                console.log(inStore);
+                setTimeout(redirection(), 2000);
                 toastr.success(respData.message);
-                window.location.href = "../index.html";
             } else {
                 document.querySelector('.response').style.color = 'red';
-                document.querySelector('.response').innerHTML = respData.message;
+                toastr.error(respData.message);
             }
         })
     }
@@ -161,6 +176,36 @@ document.addEventListener('DOMContentLoaded', () => {
             user.style.display = 'none';
         })
     }
+    const tokenVerify = () => {
+        const path = '/api/v1/users/auth/tokenverify';
+        const inStore = JSON.parse(localStorage.getItem('loggedInUser'));
+        if (inStore === null) {
+            console.log('token expired');
+            toastr.info('session expired, please login');
+            localStorage.clear();
+        } else {
+            const { token } = inStore;
+            console.log(token);
+            const data = {
+                token,
+            }
+            httpPost(path, data, (err, respData, xhttp) => {
+                console.log(respData);
+                if (err) {
+                    console.log(err);
+                } else if (respData.status === 200) {
+                    inStore;
+                }  else if (respData.status === 403) {
+                    toastr.info('session expired');
+                    localStorage.clear();
+                    window.location.href = "signinpage.html";
+                    document.querySelector('.message').innerHTML = 'Session Expired! Login required'
+
+                }
+            });
+        }
+    }
+    tokenVerify();
 });
 
 
@@ -173,16 +218,6 @@ document.addEventListener('DOMContentLoaded', () => {
     //     user.style.display = 'none';
     // });
 
-     
-    // document.querySelector('.img-svg').onclick = () => {
-    //     if(arrowUp.style.display == 'none' && dropDown.style.display == 'none') {
-    //         arrowUp.style.display = 'block';
-    //         dropDown.style.display = 'block';
-    //     } else {
-    //         dropDown.style.display = 'none';
-    //         arrowUp.style.display = 'none';
-    //     }
-    // }
 
     // document.querySelector('.sign-up-pg').onmouseover = () => {
     //     lineTwo.style.display = 'block';

@@ -17,31 +17,17 @@
             <ul class="nav-links">
                 <li><a class="need-user-link" href="sell.html">Post a sale Ad</a></li>
                 <li><a class="need-user-link" href="purchase-order.html">Make a purchase order</a></li>
-                <li><a class="need-user-link" href="#">My Orders</a></li>
-                <li><a class="need-user-link" href="ads.html">My Ads</a></li>
+                <li><a class="need-user-link" href="myorders.html">My Orders</a></li>
+                <li><a class="need-user-link" href="mycarorders.html">My Car Orders</a></li>
+                <li><a class="need-user-link" href="myads.html">My Ads</a></li>
                 <!-- <li class="in-page"><a href="signinpage.html">Log in</a></li>
                 <li class="sign-up in-page"><a href="signinpage.html">Sign up</a></li> -->
             </ul>
-            <!-- <ul class="svg need-user">
-                <li>
-                    <img src="images/user.svg" class="img-svg"/>
-                </li>
-            </ul> -->
             <a id="nav-toggle" href="#"><span></span></a>
         </nav>
-        <div class="arrow-up none" id="arrowup"></div>
-        <div class="dropdown none" id="drpdown">
-            <button class="button-dropdown"><a href="signinpage.html">Sign In</a></button>
-            <p class="para-dropdown">Don't have an account?<a href="signinpage.html"> Sign Up </a></p>
-            <hr>
-            <p class="para-dropdown"><a href="ads.html">My Ads</a></p>
-            <p class="para-dropdown"><a href="orders.html">My Orders</a></p>
-        </div>
     <main class="main-signin-page">
         <div>
             <header class="header-signin-page">
-                <h3 class="sign-up-pg">Update Profile</h3>
-                <span class="line-two"></span>
                 <h3 class="log-in">Log In</h3>
                 <span class="line"></span>
                 <h3 class="sign-up-pg">Sign Up</h3>
@@ -68,26 +54,12 @@
                 <div class="response"></div>
                 <input type="submit" name="submit" value="Login" class="button"/>
             </form>
-            <form role="form" class="update-info">            
-                <p class="p-signin-page p-email">Email</p>
-                <input type="email" name="email" class="search update-email" required />
-                <p class="p-signin-page p-password">Password</p>
-                <input type="password" class="search update-password" required />
-                <p class="p-signin-page p-info">Firstname</p>
-                <input type="text" class="search update-firstname" required />
-                <p class="p-signin-page p-info">Lasttname</p>
-                <input type="text" class="search update-lastname" required />
-                <p class="p-signin-page p-info">Address</p>
-                <input type="text" class="search update-address" required />
-                <div class="response"></div>
-                <input type="submit" name="submit" value="Login" class="button"/>
-            </form>
         </div>
     </main>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
-    <script src="js/toastr.js"></script>    
-    <script src="js/request.js"></script>
+    <script src="js/toastr.js"></script>
+    <script src="js/request-signin.js"></script>
     <script src="js/signinpage.js"></script>
 </body>
 </html>

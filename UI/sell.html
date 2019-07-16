@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Auto Mart</title>
+    <link rel="stylesheet" text="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
     <link rel="stylesheet" text="text/css" href="css/sale_order_styles/sell_2560.css"/>
     <link rel="stylesheet" text="text/css" href="css/sale_order_styles/sell_768.css"/>
     <link rel="stylesheet" text="text/css" href="css/sale_order_styles/sell_320.css"/>
@@ -15,10 +16,9 @@
         <ul class="nav-links">
             <li><a href="sell.html">Post a car sale</a></li>
             <li><a href="purchase-order.html">Make a purchase order</a></li>
-            <li><a href="#">My Orders</a></li>
-            <li><a href="ads.html">My Ads</a></li>
-            <li><a href="signinpage.html">Log in</a></li>
-            <li class="sign-up"><a href="signinpage.html">Sign up</a></li>
+            <li><a href="myorders.html">My Orders</a></li>
+            <li><a href="mycaroders.html">My Car Orders</a></li>
+            <li><a href="myads.html">My Ads</a></li>
         </ul>
         <ul class="svg">
             <li>
@@ -29,132 +29,153 @@
     </nav>
     <div class="arrow-up none" id="arrowup"></div>
     <div class="dropdown none" id="drpdown">
-        <button class="button-dropdown"><a href="signinpage.html">Sign In</a></button>
-        <p class="para-dropdown">Don't have an account?<a href="signinpage.html"> Sign Up </a></p>
+        <div class="dashboard-dropdown"></div>
+        <p class="para-dropdown"><a href="updateuser.html" class="update">My profile</a></p>
         <hr>
-        <p class="para-dropdown"><a href="ads.html">My Ads</a></p>
-        <p class="para-dropdown"><a href="orders.html">My Orders</a></p>
-        <button class="button-dropdown">Log out</button>
+        <p class="para-dropdown"><a href="myads.html">My Ads</a></p>
+        <p class="para-dropdown"><a href="mycarorders.html">My Car Orders</a></p>
+        <p class="para-dropdown"><a href="myorders.html">My Orders</a></p>
+        <p class="para-dropdown"><a href="signinpage.html" class="sign-out">Log Out</a></p>
+        <hr>
     </div>
     <section class="sect-sell">
         <section class="backgrnd-image"></section>
         <h3 class="h-title-sell">Basic Vehicle Information</h3>
         <h6>Required Information</h6>
-            <form>
+        <h6>Please fill the necessary information</h6>
+        <h6 class="req-info">Please note that the more information you fill, the more chances of selling fast</h6>
+            <form role="form" class="post">
                 <fieldset>
-                        <label>Make</label>
+                    <label>Status</label>
+                    <div>
+                        <select name="status" class="status" required>
+                            <option value="">Select status of vehicle</option>
+                            <option value="available">Available</option>
+                            <option value="sold">Sold</option>
+                        </select>
+                    </div>
+                </fieldset>
+                <fieldset>
+                    <label>State</label>
+                    <div>
+                        <select name="state" class="state" required>
+                            <option value="">Select state of vehicle</option>
+                            <option value="new">New</option>
+                            <option value="used">Used</option>
+                        </select>
+                    </div>
+                </fieldset>
+                <fieldset>
+                        <label>Manufacturer</label>
                         <div>
-                            <select>
-                                <option selected>Select a Make</option>
-                                <option>Toyota</option>
-                                <option>Lexus</option>
-                                <option>Volkswagen</option>
-                                <option>BMW</option>
-                            </select>
+                            <input type="text" name="manufacturer" required list="manufacturer" value="" class="manufacturer" />
+                            <datalist id="manufacturer">
+                                <option value="Audi">
+                                <option value="BMW">
+                                <option value="Toyota">
+                                <option value="Volkswagen">
+                            </datalist>
                         </div>
-                    </fieldset>
+                </fieldset>
+                <fieldset>
+                    <label>Model</label>
+                    <div>
+                        <input type="text" class="model" required />
+                    </div>
+                </fieldset>
+                <fieldset>
+                        <label>Body Type</label>
+                        <div>
+                            <input type="text" name="body-type" required list="body-type" class="body_type">
+                            <datalist id="body-type">
+                                <option value="Car">
+                                <option value="Bus">
+                                <option value="Truck">
+                                <option value="Van">
+                            </datalist>
+                        </div>
+                </fieldset>
+                <fieldset>
+                    <label>Price</label>
+                    <div>
+                        <input type="text" class="amount" required />
+                    </div>
+                </fieldset>
                 <fieldset>
                         <label>Exterior Color</label>
                         <div>
-                            <select selected>
-                                <option>Select a Exterior Color</option>
-                                <option>Red</option>
-                                <option>Green</option>
-                                <option>Blue</option>
-                                <option>Gold</option>
-                            </select>
+                            <input type="text" name="exterior-color" list="exterior-color" class="ext_col" />
+                            <datalist id="exterior-color">
+                                <option value="Red">
+                                <option value="Green">
+                                <option value="Blue">
+                                <option value="Gold">
+                            </datalist>
                         </div>
                 </fieldset>
                 <fieldset>
                         <label>Interior Color</label>
                         <div>
-                            <select>
-                                <option selected>Select a Interior Color</option>
-                                <option>Red</option>
-                                <option>Green</option>
-                                <option>Blue</option>
-                                <option>Gold</option>
-                            </select>
+                            <input type="text" name="interior-color" list="interior-color" class="int_col" />
+                            <datalist id="interior-color">
+                                <option value="Red">
+                                <option value="Green">
+                                <option value="Blue">
+                                <option value="Gold">
+                            </datalist>
                         </div>
                 </fieldset>
                 <fieldset>
                         <label>Transmission</label>
                         <div>
-                            <select>
-                                <option selected>Select a Transmission</option>
-                                <option>Automatic</option>
-                                <option>Automanual</option>
-                                <option>CVT</option>
-                                <option>Manual</option>
+                            <select name="transmission" class="transmission">
+                                <option value="">Select a Transmission</option>
+                                <option value="automatic">Automatic</option>
+                                <option value="automanual">Automanual</option>
+                                <option value="cvt">CVT</option>
+                                <option value="manual">Manual</option>
                             </select>
                         </div>
                 </fieldset>
                 <fieldset>
                         <label>Mileage</label>
                         <div>
-                            <input type="text" name="mileage" placeholder="Type here" maxlength="7" class="placeholder">
+                            <input type="text" name="mileage" placeholder="Type here" maxlength="7" class="mileage" />
                         </div>
                 </fieldset>
                 <fieldset>
                         <label>No of Doors</label>
                         <div>
-                            <select>
-                                <option selected>Select a Number of Doors</option>
-                                <option>Red</option>
-                                <option>Green</option>
-                                <option>Blue</option>
-                                <option>Gold</option>
-                            </select>
+                            <input type="text" name="doors" list="doors" class="doors" />
+                            <datalist id="doors">
+                                <option value="2">
+                                <option value="4">
+                                <option value="6">
+                            </datalist>
                         </div>
                 </fieldset>
                 <fieldset>
                         <label>Enter Description (optional)</label>
                         <div>
-                            <textarea rows="4" cols="38" maxlength="1000" ></textarea>
+                            <textarea rows="4" cols="38" maxlength="1000" class="description" ></textarea>
                         </div>
                 </fieldset>
-                <section>
-                    <hr>
-                    <h5 class="contact-info">Contact Information</h5>
-                </section>
-                <legend>All fields required</legend>
-                <div>
-                    <fieldset>
-                        <label>Name</label>
-                        <div>
-                            <input type="text" name="firstname" maxlength="35" required>
-                        </div>
-                    </fieldset>
-                    <fieldset>
-                        <label>Address</label>
-                        <div>
-                            <input type="text" name="firstname" required>
-                        </div>
-                    </fieldset>
-                    <fieldset>
-                        <label>Phone Number</label>
-                        <div>
-                            <input type="tel" name="phone" maxlength="28" required>
-                        </div>
-                    </fieldset>
-                    <fieldset>
-                        <label>Email Address</label>
-                        <div>
-                            <input type="email" name="emailAddress" maxlength="28" required>
-                        </div>
-                    </fieldset>
-                </div>
                 <hr>
                 <fieldset>
                     <label>Add Image</label>
                     <small>(To select multiple files, hold down hold down the CTRL or SHIFT key while selecting.)</small>
                     <div>
-                        <input type="file" accept="images" name="image/*" multiple required>
+                        <input type="file" accept="images" name="image/*" class="file-upload" multiple required>
+                        <img src="" class="preview" />
                     </div>
                 </fieldset>
-                <a class="sell-submit" href="result.html"><input type="submit" name="submit" value="POST" class="sell-submit-button"/></a>    
+                <input type="submit" name="submit" value="POST" class="sell-submit-button" />    
             </form>
     </section>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+    <script src="js/toastr.js"></script>
+    <script src="js/request_sell.js"></script>
     <script src="js/sell.js"></script>
 </body>
 </html>

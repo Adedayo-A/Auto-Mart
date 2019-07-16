@@ -116,7 +116,13 @@
 
     /**********NAV ENDED********/
     /*********SIGN IN PAGE******/
-    .login-form, .update-info {
+    
+    /***** HEADER UPDATE PROFILE.. DISPLAY ON CLICK IN INDEX HTML  *****/
+    .header-update-profile {
+      display: none;
+    }
+
+    .login-form {
       display: none;
     }
     
@@ -131,20 +137,21 @@
         height: max-content;
         margin-top: 70px;
       }
-
     .header-signin-page {
         display: flex;
         justify-content: center;
         margin-bottom: 27px;
-    }
+    } 
     .header-signin-page h3 {
         font-weight: 200;
         font-size: 16px;
         opacity: 0.6;
         cursor: pointer;
     }
+
     .header-signin-page h3:nth-child(1) {
         flex-grow: 0.2;
+        /* margin-left: 5px; */
     }
 
     .main-signin-page hr {
@@ -155,7 +162,6 @@
       height: 2px;
       opacity: 0.2;
     }
-
  
     .line {
       position: absolute;
@@ -166,7 +172,7 @@
       height: 0.38rem;
       background-color: #A400B4;
     }
-
+ 
     .line-two {
       position: absolute;
       margin-left: 55px;
@@ -184,35 +190,7 @@
       padding: 7px;
       border-radius: 3px;
     }
-
-
-    /* .log-in:hover + .line {
-      display: block;
-    }
-
-    .sign-up-pg:hover + .line-two {
-      display: block;
-    } */
-
-    /* .long-line {
-      position: absolute;
-      margin-left: -160px;
-      margin-top: -2.5rem;
-      display: block;
-      width: 65rem;
-      height: 0.11rem;
-      background-color: grey;
-      opacity: 0.1;
-    } */
-
-    /* .header-signin-page h3:hover .line {
-      display: block;
-    } */
-    /* .header-signin-page h3:hover .line-two {
-      display: block;
-    } */
-
-     .p-signin-page {
+    .p-signin-page {
         font-weight: 600;
         font-size: 16px;
         opacity: 0.6;
