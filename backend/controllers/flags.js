@@ -17,7 +17,6 @@ var postFlag = function postFlag(req, res) {
         message: 'error..invalid token'
       });
     } else {
-      console.log(req.params);
       var info = req.body.info;
       var car_id = req.params.id;
       var pg = new Client({

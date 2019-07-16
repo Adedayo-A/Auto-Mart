@@ -42,11 +42,11 @@ var getCars = function getCars(req, res) {
             });
             pg.end();
           } else {
-            var carad = dbres.rows;
+            var car_ad = dbres.rows;
             res.status(200).json({
               state: 'success',
               message: 'result completed',
-              carad: carad
+              car_ad: car_ad
             });
             pg.end();
           }
@@ -68,11 +68,11 @@ var getCars = function getCars(req, res) {
             });
             pg.end();
           } else {
-            var carad = dbres.rows;
+            var car_ad = dbres.rows;
             res.status(200).json({
               state: 'success',
               message: 'result completed',
-              carad: carad
+              car_ad: car_ad
             });
             pg.end();
           }
@@ -94,11 +94,11 @@ var getCars = function getCars(req, res) {
             });
             pg.end();
           } else {
-            var carad = dbres.rows;
+            var car_ad = dbres.rows;
             res.status(200).json({
               state: 'success',
               message: 'result completed',
-              carad: carad
+              car_ad: car_ad
             });
             pg.end();
           }
@@ -121,11 +121,12 @@ var getCars = function getCars(req, res) {
             });
             pg.end();
           } else {
-            var carad = dbres.rows;
+            var car_ad = dbres.rows;
             res.status(200).json({
+              status: 200,
               state: 'success',
               message: 'result completed',
-              carad: carad
+              car_ad: car_ad
             });
             pg.end();
           }
@@ -147,11 +148,11 @@ var getCars = function getCars(req, res) {
             });
             pg.end();
           } else {
-            var carad = dbres.rows;
+            var car_ad = dbres.rows;
             res.status(200).json({
               state: 'success',
               message: 'result completed',
-              carad: carad
+              car_ad: car_ad
             });
             pg.end();
           }
@@ -180,11 +181,11 @@ var getCars = function getCars(req, res) {
                 });
                 pg.end();
               } else {
-                var carad = resdb.rows;
+                var car_ad = resdb.rows;
                 res.status(200).json({
                   state: 'success',
                   message: 'result completed',
-                  carad: carad
+                  car_ad: car_ad
                 });
                 pg.end();
               }
@@ -229,11 +230,11 @@ var getCar = function getCar(req, res) {
           });
           pg.end();
         } else {
-          var carad = dbres.rows;
+          var car_ad = dbres.rows;
           res.status(200).json({
             state: 'success',
             message: 'Success, result completed',
-            carad: carad
+            car_ad: car_ad
           });
           pg.end();
         }
@@ -279,11 +280,11 @@ var getadsByOwner = function getadsByOwner(req, res) {
               });
               pg.end();
             } else {
-              var carad = dbres.rows;
+              var car_ad = dbres.rows;
               res.status(200).json({
                 state: 'success',
                 message: 'Success, result completed',
-                carad: carad
+                car_ad: car_ad
               });
               pg.end();
             }
@@ -336,7 +337,7 @@ var postCar = function postCar(req, res) {
               console.error(err);
               res.status(403).json({
                 message: 'Input error, Please check input!!!',
-                newAd: newAd
+                new_ad: new_ad
               });
               pg.end();
             } else {
@@ -344,7 +345,7 @@ var postCar = function postCar(req, res) {
                 state: 'success',
                 status: 200,
                 message: 'Posted successfully',
-                newAd: newAd
+                new_ad: new_ad
               });
               pg.end();
             }
@@ -429,8 +430,6 @@ var patchCar = function patchCar(req, res) {
                 pg.end();
               }
             }
-
-            ;
           });
         }
       });
@@ -521,12 +520,12 @@ var getCarOrders = function getCarOrders(req, res) {
               console.error(err);
               pg.end();
             } else {
-              var mycarorders = respo.rows;
+              var my_car_orders = respo.rows;
               res.status(403).json({
                 state: 'success',
                 status: 200,
                 message: 'orders retrieved',
-                mycarorders: mycarorders
+                my_car_orders: my_car_orders
               });
             }
           });
@@ -558,12 +557,10 @@ var updateCarOrders = function updateCarOrders(req, res) {
           pg.end();
         } else {
           var status = req.body.status;
-          console.log(status);
           var orderid = req.params.id;
           var curruser = resdb.rows[0].id;
           query = 'UPDATE purchaseorder SET status=LOWER($1) WHERE id = $2';
           value = [status, orderid, curruser];
-          console.log(value);
           pg.query(query, value, function (err, dbres) {
             // const result = dbres.rows[0];/
             if (err) {

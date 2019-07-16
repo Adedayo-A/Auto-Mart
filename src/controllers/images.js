@@ -58,7 +58,6 @@ const imgUploader = (req, res) => {
           });
         } else {
           if (req.file == undefined) {
-            console.log('undefined');
             res.send({
              msg: 'Error: No File Selected!',
             });
@@ -68,16 +67,14 @@ const imgUploader = (req, res) => {
             .then((file) => {
               console.log('Public id of the file is  ' + file.public_id);
               console.log('Url of the file is  ' + file.url);
-              const image_url = file.url; // save the url to your model
-              console.log('uploaded');
-              console.log(image_url);
+              const image_url = file.url;
               res.send({
                 msg: 'File Uploaded!',
                 image_url,
               });
             }).catch((err) => {
                  if (err) { 
-                  console.warn('error heere' + err);
+                  console.log('error here' + err);
                  }
               });
           }

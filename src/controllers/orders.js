@@ -15,7 +15,6 @@ const postOrder = (req, res) => {
     } else {
       const newOrder = req.body;
       const carId = req.params.id;
-      console.log(req.params);
       const { description } = newOrder;
       const email = authData.user.email;
       const pg = new Client({
@@ -53,14 +52,14 @@ const postOrder = (req, res) => {
                   res.status(403).json({
                     status: 403,
                     message: 'Input error, Please check input!!!',
-                    newOrder,
+                    new_order,
                   });
                   pg.end();
                 } else {
                   res.status(200).json({
                     status: 200,
                     message: 'Posted successfully',
-                    newOrder,
+                    new_order,
                   });
                   pg.end();
                 }
@@ -137,15 +136,14 @@ const getAnOrder = (req, res) => {
         message: 'error..invalid Token',
       });
     } else {
-      const order = req.params;
+      const orderId = req.params.orderid;
       const pg = new Client({
         connectionString: process.env.db_URL,
       });
       pg.connect();
       // eslint-disable-next-line consistent-return
       const query = 'SELECT * FROM purchaseorder WHERE id = $1';
-      const value = [order.orderid];
-      console.log('value ' + value);
+      const value = [orderId];
 
       pg.query(query, value, (err, dbres) => {
         if (err) {
@@ -199,52 +197,53 @@ const patchOrder = (req, res) => {
         } else {
           console.log(dbres);
           currUser = dbres.rows[0].id;
-        }
-        query = 'SELECT buyer FROM purchaseorder WHERE id = $1';
-        value = [req.params.id];
-        // eslint-disable-next-line consistent-return
-        pg.query(query, value, (err, dbresp) => {
-          if (err) {
-            console.error(err);
-            pg.end();
-          } else if (dbresp.rows.length === 0) {
-            res.status(200).json({
-              message: 'No order found',
-            });
-            pg.end();
-          } else {
-            // eslint-disable-next-line prefer-destructuring
-            buyer = dbresp.rows[0].buyer;
-          }
-
-          if (currUser === buyer) {
-            query = 'UPDATE purchaseorder SET amount=$1';
-            value = [order.amount];
-            // eslint-disable-next-line consistent-return
-            // eslint-disable-next-line no-unused-vars
-            pg.query(query, value, (err, dbresponse) => {
-              if (err) {
-                // console.error(err);
-                res.status(403).json({
-                  message: 'An error occured, Please check input!!!',
+        
+          query = 'SELECT buyer FROM purchaseorder WHERE id = $1';
+          value = [req.params.id];
+          // eslint-disable-next-line consistent-return
+          pg.query(query, value, (err, dbresp) => {
+            if (err) {
+              console.error(err);
+              pg.end();
+            } else if (dbresp.rows.length === 0) {
+              res.status(200).json({
+                message: 'No order found',
+              });
+              pg.end();
+            } else {
+              // eslint-disable-next-line prefer-destructuring
+              buyer = dbresp.rows[0].buyer;
+            
+              if (currUser === buyer) {
+                query = 'UPDATE purchaseorder SET amount=$1';
+                value = [order.amount];
+                // eslint-disable-next-line consistent-return
+                // eslint-disable-next-line no-unused-vars
+                pg.query(query, value, (err, dbresponse) => {
+                  if (err) {
+                    // console.error(err);
+                    res.status(403).json({
+                      message: 'An error occured, Please check input!!!',
+                    });
+                    pg.end();
+                  } else {
+                    res.status(200).json({
+                      status: 200,
+                      message: 'Order updated successfully!!',
+                      order,
+                    });
+                    pg.end();
+                  }
                 });
-                pg.end();
               } else {
-                res.status(200).json({
-                  status: 200,
-                  message: 'Order updated successfully!!',
-                  order,
+                res.status(403).json({
+                  message: 'You are not permiited to update this ad!!!',
                 });
                 pg.end();
               }
-            });
-          } else {
-            res.status(403).json({
-              message: 'You are not permiited to update this ad!!!',
-            });
-            pg.end();
-          }
-        });
+            }
+          });
+        }
       });
     }
   });

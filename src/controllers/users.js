@@ -48,7 +48,6 @@ const signUp = (req, res) => {
           jwt.sign({ user }, process.env.JWT_KEY, { expiresIn: '20m' }, (err, token) => {
             query = 'SELECT * FROM users WHERE email = $1';
             value = [user.email];
-            console.log('this is ' + value);
             pg.query(query, value, (err, dbres) => {
               if (err) {
                 console.log(err.stack);

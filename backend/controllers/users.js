@@ -57,7 +57,6 @@ var signUp = function signUp(req, res) {
           }, function (err, token) {
             query = 'SELECT * FROM users WHERE email = $1';
             value = [user.email];
-            console.log('this is ' + value);
             pg.query(query, value, function (err, dbres) {
               if (err) {
                 console.log(err.stack);

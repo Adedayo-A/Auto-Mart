@@ -37,11 +37,11 @@ const getCars = (req, res) => {
             });
             pg.end();
           } else {
-            const carad = dbres.rows;
+            const car_ad = dbres.rows;
             res.status(200).json({
               state: 'success',
               message: 'result completed',
-              carad,
+              car_ad,
             });
             pg.end();
           }
@@ -63,11 +63,11 @@ const getCars = (req, res) => {
             });
             pg.end();
           } else {
-            const carad = dbres.rows;
+            const car_ad = dbres.rows;
             res.status(200).json({
               state: 'success',
               message: 'result completed',
-              carad,
+              car_ad,
             });
             pg.end();
           }
@@ -89,11 +89,11 @@ const getCars = (req, res) => {
             });
             pg.end();
           } else {
-            const carad = dbres.rows;
+            const car_ad = dbres.rows;
             res.status(200).json({
               state: 'success',
               message: 'result completed',
-              carad,
+              car_ad,
             });
             pg.end();
           }
@@ -116,11 +116,12 @@ const getCars = (req, res) => {
             });
             pg.end();
           } else {
-            const carad = dbres.rows;
+            const car_ad = dbres.rows;
             res.status(200).json({
+              status: 200,
               state: 'success',
               message: 'result completed',
-              carad,
+              car_ad,
             });
             pg.end();
           }
@@ -142,11 +143,11 @@ const getCars = (req, res) => {
             });
             pg.end();
           } else {
-            const carad = dbres.rows;
+            const car_ad = dbres.rows;
             res.status(200).json({
               state: 'success',
               message: 'result completed',
-              carad,
+              car_ad,
             });
             pg.end();
           }
@@ -175,11 +176,11 @@ const getCars = (req, res) => {
                 });
                 pg.end();
               } else {
-                const carad = resdb.rows;
+                const car_ad = resdb.rows;
                 res.status(200).json({
                   state: 'success',
                   message: 'result completed',
-                  carad,
+                  car_ad,
                 });
                 pg.end();
               }
@@ -224,11 +225,11 @@ const getCar = (req, res) => {
           });
           pg.end();
         } else {
-          const carad = dbres.rows;
+          const car_ad = dbres.rows;
           res.status(200).json({
             state: 'success',
             message: 'Success, result completed',
-            carad,
+            car_ad,
           });
           pg.end();
         }
@@ -274,11 +275,11 @@ const getadsByOwner = (req, res) => {
               });
               pg.end();
             } else {
-              const carad = dbres.rows;
+              const car_ad = dbres.rows;
               res.status(200).json({
                 state: 'success',
                 message: 'Success, result completed',
-                carad,
+                car_ad,
               });
               pg.end();
             }
@@ -336,7 +337,7 @@ const postCar = (req, res) => {
               console.error(err);
               res.status(403).json({
                 message: 'Input error, Please check input!!!',
-                newAd,
+                new_ad,
               });
               pg.end();
             } else {
@@ -344,7 +345,7 @@ const postCar = (req, res) => {
                 state: 'success',
                 status: 200,
                 message: 'Posted successfully',
-                newAd,
+                new_ad,
               });
               pg.end();
             }
@@ -428,13 +429,13 @@ const patchCar = (req, res) => {
                 });
                 pg.end();       
               }
-            };
+            }
           });
         }
       });
     }
   });
-}
+};
 
 
 // DELETE CAR
@@ -519,12 +520,12 @@ const getCarOrders = (req, res) => {
               console.error(err);
               pg.end();
             } else {
-              const mycarorders = respo.rows;
+              const my_car_orders = respo.rows;
               res.status(403).json({
                 state: 'success',
                 status: 200,
                 message: 'orders retrieved',
-                mycarorders,
+                my_car_orders,
               });
             }
           });
@@ -556,12 +557,10 @@ const updateCarOrders = (req, res) => {
           pg.end();
         } else {
           const status = req.body.status;
-          console.log(status);
           const orderid = req.params.id;
           const curruser = resdb.rows[0].id;
           query = 'UPDATE purchaseorder SET status=LOWER($1) WHERE id = $2';
           value = [status, orderid, curruser];
-          console.log(value);
           pg.query(query, value, (err, dbres) => {
             // const result = dbres.rows[0];/
             if (err) {
@@ -579,9 +578,7 @@ const updateCarOrders = (req, res) => {
       });
     }
   });
-}
-
-
+};
 
 module.exports = {
   getCars,

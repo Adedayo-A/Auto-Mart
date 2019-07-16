@@ -63,7 +63,6 @@ var imgUploader = function imgUploader(req, res) {
           });
         } else {
           if (req.file == undefined) {
-            console.log('undefined');
             res.send({
               msg: 'Error: No File Selected!'
             });
@@ -75,17 +74,14 @@ var imgUploader = function imgUploader(req, res) {
             }).then(function (file) {
               console.log('Public id of the file is  ' + file.public_id);
               console.log('Url of the file is  ' + file.url);
-              var image_url = file.url; // save the url to your model
-
-              console.log('uploaded');
-              console.log(image_url);
+              var image_url = file.url;
               res.send({
                 msg: 'File Uploaded!',
                 image_url: image_url
               });
             })["catch"](function (err) {
               if (err) {
-                console.warn('error heere' + err);
+                console.log('error here' + err);
               }
             });
           }
