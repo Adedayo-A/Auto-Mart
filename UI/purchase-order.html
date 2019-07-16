@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Auto Mart</title>
+    <link rel="stylesheet" text="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
     <link rel="stylesheet" text="text/css" href="css/purchase_order_styles/purchase_order_2560.css" />
     <link rel="stylesheet" text="text/css" href="css/purchase_order_styles/purchase_order_768.css" />
     <link rel="stylesheet" text="text/css" href="css/purchase_order_styles/purchase_order_320.css" />
@@ -15,104 +16,51 @@
         <ul class="nav-links">
             <li><a href="sell.html">Post a car sale</a></li>
             <li><a href="purchase-order.html">Make a purchase order</a></li>
-            <li><a href="#">My Orders</a></li>
-            <li><a href="ads.html">My Ads</a></li>
-            <li><a href="signinpage.html">Log in</a></li>
-            <li class="sign-up"><a href="signinpage.html">Sign up</a></li>
+            <li><a href="myorders.html">My Orders</a></li>
+            <li><a href="mycaroders.html">My Car Orders</a></li>
+            <li><a href="myads.html">My Ads</a></li>
         </ul>
         <ul class="svg">
             <li>
                 <img src="images/user.svg" class="img-svg"/>
             </li>
         </ul>
-        <a id="nav-toggle" href="#"><span></span></a>    
+        <a id="nav-toggle" href="#"><span></span></a>       
     </nav>
     <div class="arrow-up none" id="arrowup"></div>
     <div class="dropdown none" id="drpdown">
-        <button class="button-dropdown"><a href="signinpage.html">Sign In</a></button>
-        <p class="para-dropdown">Don't have an account?<a href="signinpage.html"> Sign Up </a></p>
+        <div class="dashboard-dropdown"></div>
+        <p class="para-dropdown"><a href="updateuser.html" class="update">My profile</a></p>
         <hr>
-        <p class="para-dropdown"><a href="ads.html">My Ads</a></p>
-        <p class="para-dropdown"><a href="orders.html">My Orders</a></p> 
+        <p class="para-dropdown"><a href="myads.html">My Ads</a></p>
+        <p class="para-dropdown"><a href="mycarorders.html">My Car Orders</a></p>
+        <p class="para-dropdown"><a href="myorders.html">My Orders</a></p>
+        <p class="para-dropdown"><a href="signinpage.html" class="sign-out">Log Out</a></p>
+        <hr>
     </div>
     <section class="section-purchase-order">
         <section class="backgrnd-image"></section>
         <h1 class="purchase-order-main-heading">PURCHASE ORDER FORM</h1>
-        <form>
+        <form role="form" class="order">
             <fieldset>
-                    <label>Name:</label>
+                    <label>Price</label>
                     <div>
-                        <input type="text" name="buyer" maxlength="35" required placeholder="Name" />
-                    </div>
-            </fieldset>
-            <fieldset>
-                    <label>Email:</label>
-                    <div>
-                        <input type="email" name="email_address" placeholder="Email Address" />
-                    </div>
-            </fieldset>
-            <fieldset>
-                    <label>Having a specific car in mind?</label>
-                    <div>
-                        <input type="search" name="search" placeholder="Type in here" class="">
-                    </div>
-            </fieldset>
-            <fieldset>
-                    <label>Manufacturer</label>
-                    <div>
-                        <input type="text" name="manufacturer" required list="manufacturer">
-                        <datalist id="manufacturer">
-                            <option value="Audi">
-                            <option value="BMW">
-                            <option value="Toyota">
-                            <option value="Volkswagen">
-                        </datalist>
-                    </div>
-            </fieldset>
-            <fieldset>
-                    <label>Year</label>
-                    <div>
-                        <select>
-                            <option selected>Select One</option>
-                            <option>2019</option>
-                            <option>2018</option>
-                            <option>2017</option>
-                            <option>2016</option>
-                        </select>
-                    </div>
-            </fieldset>
-            <fieldset>
-                    <label>Usage</label>
-                    <div>
-                        <select id="usage" name="usage">
-                            <option selected>Select One</option>
-                            <option>New</option>
-                            <option>Used</option>
-                            <option>All</option>
-                        </select>
-                    </div>
-            </fieldset>
-            <fieldset>
-                    <label>Price range</label>
-                    <div>
-                        <input type="text" name="price-range" required list="price">
-                        <datalist id="price">
-                            <option value="1,000,000 or below">
-                            <option value="2,000,000 - 1,000,000">
-                            <option value="3,000,000 - 2,000,000">
-                            <option value="3,000,000 above">
-                        </datalist>
+                        <input type="number" name="price-range" required class="price" />
                     </div>
             </fieldset>
             <fieldset>
                     <label>Other Requirements</label>
                     <div>
-                        <textarea name="comments" rows="4" cols="50" maxlength="500"></textarea>
+                        <textarea name="comments" class="description" rows="4" cols="50" maxlength="500"></textarea>
                     </div>
             </fieldset>
-            <p><a class="sell-submit" href="result.html"><button>Submit Order</button></a></p>
+            <input type="submit" name="submit" value="Submit Order" class="sell-submit-button" />
         </form>
     </section>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+    <script src="js/toastr.js"></script>
+    <script src="js/request.js"></script>
     <script src="js/purchaseorder.js"></script>
 </body>
 </html>

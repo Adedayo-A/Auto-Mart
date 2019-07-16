@@ -117,7 +117,9 @@
     /****** SECTION BEGINS ******/
     .section-result {
       display: flex;
-      margin-left: 2rem;
+      margin: auto; 
+      flex-direction: column;
+      margin-left: 25rem;
       margin-top: 2rem;
     }
     .filter-results {
@@ -127,8 +129,8 @@
     }
     .div-result-wrap {
         width: 55rem;
-        display: flex;
-        flex-direction: column;
+        /* display: flex;
+        flex-direction: column; */
     }
     .wrapper-result {
         display: flex;
@@ -142,19 +144,16 @@
         height: 15rem;
     }
     .one {
-      background-image: url("../../images/car-result1.webp");
-      background-repeat: no-repeat;
+    /* background-image: url("../../images/car-result1.webp"); */
+      /* background-repeat: no-repeat; */
     }
     .two {
-      background-image: url("../../images/car-result2.webp");
       background-repeat: no-repeat;
     }
     .three {
-      background-image: url("../../images/car-result3.webp");
       background-repeat: no-repeat;
     }
     .four {
-      background-image: url("../../images/car-result4.webp");
       background-repeat: no-repeat;
     }
     .card-stories {
