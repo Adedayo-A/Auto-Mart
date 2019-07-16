@@ -110,11 +110,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 const orderdetails = response.order;
                 let output = '';
                 for (var i in orderdetails) {
+                    const accept = '<button class="edit"> Accept </button>'
+                    const reject = '<button class=""> Reject </button>'
                     const image = orderdetails[i].image || 'N/A';
                     const carId = orderdetails[i].car_id || 'N/A';
                     const manufacturer = orderdetails[i].manufacturer || 'N/A';
                     const model = orderdetails[i].model || 'N/A';
-                    const status = orderdetails[i].status || 'N/A';
+                    const isaccepted = orderdetails[i].status == 'accepted';
                     const priceOffered = orderdetails[i].amount || 'N/A';
                     const orderId = orderdetails[i].id || 'N/A';
                     output += `<div class="div-result-wrap wrap-all">
@@ -127,21 +129,21 @@ document.addEventListener('DOMContentLoaded', () => {
                                     <h4 class="first-heading-card-stories"> Car id: ${carId} </h4>
                                     <h4 class="first-heading-card-stories"> Manufacturer: ${manufacturer} </h4>
                                     <h4 class="first-heading-card-stories"> Model: ${model} </h4>
-                                    <h4 class="first-heading-card-stories"> Status of Order: ${status} </h4>
+                                    <h4 class="first-heading-card-stories"> Status of Order: ${orderdetails[i].status} </h4>
                                     <h3 class="heading-price-card-stories"> Price Offered: ${priceOffered} </h3>
                                 </div>
-                                <p class="para-delete-card-stories">
-                                    <button class="edit accept" value = "${orderId}"> Accept </button>
-                                    <button class="reject" value = "${orderId}"> Reject </button>
-                                </p>
                             </div>
                         </div>
                     </div>`
                 }
+
+                document.querySelector('.section-result').innerHTML = output;
                 const statusAccept = () => {
+                    console.log('here');
                     const adId = window.location.search.slice(1).split("&")[0].split("=")[1];
                     const path = `/api/v1/car/${adId}/carorders`;
                     const accept = document.querySelector('.accept').value;
+                    console.log(accept);
                     const data = {
                         status: accept,
                     }
@@ -151,7 +153,8 @@ document.addEventListener('DOMContentLoaded', () => {
                             toastr.error('An error occured');
                             console.log(err);
                         } else {
-                            toastr.success(response.message)
+                            toastr.success(response.message);
+                            window.location.href = 'mycarorders.html';
                         }
                     });
                 }
@@ -168,18 +171,16 @@ document.addEventListener('DOMContentLoaded', () => {
                             toastr.error('An error occured');
                             console.log(err);
                         } else {
-                            toastr.success(response.message)
+                            toastr.success(response.message);
+                            window.location.href = 'mycarorders.html';
                         }
                     });
                 }
 
-                document.querySelector('.section-result').innerHTML = output;
-                document.querySelector('.accept').onclick = () => {
-                    statusAccept;
-                }
-                document.querySelector('.reject').onclick = () => {
-                    statusReject;
-                }
+                document.querySelector('.accept').onclick =  statusAccept;
+            
+                document.querySelector('.reject').onclick = statusReject;
+                
             } else {
                 console.log(response);
                 toastr.info(response.message);

@@ -99,11 +99,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 const orderdetails = response.orders
                 let output = '';
                 for (var i in orderdetails) {
+                    const accept = '<button class="edit"> Accept </button>'
+                    const reject = '<button class=""> Reject </button>'
                     const image = orderdetails[i].image || 'N/A';
                     const carId = orderdetails[i].car_id || 'N/A';
                     const manufacturer = orderdetails[i].manufacturer || 'N/A';
                     const model = orderdetails[i].model || 'N/A';
-                    const status = orderdetails[i].status || 'N/A';
+                    const isaccepted = orderdetails[i].status == 'accepted';
                     const priceOffered = orderdetails[i].amount || 'N/A';
                     const orderId = orderdetails[i].id || 'N/A';
                     output += `<div class="div-result-wrap wrap-all">
@@ -118,13 +120,13 @@ document.addEventListener('DOMContentLoaded', () => {
                                     <h4 class="first-heading-card-stories"> Car id: ${carId} </h4>
                                     <h4 class="first-heading-card-stories"> Manufacturer: ${manufacturer} </h4>
                                     <h4 class="first-heading-card-stories"> Model: ${model} </h4>
-                                    <h4 class="first-heading-card-stories"> Status of Order: ${status} </h4>
+                                    <h4 class="first-heading-card-stories"> Status of Order: ${orderdetails[i].status} </h4>
                                     <h3 class="heading-price-card-stories"> Price Offered: ${priceOffered} </h3>
-                                    <button class="edit"> <a href="acarorder.html?orderid=${orderId}"> View Order</a></button>
+                                    <button class="view"> <a href="acarorder.html?orderid=${orderId}"> View Order</a></button>
                                 </div>
                                 <p class="para-delete-card-stories">
-                                    <button class="edit"> Accept </button>
-                                    <button class=""> Reject </button>
+                                ${!isaccepted ? accept:''}
+                                ${!isaccepted ? reject:''}
                                 </p>
                             </div>
                         </div>

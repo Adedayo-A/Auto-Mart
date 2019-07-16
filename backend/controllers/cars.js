@@ -18,229 +18,180 @@ var getCars = function getCars(req, res) {
         status: 401,
         message: 'invalid token!!!'
       });
-    } else if (req.query.min_price && req.query.max_price && req.query.status) {
+    } else {
+      // PG Connect
       var pg = new Client({
         connectionString: process.env.db_URL
       });
-      pg.connect(); // PG Connect
-      // eslint-disable-next-line consistent-return
+      pg.connect();
 
-      var query = 'SELECT * FROM carads WHERE price BETWEEN $1 AND $2 AND LOWER(status) = LOWER($3)';
-      var value = [req.query.min_price, req.query.max_price, 'available'];
-      pg.query(query, value, function (err, dbres) {
-        if (err) {
-          // console.log(err.stack);
-          res.status(500).json({
-            message: 'error encountered'
-          });
-          pg.end();
-        } else if (dbres.rows.length === 0) {
-          res.status(200).json({
-            message: 'No car found!!'
-          });
-          pg.end();
-        } else {
-          var carad = dbres.rows;
-          res.status(200).json({
-            state: 'success',
-            message: 'result completed',
-            carad: carad
-          });
-          pg.end();
-        }
-      });
-    } else if (req.query.state && req.query.status) {
-      var _pg = new Client({
-        connectionString: process.env.db_URL
-      });
+      if (req.query.min_price && req.query.max_price && req.query.status) {
+        // eslint-disable-next-line consistent-return
+        var query = 'SELECT * FROM carads WHERE price BETWEEN $1 AND $2 AND LOWER(status) = LOWER($3)';
+        var value = [req.query.min_price, req.query.max_price, 'available'];
+        pg.query(query, value, function (err, dbres) {
+          if (err) {
+            console.log(err);
+            res.status(500).json({
+              message: 'error encountered'
+            });
+            pg.end();
+          } else if (dbres.rows.length === 0) {
+            res.status(200).json({
+              message: 'No car found!!'
+            });
+            pg.end();
+          } else {
+            var carad = dbres.rows;
+            res.status(200).json({
+              state: 'success',
+              message: 'result completed',
+              carad: carad
+            });
+            pg.end();
+          }
+        });
+      } else if (req.query.state && req.query.status) {
+        // eslint-disable-next-line consistent-return
+        var _query = 'SELECT * FROM carads WHERE LOWER(status)=LOWER($1) AND LOWER(state)=LOWER($2)';
+        var _value = ['available', req.query.state];
+        pg.query(_query, _value, function (err, dbres) {
+          if (err) {
+            console.log(err);
+            res.status(500).json({
+              message: 'error encountered'
+            });
+            pg.end();
+          } else if (dbres.rows.length === 0) {
+            res.status(200).json({
+              message: 'No car found!!!'
+            });
+            pg.end();
+          } else {
+            var carad = dbres.rows;
+            res.status(200).json({
+              state: 'success',
+              message: 'result completed',
+              carad: carad
+            });
+            pg.end();
+          }
+        });
+      } else if (req.query.status) {
+        // eslint-disable-next-line consistent-return
+        var _query2 = 'SELECT * FROM carads WHERE LOWER(status) = LOWER($1)';
+        var _value2 = ['available'];
+        pg.query(_query2, _value2, function (err, dbres) {
+          if (err) {
+            console.log(err);
+            res.status(500).json({
+              message: 'error encountered'
+            });
+            pg.end();
+          } else if (dbres.rows.length === 0) {
+            res.status(200).json({
+              message: 'No car found!!!'
+            });
+            pg.end();
+          } else {
+            var carad = dbres.rows;
+            res.status(200).json({
+              state: 'success',
+              message: 'result completed',
+              carad: carad
+            });
+            pg.end();
+          }
+        });
+      } else if (req.query.body_type) {
+        // eslint-disable-next-line consistent-return
+        var _query3 = 'SELECT * FROM carads WHERE LOWER(body_type) = LOWER($1)';
+        var _value3 = [req.query.body_type];
+        pg.query(_query3, _value3, function (err, dbres) {
+          if (err) {
+            console.log(err);
+            res.status(500).json({
+              message: 'error encountered'
+            });
+            pg.end();
+          } else if (dbres.rows.length === 0) {
+            res.status(200).json({
+              status: 200,
+              message: 'No car found!!!'
+            });
+            pg.end();
+          } else {
+            var carad = dbres.rows;
+            res.status(200).json({
+              state: 'success',
+              message: 'result completed',
+              carad: carad
+            });
+            pg.end();
+          }
+        });
+      } else if (req.query.manufacturer) {
+        // eslint-disable-next-line consistent-return
+        var _query4 = 'SELECT * FROM carads WHERE LOWER(manufacturer) = LOWER($1) AND LOWER(status)=LOWER($2)';
+        var _value4 = [req.query.manufacturer, req.query.status];
+        pg.query(_query4, _value4, function (err, dbres) {
+          if (err) {
+            console.log(err);
+            res.status(500).json({
+              message: 'error encountered'
+            });
+            pg.end();
+          } else if (dbres.rows.length === 0) {
+            res.status(200).json({
+              message: 'No car found!!!'
+            });
+            pg.end();
+          } else {
+            var carad = dbres.rows;
+            res.status(200).json({
+              state: 'success',
+              message: 'result completed',
+              carad: carad
+            });
+            pg.end();
+          }
+        });
+      } else {
+        var email = authData.user.email;
+        var _query5 = 'SELECT * FROM users WHERE LOWER(email) = LOWER($1)';
+        var _value5 = [email]; // eslint-disable-next-line consistent-return
 
-      _pg.connect(); // PG Connect
-      // eslint-disable-next-line consistent-return
-
-
-      var _query = 'SELECT * FROM carads WHERE LOWER(status)=LOWER($1) AND LOWER(state)=LOWER($2)';
-      var _value = ['available', req.query.state];
-
-      _pg.query(_query, _value, function (err, dbres) {
-        if (err) {
-          // console.log(err.stack);
-          res.status(500).json({
-            message: 'error encountered'
-          });
-
-          _pg.end();
-        } else if (dbres.rows.length === 0) {
-          res.status(200).json({
-            message: 'No car found!!!'
-          });
-
-          _pg.end();
-        } else {
-          var carad = dbres.rows;
-          res.status(200).json({
-            state: 'success',
-            message: 'result completed',
-            carad: carad
-          });
-
-          _pg.end();
-        }
-      });
-    } else if (req.query.status) {
-      var _pg2 = new Client({
-        connectionString: process.env.db_URL
-      });
-
-      _pg2.connect(); // PG Connect
-      // eslint-disable-next-line consistent-return
-
-
-      var _query2 = 'SELECT * FROM carads WHERE LOWER(status) = LOWER($1)';
-      var _value2 = ['available'];
-
-      _pg2.query(_query2, _value2, function (err, dbres) {
-        if (err) {
-          // console.log(err.stack);
-          res.status(500).json({
-            message: 'error encountered'
-          });
-
-          _pg2.end();
-        } else if (dbres.rows.length === 0) {
-          res.status(200).json({
-            message: 'No car found!!!'
-          });
-
-          _pg2.end();
-        } else {
-          var carad = dbres.rows;
-          res.status(200).json({
-            state: 'success',
-            message: 'result completed',
-            carad: carad
-          });
-
-          _pg2.end();
-        }
-      });
-    } else if (req.query.body_type) {
-      var _pg3 = new Client({
-        connectionString: process.env.db_URL
-      });
-
-      _pg3.connect(); // eslint-disable-next-line consistent-return
-
-
-      var _query3 = 'SELECT * FROM carads WHERE LOWER(body_type) = LOWER($1)';
-      var _value3 = [req.query.body_type];
-
-      _pg3.query(_query3, _value3, function (err, dbres) {
-        if (err) {
-          // console.log(err.stack);
-          res.status(500).json({
-            message: 'error encountered'
-          });
-
-          _pg3.end();
-        } else if (dbres.rows.length === 0) {
-          res.status(200).json({
-            status: 200,
-            message: 'No car found!!!'
-          });
-
-          _pg3.end();
-        } else {
-          var carad = dbres.rows;
-          res.status(200).json({
-            state: 'success',
-            message: 'result completed',
-            carad: carad
-          });
-
-          _pg3.end();
-        }
-      });
-    } else if (req.query.manufacturer) {
-      var _pg4 = new Client({
-        connectionString: process.env.db_URL
-      });
-
-      _pg4.connect(); // eslint-disable-next-line consistent-return
-
-
-      var _query4 = 'SELECT * FROM carads WHERE LOWER(manufacturer) = LOWER($1) AND LOWER(status)=LOWER($2)';
-      var _value4 = [req.query.manufacturer, req.query.status];
-
-      _pg4.query(_query4, _value4, function (err, dbres) {
-        if (err) {
-          // console.log(err.stack);
-          res.status(500).json({
-            message: 'error encountered'
-          });
-
-          _pg4.end();
-        } else if (dbres.rows.length === 0) {
-          res.status(200).json({
-            message: 'No car found!!!'
-          });
-
-          _pg4.end();
-        } else {
-          var carad = dbres.rows;
-          res.status(200).json({
-            state: 'success',
-            message: 'result completed',
-            carad: carad
-          });
-
-          _pg4.end();
-        }
-      });
-    } else {
-      var email = authData.user.email;
-
-      var _pg5 = new Client({
-        connectionString: process.env.db_URL
-      });
-
-      _pg5.connect();
-
-      var _query5 = 'SELECT * FROM users WHERE LOWER(email) = LOWER($1)';
-      var _value5 = [email]; // eslint-disable-next-line consistent-return
-
-      _pg5.query(_query5, _value5, function (err, dbres) {
-        if (err) {
-          console.error(err);
-        } else if (dbres.rows[0].is_admin === false) {
-          res.status(403).json({
-            message: 'Access Denied!!!'
-          });
-
-          _pg5.end();
-        } else {
-          _query5 = 'SELECT * FROM LOWER(carads)';
-
-          _pg5.query(_query5, function (err, resdb) {
-            if (err) {// console.error(err);
-            } else if (resdb.rows.length === 0) {
-              res.status(404).json({
-                message: 'No ads present!'
-              });
-
-              _pg5.end();
-            } else {
-              var carad = resdb.rows;
-              res.status(200).json({
-                state: 'success',
-                message: 'result completed',
-                carad: carad
-              });
-
-              _pg5.end();
-            }
-          });
-        }
-      });
+        pg.query(_query5, _value5, function (err, dbres) {
+          if (err) {
+            console.error(err);
+          } else if (dbres.rows[0].is_admin === false) {
+            res.status(403).json({
+              message: 'Access Denied!!!'
+            });
+            pg.end();
+          } else {
+            _query5 = 'SELECT * FROM LOWER(carads)';
+            pg.query(_query5, function (err, resdb) {
+              if (err) {
+                console.error(err);
+              } else if (resdb.rows.length === 0) {
+                res.status(404).json({
+                  message: 'No ads present!'
+                });
+                pg.end();
+              } else {
+                var carad = resdb.rows;
+                res.status(200).json({
+                  state: 'success',
+                  message: 'result completed',
+                  carad: carad
+                });
+                pg.end();
+              }
+            });
+          }
+        });
+      }
     }
   });
 }; // GET SPECIFIC CAR
@@ -266,7 +217,7 @@ var getCar = function getCar(req, res) {
         console.log(dbres);
 
         if (err) {
-          // console.log(err.stack);
+          // console.log(err);
           res.status(500).json({
             message: 'error encountered'
           });
@@ -317,7 +268,7 @@ var getadsByOwner = function getadsByOwner(req, res) {
           value = [owner];
           pg.query(query, value, function (err, dbres) {
             if (err) {
-              // console.log(err.stack);
+              // console.log(err);
               res.status(500).json({
                 message: 'error encountered'
               });
@@ -408,13 +359,13 @@ var postCar = function postCar(req, res) {
 var patchCar = function patchCar(req, res) {
   // eslint-disable-next-line no-unused-vars
   jwt.verify(req.token, process.env.JWT_KEY, function (err, authData) {
-    var email = authData.user.email;
-
     if (err) {
       res.status(403).json({
         message: 'error..invalid token'
       });
     } else {
+      var email = authData.user.email;
+      var adId = req.params.id;
       var ad = req.body;
       var query;
       var value;
@@ -433,54 +384,55 @@ var patchCar = function patchCar(req, res) {
           pg.end();
         } else {
           currUser = dbres.rows[0].id;
-        }
+          query = 'SELECT owner FROM carads WHERE id = $1';
+          value = [adId]; // eslint-disable-next-line consistent-return
+          // eslint-disable-next-line no-shadow
 
-        query = 'SELECT owner FROM carads WHERE id = $1';
-        value = [req.params.id]; // eslint-disable-next-line consistent-return
-        // eslint-disable-next-line no-shadow
+          pg.query(query, value, function (err, dbres) {
+            if (err) {
+              console.error(err);
+              pg.end();
+            } else if (dbres.rows.length === 0) {
+              res.status(200).json({
+                message: 'No ad found'
+              });
+              pg.end();
+            } else {
+              owner = dbres.rows[0].owner;
 
-        pg.query(query, value, function (err, dbres) {
-          if (err) {
-            console.error(err);
-            pg.end();
-          } else if (dbres.rows.length === 0) {
-            res.status(200).json({
-              message: 'No ad found'
-            });
-            pg.end();
-          } else {
-            owner = dbres.rows[0].owner;
-          }
+              if (currUser === owner) {
+                query = 'UPDATE carads SET status=$1, price=$2, manufacturer=$3, model=$4, body_type=$5, owner=$6, state=$7, image_url=$8 WHERE id=$9';
+                value = [ad.status, ad.price, ad.manufacturer, ad.model, ad.body_type, owner, ad.state, ad.image_url, adId]; // eslint-disable-next-line consistent-return
+                // eslint-disable-next-line no-unused-vars
 
-          if (currUser === owner) {
-            query = 'UPDATE carads SET status=$1, price=$2';
-            value = [ad.status, ad.price]; // eslint-disable-next-line consistent-return
-            // eslint-disable-next-line no-unused-vars
-
-            pg.query(query, value, function (err, dbresponse) {
-              if (err) {
-                // console.error(err);
-                res.status(403).json({
-                  message: 'An error occured, Please check input!!!'
+                pg.query(query, value, function (err, dbresponse) {
+                  if (err) {
+                    console.error(err);
+                    res.status(403).json({
+                      message: 'An error occured, Please check input!!!'
+                    });
+                    pg.end();
+                  } else {
+                    res.status(200).json({
+                      state: 'success',
+                      status: 200,
+                      message: 'AD updated successfully!!',
+                      ad: ad
+                    });
+                    pg.end();
+                  }
                 });
-                pg.end();
               } else {
-                res.status(200).json({
-                  state: 'success',
-                  status: 200,
-                  message: 'AD updated successfully!!',
-                  ad: ad
+                res.status(403).json({
+                  message: 'You are not permiited to update this ad!!!'
                 });
                 pg.end();
               }
-            });
-          } else {
-            res.status(403).json({
-              message: 'You are not permiited to update this ad!!!'
-            });
-            pg.end();
-          }
-        });
+            }
+
+            ;
+          });
+        }
       });
     }
   });
@@ -594,7 +546,7 @@ var updateCarOrders = function updateCarOrders(req, res) {
       });
     } else {
       var email = authData.user.email;
-      var query = 'SELECT id FROM user WHERE email = $1';
+      var query = 'SELECT id FROM users WHERE email = $1';
       var value = [email];
       var pg = new Client({
         connectionString: process.env.db_URL
@@ -606,13 +558,14 @@ var updateCarOrders = function updateCarOrders(req, res) {
           pg.end();
         } else {
           var status = req.body.status;
+          console.log(status);
           var orderid = req.params.id;
           var curruser = resdb.rows[0].id;
-          query = 'UPDATE purchaseorder SET status=$1 WHERE id = $2 AND car_owner = $3';
+          query = 'UPDATE purchaseorder SET status=LOWER($1) WHERE id = $2';
           value = [status, orderid, curruser];
+          console.log(value);
           pg.query(query, value, function (err, dbres) {
-            var result = dbres.rows[0];
-
+            // const result = dbres.rows[0];/
             if (err) {
               console.error(err);
               pg.end();
@@ -621,6 +574,7 @@ var updateCarOrders = function updateCarOrders(req, res) {
                 status: 200,
                 message: 'Order Updated'
               });
+              pg.end();
             }
           });
         }

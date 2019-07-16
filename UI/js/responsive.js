@@ -156,38 +156,34 @@ document.addEventListener('DOMContentLoaded', () => {
                                         <span>${cars[i].status}</span>
                                     </p>
                                     <p class="para-delete-card-stories">
-                                        <a href="purchase-order.html?adId=${carId}">
-                                            <button class="edit"> Make a purchase order</button>
+                                        <a href="UI/an_ad.html?adId=${carId}">
+                                            <button class="view"> View Ad </button>
                                         </a>
-                                        <a href="UI/flag.html?adId=${carId}">
-                                            <button class="edit">Flag</button>
-                                        </a>
-                                        ${inStore.admin ? delButton: ''}
                                     </p>
                                 </div>
                             </div>
                         </div>
                     </div>`  
                 }
+
                 const deleteAd = (e) => {
+                    console.log('targ');
                     const targ = e.target.value;
                     console.log(targ);
-                    path = `/api/v1/car/${targ}/`;
+                    const path = `/api/v1/car/${targ}/`;
                     httpDelete( path, (err, response, xhttp) => {
                         if (err) {
                             toastr.error('An error occured');
                             console.log(err);
                         } else {
                             console.log(response);
-                            toastr.success(response.message)
+                            toastr.success(response.message);
+                            window.location.href = '#';
                         }
                     })
                 }
                 
                 document.querySelector('.section-result').innerHTML = output;
-                if (inStore.admin) {
-                    document.querySelector('.delete').onclick = deleteAd;
-                }
                 document.querySelector('.second-background-image').style.display = 'none';
                 result.scrollIntoView();
             } else {

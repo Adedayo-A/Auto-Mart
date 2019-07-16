@@ -103,30 +103,30 @@ var getMyOrders = function getMyOrders(req, res) {
           pg.end();
         } else {
           currUser = dbres.rows[0].id;
+          query = 'SELECT * FROM purchaseorder WHERE buyer = $1';
+          value = [currUser];
+          console.log('this is current ' + currUser);
+          pg.query(query, value, function (err, dbresp) {
+            if (err) {
+              console.error(err);
+              pg.end();
+            } else if (dbresp.rows.length === 0) {
+              res.status(200).json({
+                message: 'No order found'
+              });
+              pg.end();
+            } else {
+              var orders = dbresp.rows;
+              console.log('this is order ' + orders);
+              res.status(200).json({
+                state: 'success',
+                message: 'result completed',
+                orders: orders
+              });
+              pg.end();
+            }
+          });
         }
-
-        query = 'SELECT * FROM purchaseorder WHERE buyer = $1';
-        value = [currUser];
-        console.log('this is current ' + currUser);
-        pg.query(query, value, function (err, dbresp) {
-          if (err) {
-            console.error(err);
-            pg.end();
-          } else if (dbresp.rows.length === 0) {
-            res.status(200).json({
-              message: 'No order found'
-            });
-            pg.end();
-          } else {
-            var orders = dbresp.rows;
-            console.log('this is order ' + orders);
-            res.status(200).json({
-              state: 'success',
-              message: 'result completed',
-              orders: orders
-            });
-          }
-        });
       });
     }
   });

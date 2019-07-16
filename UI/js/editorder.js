@@ -116,7 +116,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 window.location.href = "signinpage.html";
             } else if (respData.status === 200) {
                 toastr.success(respData.message);
-                window.location.href = "myads.html";
+                window.location.href = "myorders.html";
             } else {
                 toastr.error(respData.message);
             }

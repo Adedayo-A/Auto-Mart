@@ -98,18 +98,20 @@ document.addEventListener('DOMContentLoaded', () => {
                 const orderdetails = response.orders
                 let output = '';
                 for (let i in orderdetails) {
+                    const orderId = orderdetails[i].id;
+                    const isaccepted = orderdetails[i].status == 'accepted';
+                    const updtButton = `<button class="edit"><a href="editorder.html?orderid=${orderId}">Update</a></button>`;
+                    const canclButton = `<button class="delete" value="${orderId}"> Cancel Order </button>`;
                     const image = orderdetails[i].image || 'N/A';
                     const carId = orderdetails[i].car_id || 'N/A';
                     const manufacturer = orderdetails[i].manufacturer || 'N/A';
                     const model = orderdetails[i].model || 'N/A';
-                    const status = orderdetails[i].status || 'N/A';
                     const priceOffered = orderdetails[i].amount || 'N/A';
-                    const orderId = orderdetails[i].id || 'N/A';
                     output += `<div class="div-result-wrap wrap-all">
                         <div class="wrapper-result one">
                             <div class="card-pictures">
                                 <a href="an_order.html?orderid=${orderId}">
-                                    <img src= ${image} />
+                                    <img src=${image} />
                                 </a>
                             </div>
                             <div class="card-stories">
@@ -117,21 +119,21 @@ document.addEventListener('DOMContentLoaded', () => {
                                     <h4 class="first-heading-card-stories"> Car id: ${carId} </h4>
                                     <h4 class="first-heading-card-stories"> Manufacturer: ${manufacturer} </h4>
                                     <h4 class="first-heading-card-stories"> Model: ${model} </h4>
-                                    <h4 class="first-heading-card-stories"> Status of Order: ${status} </h4>
+                                    <h4 class="first-heading-card-stories"> Status of Order: ${orderdetails[i].status} </h4>
                                     <h3 class="heading-price-card-stories"> Price Offered: ${priceOffered} </h3>
-                                    <button class="edit"> <a href="an_order.html?orderid=${orderId}"> View Order </a> </button>
+                                    <button class="view">
+                                        <a class="view-a" href="an_order.html?orderid=${orderId}"> View Order </a> 
+                                    </button>
                                 </div>
-                                <p class="para-delete-card-stories">
-                                    <button class="edit"><a href="editorder.html?orderid=${orderId}">Update</a></button>
-                                    <button class="delete"> Cancel Order </button>
-                                </p>
                             </div>
                         </div>
                     </div>`
                 }
+                
+                document.querySelector('.section-result').innerHTML = output;
                 const deleteOrder = (e) => {
                     const targ = e.target.value;
-                    path = `/api/v1/order/${targ}/`;
+                    const path = `/api/v1/order/${targ}`;
                     httpDelete( path, (err, response, xhttp) => {
                         if (err) {
                             toastr.error('An error occured');
@@ -141,7 +143,6 @@ document.addEventListener('DOMContentLoaded', () => {
                         }
                     })
                 }
-                document.querySelector('.section-result').innerHTML = output; 
                 if (inStore.admin) {
                     document.querySelector('.delete').onclick = deleteOrder;
                 }

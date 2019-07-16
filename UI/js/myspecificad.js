@@ -103,7 +103,7 @@ document.addEventListener('DOMContentLoaded', () => {
                  for (var i in cars) {
                     const int_color = cars[i].int_color || 'N/A';
                     const image = cars[i].image_url || 'N/A';
-                    const price = cars[i].state || 'N/A';
+                    const price = cars[i].price || 'N/A';
                     const manufacturer = cars[i].manufacturer || 'N/A';
                     const ext_color = cars[i].ext_color || 'N/A';
                     const transmission = cars[i].transmission || 'N/A'; 
@@ -137,7 +137,6 @@ document.addEventListener('DOMContentLoaded', () => {
                                         </p>
                                         <p class="para-delete-card-stories">
                                             <button class="edit"><a href="editad.html?adid=${adId}">Update</a></button>
-                                            <button><a href="#"> Delete</a></button>
                                         </p>
                                     </div>
                                 </div>
