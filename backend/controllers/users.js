@@ -1,121 +1,211 @@
+"use strict";
+
 /* eslint-disable no-trailing-spaces */
+
 /* eslint-disable eol-last */
+
 /* eslint-disable linebreak-style */
 // eslint-disable-next-line import/no-extraneous-dependencies
-const { Client } = require('pg');
-const jwt = require('jsonwebtoken');
-// eslint-disable-next-line import/no-extraneous-dependencies
-const bcrypt = require('bcrypt');
+var _require = require('pg'),
+    Client = _require.Client;
 
-// const users = require('../db/Users.js');
+var jwt = require('jsonwebtoken'); // eslint-disable-next-line import/no-extraneous-dependencies
+
+
+var bcrypt = require('bcrypt'); // const users = require('../db/Users.js');
 // class userControllers { 
-const signUp = (req, res) => {
-  const user = req.body;
-  const myPassword = user.password;
-  bcrypt.hash(myPassword, 10, (err, hash) => {
+
+
+var signUp = function signUp(req, res) {
+  var user = req.body;
+  var myPassword = user.password;
+  bcrypt.hash(myPassword, 10, function (err, hash) {
     // Store hash in database
     if (err) {
       console.log(err);
     } else {
-      const hashedPassword = hash;
-      const pg = new Client({
-        connectionString: process.env.db_URL,
+      var hashedPassword = hash;
+      var pg = new Client({
+        connectionString: process.env.db_URL
       });
       pg.connect();
-      const query = 'INSERT INTO users(email, first_name, last_name, password, address, is_admin) VALUES($1, $2, $3, $4, $5, $6)';
-      const value = [user.email, user.first_name, user.last_name, hashedPassword, 
-        user.address, user.is_admin];
-      
-      // PG Connect
+      var query = 'INSERT INTO users(email, first_name, last_name, password, address, is_admin) VALUES($1, $2, $3, $4, $5, $6)';
+      var value = [user.email, user.first_name, user.last_name, hashedPassword, user.address, user.is_admin]; // PG Connect
       // eslint-disable-next-line consistent-return
-      pg.query(query, value, (err, dbRes) => {
+      // eslint-disable-next-line no-unused-vars
+
+      pg.query(query, value, function (err, dbRes) {
         if (err) {
-          console.log(err);
-          res.status(500).json({
-            message: 'error encountered',
-          });
-        } else {
-          console.log(dbRes);
-          jwt.sign({ user }, process.env.JWT_KEY, { expiresIn: '30m' }, (err, token) => {
-            res.status(200).send({
-              message: 'Signed up successful',
-              token,
+          if (err.constraint === 'users_email_key') {
+            res.status(500).json({
+              message: 'email already exist, please choose another email'
             });
+            pg.end();
+          } else if (err) {
+            console.log(err);
+            res.status(500).json({
+              message: 'error encountered'
+            });
+            pg.end();
+          }
+        } else {
+          jwt.sign({
+            user: user
+          }, process.env.JWT_KEY, {
+            expiresIn: '30m'
+          }, function (err, token) {
+            res.status(200).send({
+              message: 'Sucess..sign up successful',
+              token: token
+            });
+            pg.end();
           });
         }
+
         pg.end();
       });
     }
   });
 };
 
-const verifyUser = (req, res) => {
+var verifyUser = function verifyUser(req, res) {
   // eslint-disable-next-line max-len
-  const user = req.body;
-  const myPassword = user.password;
-  const userEmail = user.email;
-  
-  const pg = new Client({
-    connectionString: process.env.db_URL,
+  var user = req.body;
+  var myPassword = user.password;
+  var userEmail = user.email;
+  var pg = new Client({
+    connectionString: process.env.db_URL
   });
-  pg.connect();
-  // PG Connect
+  pg.connect(); // PG Connect
   // eslint-disable-next-line consistent-return
-  const query = 'SELECT * FROM users WHERE email = $1';
-  const value = [userEmail];
- 
 
-  pg.query(query, value, (err, dbres) => {
+  var query = 'SELECT * FROM users WHERE email = $1';
+  var value = [userEmail];
+  pg.query(query, value, function (err, dbres) {
     if (err) {
       console.log(err.stack);
       res.status(500).json({
-        message: 'error encountered',
+        message: 'error encountered'
       });
+      pg.end();
     } else if (dbres.rows.length === 0) {
       res.status(403).json({
-        message: 'error encountered, Invalid Email',
+        message: 'error encountered, Invalid Email'
       });
+      pg.end();
     } else {
-      const dbPsw = dbres.rows[0].password;
-      const username = dbres.rows[0].first_name;
-      bcrypt.compare(myPassword, dbPsw, (err, match) => {
+      var dbPsw = dbres.rows[0].password;
+      var username = dbres.rows[0].first_name;
+      bcrypt.compare(myPassword, dbPsw, function (err, match) {
         if (err) {
           console.log(err.stack);
+          pg.end();
         } else if (!match) {
           res.status(403).json({
-            message: 'error encountered, Invalid password',
-          });   
+            message: 'error encountered, Invalid password'
+          });
+          pg.end();
         } else {
-          jwt.sign({ user }, process.env.JWT_KEY, { expiresIn: '30m' }, (err, token) => {
-            res.status(200).send({
-              message: `Welcome Back ${username}`,
-              token,
+          jwt.sign({
+            user: user
+          }, process.env.JWT_KEY, {
+            expiresIn: '30m'
+          }, function (err, token) {
+            res.status(200).json({
+              username: username,
+              status: 200,
+              message: "Success..Welcome Back ".concat(username),
+              token: token
             });
           });
+          pg.end();
+        }
+      });
+    }
+  });
+}; // UPDATE A USER
+
+
+var updateUser = function updateUser(req, res) {
+  // eslint-disable-next-line no-unused-vars
+  jwt.verify(req.token, process.env.JWT_KEY, function (err, authData) {
+    // eslint-disable-next-line prefer-destructuring
+    if (err) {
+      res.status(403).json({
+        message: 'error..invalid token'
+      });
+    } else {
+      // eslint-disable-next-line prefer-destructuring
+      var email = authData.user.email;
+      var pg = new Client({
+        connectionString: process.env.db_URL
+      });
+      pg.connect();
+      var query = 'UPDATE users SET first_name=$1, last_name=$2, address=$3 WHERE email = $4';
+      var value = [req.body.first_name, req.body.last_name, req.body.address, email]; // eslint-disable-next-line consistent-return
+
+      pg.query(query, value, function (err, dbres) {
+        if (err) {
+          console.error(err);
+          pg.end();
+        } else if (dbres.rowCount === 0) {
+          res.status(403).json({
+            message: 'An error occured, please check input'
+          });
+          pg.end();
+        } else {
+          res.status(200).json({
+            message: 'Profile updated'
+          });
+          pg.end();
+        }
+      });
+    }
+  });
+}; // GET A USER
+
+
+var getAUser = function getAUser(req, res) {
+  jwt.verify(req.token, process.env.JWT_KEY, function (err, authData) {
+    if (err) {
+      res.status(403).json({
+        message: 'error..invalid token'
+      });
+    } else {
+      var useremail = authData.user.email;
+      var pg = new Client({
+        connectionString: process.env.db_URL
+      });
+      pg.connect();
+      var query = 'SELECT * FROM users WHERE LOWER(email) = LOWER($1)';
+      var value = [useremail]; // eslint-disable-next-line consistent-return
+
+      pg.query(query, value, function (err, dbres) {
+        if (err) {
+          console.error(err);
+          pg.end();
+        } else {
+          var data = dbres.rows[0];
+          var email = data.email,
+              first_name = data.first_name,
+              last_name = data.last_name,
+              address = data.address;
+          res.status(200).json({
+            email: email,
+            first_name: first_name,
+            last_name: last_name,
+            address: address
+          });
+          pg.end();
         }
       });
     }
   });
 };
 
-
-const protectedRoute = (req, res) => {
-  jwt.verify(req.token, process.env.JWT_KEY, (err, authData) => {
-    if (err) {
-      res.status(403).json({
-        message: 'error',
-      });
-    } else {
-      res.json({
-        message: 'Signed in Successfully',
-        authData,
-      });
-    }
-  });
-};
-
 module.exports = {
-  signUp,
-  verifyUser,
-  protectedRoute,
+  signUp: signUp,
+  verifyUser: verifyUser,
+  updateUser: updateUser,
+  getAUser: getAUser
 };

@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
+    <link rel="stylesheet" text="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
     <link rel="stylesheet" text="text/css" href="css/user_access_styles/user_access2560.css" />
     <link rel="stylesheet" text="text/css" href="css/user_access_styles/user_access768.css" />
     <link rel="stylesheet" text="text/css" href="css/user_access_styles/user_access320.css" />
@@ -14,28 +15,16 @@
         <nav class="nav">
             <a href="../index.html" class="logo"><h2>Auto Mart</h2></a>
             <ul class="nav-links">
-                <li><a href="sell.html">Post a car sale</a></li>
-                <li><a href="purchase-order.html">Make a purchase order</a></li>
-                <li><a href="#">My Orders</a></li>
-                <li><a href="ads.html">My Ads</a></li>
-                <li><a href="signinpage.html">Log in</a></li>
-                <li class="sign-up"><a href="signinpage.html">Sign up</a></li>
-            </ul>
-            <ul class="svg">
-                <li>
-                    <img src="images/user.svg" class="img-svg"/>
-                </li>
+                <li><a class="need-user-link" href="sell.html">Post a sale Ad</a></li>
+                <li><a class="need-user-link" href="purchase-order.html">Make a purchase order</a></li>
+                <li><a class="need-user-link" href="myorders.html">My Orders</a></li>
+                <li><a class="need-user-link" href="mycarorders.html">My Car Orders</a></li>
+                <li><a class="need-user-link" href="myads.html">My Ads</a></li>
+                <!-- <li class="in-page"><a href="signinpage.html">Log in</a></li>
+                <li class="sign-up in-page"><a href="signinpage.html">Sign up</a></li> -->
             </ul>
             <a id="nav-toggle" href="#"><span></span></a>
         </nav>
-        <div class="arrow-up none" id="arrowup"></div>
-        <div class="dropdown none" id="drpdown">
-            <button class="button-dropdown"><a href="signinpage.html">Sign In</a></button>
-            <p class="para-dropdown">Don't have an account?<a href="signinpage.html"> Sign Up </a></p>
-            <hr>
-            <p class="para-dropdown"><a href="ads.html">My Ads</a></p>
-            <p class="para-dropdown"><a href="orders.html">My Orders</a></p>
-        </div>
     <main class="main-signin-page">
         <div>
             <header class="header-signin-page">
@@ -45,16 +34,32 @@
                 <span class="line-two"></span>
             </header>
             <hr>
-            <p class="p-signin-page p-email">Email</p>
-            <input type="search" class="search" />
-            <p class="p-signin-page p-password">Password</p>
-            <input type="search" class="search"/>
-            <p class="p-signin-page p-info"><span class="p-char">6 Characters or more, no spaces</span><span class="p-char forgot-p"><a href="#">Forgot password?</a></span></p>
-            <p class="p-signin-page p-signin-2">Confirm Password</p>
-            <input type="search" class="search search-confirm-password"/>
-            <a class="signup-link" href="result.html"><input type="button" name="submit" value="Sign up" class="button"/></a>
+            <form role="form" class="registration-form">            
+                <p class="p-signin-page p-email">Email</p>
+                <input type="email" name="email" class="search email-value" required/>
+                <p class="p-signin-page p-password">Password</p>
+                <input type="password" class="search password-value" required/>
+                <p class="p-signin-page p-info"><span class="p-char">6 Characters or more, no spaces</span></p>
+                <p class="p-signin-page p-signin-2">Confirm Password</p>
+                <input type="password" class="search search-confirm-password" required/>
+                <div class="message"></div>
+                <input type="submit" name="submit" value="Sign up" class="button"/>
+            </form>
+            <form role="form" class="login-form">            
+                <p class="p-signin-page p-email">Email</p>
+                <input type="email" name="email" class="search login-email" required />
+                <p class="p-signin-page p-password">Password</p>
+                <input type="password" class="search login-password" required />
+                <p class="p-signin-page p-info"><span class="p-char forgot-p"><a href="#">Forgot password?</a></span></p>
+                <div class="response"></div>
+                <input type="submit" name="submit" value="Login" class="button"/>
+            </form>
         </div>
     </main>
-<script src="js/signinpage.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+    <script src="js/toastr.js"></script>
+    <script src="js/request-signin.js"></script>
+    <script src="js/signinpage.js"></script>
 </body>
 </html>

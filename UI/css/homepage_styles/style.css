@@ -7,30 +7,35 @@
       box-sizing: inherit;
     }
 
-    body {
-      font-family: Arial, sans-serif;
-      box-sizing: border-box;
-      line-height: 1.7;
-      overflow: scroll;
-    }
+  body {
+    font-family: Arial, sans-serif;
+    box-sizing: border-box;
+    line-height: 1.7;
+    overflow: scroll;
+  }
 
-    .nav {
-      display: flex;
-      /* justify-content: space-around; */
-      align-items: center;
-      font-size: 13px;
-      background: #260957;
-      height: 38px;
-    }
+  .nav {
+    display: flex;
+    /* justify-content: space-around; */
+    align-items: center;
+    font-size: 13px;
+    background: #260957;
+    height: 38px;
+  }
 
-    .logo {
-      margin-left: 3%;
-      margin-right: auto;
+  nav a.logo {
+    margin-left: 3%;
+    margin-right: auto;
   }
 
   .nav a {
     text-decoration: none;
     color: #C6CEE4;
+    cursor: pointer;
+  }
+
+  nav ul.nav-links {
+    margin-right: 50px;
   }
 
   .nav ul.nav-links li {
@@ -49,70 +54,80 @@
   }
 
   .nav ul.svg {
-    margin-right: 20px;
+    margin-right: 70px;
   }
 
-  .nav .svg .img-svg {
+  .nav ul.svg .img-svg {
     cursor: pointer;
     width: 25px;
     margin-top: 5px;
   }
 
-    #nav-toggle {
-      display: none;
-    }
+  #nav-toggle {
+    display: none;
+  }
 
-    /* DROPDOWN */
-    .none {
-      display: none;
-    }
-    .show {
-      display: block;
-    }
-    .arrow-up {
-      position: absolute;
-      right: 160px;
-      top: 33px;
-      width: 0;
-      height: 0;
-      border-left: 5px solid transparent;
-      border-right: 5px solid transparent;
-      border-bottom: 5px solid white;
-    }
-    .dropdown {
-      background-color: white;
-      position: absolute;
-      right: 100px;
-      padding: 1rem;
-      border: 1.5px solid #efefef;
-      animation: slide-bottom 2s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
-    }
-    .button-dropdown {
-      width: 6rem;
-      height: 1.5rem;
-      border: none;
-      border-radius: 0.3rem;
-      background-color: #A400B4;
-      color: #fff;
-    }
+  /* DROPDOWN */
+  div.arrow-up {
+    position: absolute;
+    right: 80px;
+    top: 33px;
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-bottom: 5px solid white;
+    display: none;
+  }
 
-    .button-dropdown a {
-      text-decoration: none;
-      color: white;
-    }
-    .para-dropdown {
-      color: black;
-      margin-top: 10px;
-      font-size: 10px;
-    }
-    .para-dropdown a {
-      text-decoration: none;
-      color: #A400B4;
-    }
-    /**********NAV ENDED********/
+  div.dropdown {
+    background-color: white;
+    position: absolute;
+    right: 50px;
+    padding: 1rem;
+    height: 12rem;
+    border: 1.5px solid #efefef;
+    animation: slide-bottom 2s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+    display: none;
+  }
 
-    /**********BACKGROUND IMAGE********/
+  div.dashboard-dropdown {
+    width: 9rem;
+    height: 1.6rem;
+    border: none;
+    border-radius: 0.3rem;
+    background-color: #A400B4;
+    color: #fff;
+    font-size: 0.7rem;
+    text-align: center;
+    padding-top: 0.3rem;
+  }
 
+  button.button-dropdown a {
+    text-decoration: none;
+    color: white;
+  }
+
+  p.para-dropdown {
+    color: black;
+    margin-top: 10px;
+    font-size: 12px;
+    cursor: pointer;
+  }
+
+  .para-dropdown a {
+    text-decoration: none;
+    color: #A400B4;
+  }
+
+  /***** On Hover ****/
+  .svg:hover .dropdown {
+    display: block;
+  }
+
+  /**********NAV ENDED********/
+
+  /**********BACKGROUND IMAGE********/
     div.background-img {
       background-image: url("../../images/car2.jpg");
       background-position: center;
@@ -237,5 +252,120 @@
       opacity: 0.5;
       font-weight: 600;
       font-size: 14px;
+    }
+
+    /* DISPLAY RESULT */
+    /* .section-result {
+      display: none;
+    } */
+
+    /****** SECTION BEGINS ******/
+    .section-result {
+      /* display: flex; */
+      margin-left: 2rem;
+      margin-top: 4rem;
+      margin-bottom: 2rem;
+    }
+    .filter-results {
+        width: 20rem;
+        flex-grow: 0.3;
+        margin-right: 1rem;
+    }
+    .div-result-wrap {
+        width: 55rem;
+        display: flex;
+        flex-direction: column;
+    }
+    .wrapper-result {
+        display: flex;
+        width: 2rem;
+        margin: auto;
+    }
+    .wrapper-result > div {
+        margin-bottom: 2rem;    
+    }
+    .card-pictures {
+        width: 26rem;
+        height: 15rem;
+        margin-right: 3rem;
+    }
+    .one {
+      background-repeat: no-repeat;
+    }
+    .two {
+      background-repeat: no-repeat;
+    }
+    .three {
+      background-repeat: no-repeat;
+    }
+    .four {
+      background-repeat: no-repeat;
+    }
+    .card-stories {
+        padding-left: 2rem;
+    }
+
+    /* .card-stories h4, span {
+      padding-left: 2rem;
+    } */
+    .div-inside-card {
+      line-height: 40px;
+    }
+    .first-heading-card-stories {
+      font-weight:400;
+      font-size: 0.7rem;
+    }
+    .heading-price-card-stories {
+      margin-top: -1%;
+      font-size: 1rem;
+      font-weight: 550;
+      opacity: 0.6;
+    }
+    .heading-make-card-stories {
+      margin-top: -1%;
+      font-size: 1rem;
+      opacity: 0.6;
+    }
+    .para-ext-card-stories {
+      margin-top: -2.5%;
+      display: flex;
+    }
+    .para-int-card-stories {
+      display: flex;
+      margin-top: -2%;
+    }
+    .para-status-card-stories {
+      font-size: 0.9rem;
+      margin-top: -0.5rem;
+      display: flex;
+    }
+    .para-int-card-stories > span:nth-child(1), .para-status-card-stories > span:nth-child(1) {
+      margin-right: auto;
+    }
+    .para-ext-card-stories > span:nth-child(2), .para-int-card-stories > span:nth-child(2), .para-status-card-stories > span:nth-child(2) {
+      margin-right: 2rem;
+    }
+    .para-contact-card-stories {
+      margin-top: -2%;
+    }
+    .para-delete-card-stories > button:nth-child(1) {
+      color: white;
+      cursor: pointer;
+      background-color: blue;
+      box-shadow: none;
+      border: none;
+      padding: 6px;
+      border-radius: 3px;
+      width: 70px;
+    }
+
+    .para-delete-card-stories > button:nth-child(2) {
+      color: white;
+      cursor: pointer;
+      background-color: red;
+      box-shadow: none;
+      border: none;
+      padding: 6px;
+      border-radius: 3px;
     }
 }

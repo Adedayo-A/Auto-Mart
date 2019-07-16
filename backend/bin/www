@@ -1,6 +1,6 @@
 const app = require('../index.js');
 
-const port = parseInt(process.env.PORT, 10) || 5000;
+const port = parseInt(process.env.PORT, 10) || 8000;
 app.set('port', port);
 process.env.JWT_KEY = 'secretkey'
 process.env.test_reporter = '49376412b9594fa8630e855fbe49a22dd6cc051ba4777ac694abb77a1a4db7cb'
