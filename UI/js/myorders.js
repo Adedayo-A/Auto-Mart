@@ -7,10 +7,10 @@ document.addEventListener('DOMContentLoaded', () => {
     // VERIFY LOCAL STORAGE
     if (!inStore) {
         const needUser = document.querySelector('.need-user');
-            needUser.style.display = 'none';
+        needUser.style.display = 'none';
         const needUserLink = document.querySelectorAll('.need-user-link');
         needUserLink.forEach((noUserLink) => {
-            noUserLink.href = 'UI/signinpage.html';
+            noUserLink.href = 'signinpage.html';
         });
     } else if (inStore) {
         const inStore = JSON.parse(localStorage.getItem('loggedInUser'));
@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
         neednotUser.forEach((neednouser)=> {
             neednouser.style.display = 'none';
         })
-        document.querySelector('.dashboard-dropdown').innerHTML = `Welcome ${firstname}`
+         document.querySelector('.dashboard-dropdown').innerHTML = `Welcome ${firstname}`
     }
 
     // VERIFY TOKEN 
@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
             console.log('token expired');
             toastr.info('session expired, please login');
             localStorage.clear();
-            window.location.href = 'UI/signinpage.html';
+            window.location.href = 'signinpage.html';
         } else {
             const token = inStore.token;
             const data = {
@@ -47,7 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }  else if (respData.status === 403) {
                     toastr.info('session expired');
                     localStorage.clear();
-                    window.location.href = "./UI/signinpage.html";
+                    window.location.href = "signinpage.html";
                 }
             });
         }
@@ -57,7 +57,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // SIGN OUT
     document.querySelector('.sign-out').onclick = () => {
         localStorage.clear();
-        window.location.href = 'UI/signinpage.html';
+        window.location.href = 'signinpage.html';
     }
 
     
@@ -141,8 +141,10 @@ document.addEventListener('DOMContentLoaded', () => {
                         }
                     })
                 }
-                document.querySelector('.delete').onclick = deleteOrder;
-                document.querySelector('.section-result').innerHTML = output;                
+                document.querySelector('.section-result').innerHTML = output; 
+                if (inStore.admin) {
+                    document.querySelector('.delete').onclick = deleteOrder;
+                }
             } else {
                 console.log(response);
                 toastr.info('An error occured');

@@ -9,7 +9,7 @@
     "test": "./node_modules/.bin/mocha --timeout 40000 --reporter spec ./backend/test/index.js",
     "coverage": "nyc npm test",
     "coverage-report": "nyc report --reporter=text-lcov | coveralls",
-    "start": "node ./bin/www",
+    "start": "node ./backend/bin/www",
     "devstart": "babel-node -- ./src/bin/www"
   },
   "keywords": [

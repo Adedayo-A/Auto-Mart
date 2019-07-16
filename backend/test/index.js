@@ -147,8 +147,8 @@ describe('TEST API ENDPOINTS', function () {
     });
     it('should update and register a user', function (done) {
       var user = {
-        first_name: 'Obafemi',
-        last_name: 'James-Dele',
+        first_name: 'Swede',
+        last_name: 'Bolls',
         address: '33, Adeola Odeku, Lagos'
       };
       supertest(index).patch('/api/v1/users/auth/update').set('Authorization', "Bearer ".concat(token)).send(user).expect('Content-type', /json/).end(function (err, res) {

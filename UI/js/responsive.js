@@ -46,7 +46,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }  else if (respData.status === 403) {
                     toastr.info('session expired');
                     localStorage.clear();
-                    window.location.href = "./UI/signinpage.html";
+                    window.location.href = "UI/signinpage.html";
                 }
             });
         }

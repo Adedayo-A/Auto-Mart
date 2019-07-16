@@ -4,25 +4,25 @@ document.addEventListener('DOMContentLoaded', () => {
     const body = document.querySelector('.body');
     const inStore = JSON.parse(localStorage.getItem('loggedInUser'));
 
-    // VERIFY LOCAL STORAGE
-    if (!inStore) {
-        const needUser = document.querySelector('.need-user');
-            needUser.style.display = 'none';
-        const needUserLink = document.querySelectorAll('.need-user-link');
-        needUserLink.forEach((noUserLink) => {
-            noUserLink.href = 'UI/signinpage.html';
-        });
-    } else if (inStore) {
-        const inStore = JSON.parse(localStorage.getItem('loggedInUser'));
-        console.log(inStore);
-        let firstname = inStore.username;
-        const neednotUser = document.querySelectorAll('.no-user');
-        neednotUser.forEach((neednouser)=> {
-            neednouser.style.display = 'none';
-        })
-        document.querySelector('.dashboard-dropdown').innerHTML = `Welcome ${firstname}`
-    }
-
+        // VERIFY LOCAL STORAGE
+        if (!inStore) {
+            const needUser = document.querySelector('.need-user');
+                needUser.style.display = 'none';
+            const needUserLink = document.querySelectorAll('.need-user-link');
+            needUserLink.forEach((noUserLink) => {
+                noUserLink.href = 'signinpage.html';
+            });
+        } else if (inStore) {
+            const inStore = JSON.parse(localStorage.getItem('loggedInUser'));
+            console.log(inStore);
+            let firstname = inStore.username;
+            const neednotUser = document.querySelectorAll('.no-user');
+            neednotUser.forEach((neednouser)=> {
+                neednouser.style.display = 'none';
+            })
+            document.querySelector('.dashboard-dropdown').innerHTML = `Welcome ${firstname}`
+        }
+    
     // VERIFY TOKEN 
     const tokenVerify = () => {
         const path = '/api/v1/users/auth/tokenverify';
@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
             console.log('token expired');
             toastr.info('session expired, please login');
             localStorage.clear();
-            window.location.href = 'UI/signinpage.html';
+            window.location.href = 'signinpage.html';
         } else {
             const token = inStore.token;
             const data = {
@@ -47,7 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }  else if (respData.status === 403) {
                     toastr.info('session expired');
                     localStorage.clear();
-                    window.location.href = "./UI/signinpage.html";
+                    window.location.href = "signinpage.html";
                 }
             });
         }
@@ -57,7 +57,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // SIGN OUT
     document.querySelector('.sign-out').onclick = () => {
         localStorage.clear();
-        window.location.href = 'UI/signinpage.html';
+        window.location.href = 'signinpage.html';
     }
 
     
@@ -74,21 +74,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // NAV TOGGLE CLICK ON MOBILE
     const nav = document.querySelector('.nav');
-    const firstImage = document.querySelector('.one');
-    const filterResults = document.querySelector('.filter-results');
-    const reportForm = document.querySelector(".report-form");
     
     document.querySelector('#nav-toggle').onclick = () => {
         if(nav.className === "nav") {
             nav.className += " responsive";
-            firstImage.className += " responsive";
-            filterResults.className += " responsive";
-            reportForm.className +=  " show" + " responsive";
         }   else {
                 nav.className = "nav";
-                firstImage.className = "one";
-                filterResults.className = "filter-results";
-                reportForm.className += ".report-form.show";
         }
     }
 
