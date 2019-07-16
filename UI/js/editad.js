@@ -64,7 +64,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const dropDown = document.querySelector('.dropdown');
     const body = document.querySelector('.body');
     
-    //NAV CLICK ON MOBILE    
+    // NAV CLICK ON MOBILE    
     const nav = document.querySelector('.nav');
     const mainIndex = document.querySelector('.main-index');
     document.querySelector('#nav-toggle').onclick = () => {
