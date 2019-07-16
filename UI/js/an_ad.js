@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
             needUser.style.display = 'none';
         const needUserLink = document.querySelectorAll('.need-user-link');
         needUserLink.forEach((noUserLink) => {
-            noUserLink.href = 'UI/signinpage.html';
+            noUserLink.href = 'signinpage.html';
         });
     } else if (inStore) {
         const inStore = JSON.parse(localStorage.getItem('loggedInUser'));
@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
             console.log('token expired');
             toastr.info('session expired, please login');
             localStorage.clear();
-            window.location.href = 'UI/signinpage.html';
+            window.location.href = 'signinpage.html';
         } else {
             const token = inStore.token;
             const data = {
@@ -47,7 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }  else if (respData.status === 403) {
                     toastr.info('session expired');
                     localStorage.clear();
-                    window.location.href = "./UI/signinpage.html";
+                    window.location.href = "signinpage.html";
                 }
             });
         }
@@ -57,8 +57,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // SIGN OUT
     document.querySelector('.sign-out').onclick = () => {
         localStorage.clear();
-        window.location.href = 'UI/signinpage.html';
+        window.location.href = 'signinpage.html';
     }
+
     
     // CLICK USER SVG
     document.querySelector('.img-svg').onclick = () => {
@@ -109,6 +110,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 const cars = response.carad;
                 let output = '';
                 for (var i in cars) {
+                    const adId = cars[i].id || 'N/A';
+                    const delButton = `<button class="deleteone" value="${adId}"> Delete AD </button>`;
                     const int_color = cars[i].int_color || 'N/A';
                     const image = cars[i].image_url || 'N/A';
                     const price = cars[i].state || 'N/A';
@@ -122,7 +125,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     const door = cars[i].door || 'N/A';
                     const description = cars[i].description || 'N/A';
                     const status = cars[i].status || 'N/A';
-                    const adId = cars[i].id || 'N/A';
 
 
                     output += 
@@ -145,30 +147,38 @@ document.addEventListener('DOMContentLoaded', () => {
                                         <p class="para-status-card-stories">
                                             <span> Availability: ${status} </span>
                                         </p>
-                                        <p class="para-delete-card-stories">
-                                            <button class="edit"><a href="editad.html?adId=${adId}">Make a purchase order</a></button>
-                                            <button class="delete">Delete Ad</button>
+                                        <p>
+                                            <button class="viewone"><a href="editad.html?adId=${adId}">Make a purchase order</a></button>
+                                        </p>
+                                        <p>
+                                            <button class="editone">Flag</button>
+                                            ${inStore.admin ? delButton: ''}
                                         </p>
                                     </div>
                                 </div>
                             </div>
                         </div>`
                 }
-                const deleteAd = () => {
-                    const adId = window.location.search.slice(1).split("&")[0].split("=")[1];
-                    path = `/api/v1/car/${adId}/`;
+                const deleteAd = (e) => {
+                    console.log('targ');
+                    const targ = e.target.value;
+                    console.log(targ);
+                    const path = `/api/v1/car/${targ}/`;
                     httpDelete( path, (err, response, xhttp) => {
                         if (err) {
                             toastr.error('An error occured');
                             console.log(err);
                         } else {
-                            toastr.success(response.message)
+                            console.log(response);
+                            toastr.success(response.message);
+                            window.location.href = '../index.html';
                         }
                     })
                 }
+                
                 document.querySelector('.section-result').innerHTML = output;
-                document.querySelector('.delete').onclick = () => {
-                    deleteAd;
+                if (inStore.admin) {
+                    document.querySelector('.deleteone').onclick = deleteAd;
                 }
             } else {
                 console.log(response);

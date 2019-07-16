@@ -4,13 +4,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const body = document.querySelector('.body');
     const inStore = JSON.parse(localStorage.getItem('loggedInUser'));
 
-    // VERIFY LOCAL STORAGE
-    if (!inStore) {
+       // VERIFY LOCAL STORAGE
+       if (!inStore) {
         const needUser = document.querySelector('.need-user');
             needUser.style.display = 'none';
         const needUserLink = document.querySelectorAll('.need-user-link');
         needUserLink.forEach((noUserLink) => {
-            noUserLink.href = 'UI/signinpage.html';
+            noUserLink.href = 'signinpage.html';
         });
     } else if (inStore) {
         const inStore = JSON.parse(localStorage.getItem('loggedInUser'));
@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
             console.log('token expired');
             toastr.info('session expired, please login');
             localStorage.clear();
-            window.location.href = 'UI/signinpage.html';
+            window.location.href = 'signinpage.html';
         } else {
             const token = inStore.token;
             const data = {
@@ -47,7 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }  else if (respData.status === 403) {
                     toastr.info('session expired');
                     localStorage.clear();
-                    window.location.href = "./UI/signinpage.html";
+                    window.location.href = "signinpage.html";
                 }
             });
         }
@@ -57,9 +57,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // SIGN OUT
     document.querySelector('.sign-out').onclick = () => {
         localStorage.clear();
-        window.location.href = 'UI/signinpage.html';
+        window.location.href = 'signinpage.html';
     }
-    
+        
     // CLICK USER SVG
     document.querySelector('.img-svg').onclick = () => {
         if(arrowUp.style.display == 'none' && dropDown.style.display == 'none') {
@@ -106,7 +106,7 @@ document.addEventListener('DOMContentLoaded', () => {
                  for (var i in cars) {
                     const int_color = cars[i].int_color || 'N/A';
                     const image = cars[i].image_url || 'N/A';
-                    const price = cars[i].state || 'N/A';
+                    const price = cars[i].price || 'N/A';
                     const manufacturer = cars[i].manufacturer || 'N/A';
                     const ext_color = cars[i].ext_color || 'N/A';
                     const transmission = cars[i].transmission || 'N/A'; 
@@ -135,11 +135,8 @@ document.addEventListener('DOMContentLoaded', () => {
                                     <p class="para-status-card-stories">
                                         <span> ${status} </span>
                                     </p>
-                                    <button class="edit"> <a href="an_ad.html?carid=${carId}"> View Ad </a> </button>
+                                    <button class="view"> <a href="myspecificad.html?carid=${carId}"> View Ad </a> </button>
                                     <p class="para-delete-card-stories">
-                                        <a href = "editad.html?carid=${carId}"/>
-                                            <button class="edit">Update</button>
-                                        </a>
                                     </p>
                                 </div>
                             </div>

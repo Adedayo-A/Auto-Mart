@@ -37,6 +37,7 @@ var signUp = function signUp(req, res) {
       pg.query(query, value, function (err, dbRes) {
         if (err) {
           if (err.constraint === 'users_email_key') {
+            console.log(err);
             res.status(500).json({
               message: 'email already exist, please choose another email'
             });
@@ -52,17 +53,37 @@ var signUp = function signUp(req, res) {
           jwt.sign({
             user: user
           }, process.env.JWT_KEY, {
-            expiresIn: '30m'
+            expiresIn: '20m'
           }, function (err, token) {
-            res.status(200).send({
-              message: 'Sucess..sign up successful',
-              token: token
+            query = 'SELECT * FROM users WHERE email = $1';
+            value = [user.email];
+            console.log('this is ' + value);
+            pg.query(query, value, function (err, dbres) {
+              if (err) {
+                console.log(err.stack);
+                res.status(500).json({
+                  message: 'error encountered'
+                });
+                pg.end();
+              } else {
+                var username = dbres.rows[0].first_name;
+
+                if (username === null) {
+                  username = 'user';
+                }
+
+                res.status(200).send({
+                  username: username,
+                  state: 'success',
+                  status: 200,
+                  message: 'Sign up successful',
+                  token: token
+                });
+                pg.end();
+              }
             });
-            pg.end();
           });
         }
-
-        pg.end();
       });
     }
   });
@@ -96,6 +117,12 @@ var verifyUser = function verifyUser(req, res) {
     } else {
       var dbPsw = dbres.rows[0].password;
       var username = dbres.rows[0].first_name;
+      var admin = dbres.rows[0].is_admin;
+
+      if (username === null) {
+        username = 'user';
+      }
+
       bcrypt.compare(myPassword, dbPsw, function (err, match) {
         if (err) {
           console.log(err.stack);
@@ -109,10 +136,11 @@ var verifyUser = function verifyUser(req, res) {
           jwt.sign({
             user: user
           }, process.env.JWT_KEY, {
-            expiresIn: '30m'
+            expiresIn: '20m'
           }, function (err, token) {
             res.status(200).json({
               username: username,
+              admin: admin,
               status: 200,
               message: "Success..Welcome Back ".concat(username),
               token: token
@@ -129,13 +157,14 @@ var verifyUser = function verifyUser(req, res) {
 var updateUser = function updateUser(req, res) {
   // eslint-disable-next-line no-unused-vars
   jwt.verify(req.token, process.env.JWT_KEY, function (err, authData) {
-    // eslint-disable-next-line prefer-destructuring
+    // eslint-disable-next-line prefer-destructuring    
     if (err) {
       res.status(403).json({
         message: 'error..invalid token'
       });
     } else {
       // eslint-disable-next-line prefer-destructuring
+      var token = req.token;
       var email = authData.user.email;
       var pg = new Client({
         connectionString: process.env.db_URL
@@ -149,15 +178,39 @@ var updateUser = function updateUser(req, res) {
           console.error(err);
           pg.end();
         } else if (dbres.rowCount === 0) {
+          console.log('An error occured, please check input');
           res.status(403).json({
             message: 'An error occured, please check input'
           });
           pg.end();
         } else {
-          res.status(200).json({
-            message: 'Profile updated'
+          query = 'SELECT * FROM users WHERE email = $1';
+          value = [email];
+          console.log('this is ' + value);
+          pg.query(query, value, function (err, dbres) {
+            if (err) {
+              console.log(err.stack);
+              res.status(500).json({
+                message: 'error encountered'
+              });
+              pg.end();
+            } else {
+              var username = dbres.rows[0].first_name;
+
+              if (username === null) {
+                username = 'user';
+              }
+
+              res.status(200).send({
+                username: username,
+                state: 'success',
+                status: 200,
+                message: 'Profile updated',
+                token: token
+              });
+              pg.end();
+            }
           });
-          pg.end();
         }
       });
     }
@@ -167,6 +220,8 @@ var updateUser = function updateUser(req, res) {
 
 var getAUser = function getAUser(req, res) {
   jwt.verify(req.token, process.env.JWT_KEY, function (err, authData) {
+    var token = req.token;
+
     if (err) {
       res.status(403).json({
         message: 'error..invalid token'
@@ -194,10 +249,27 @@ var getAUser = function getAUser(req, res) {
             email: email,
             first_name: first_name,
             last_name: last_name,
-            address: address
+            address: address,
+            token: token
           });
           pg.end();
         }
+      });
+    }
+  });
+}; // TOKEN VERIFICATION
+
+
+var tokenVerify = function tokenVerify(req, res) {
+  jwt.verify(req.body.token, process.env.JWT_KEY, function (err) {
+    if (err) {
+      res.json({
+        status: 403,
+        message: 'Session Expired'
+      });
+    } else {
+      res.json({
+        status: 200
       });
     }
   });
@@ -207,5 +279,6 @@ module.exports = {
   signUp: signUp,
   verifyUser: verifyUser,
   updateUser: updateUser,
-  getAUser: getAUser
+  getAUser: getAUser,
+  tokenVerify: tokenVerify
 };

@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
             needUser.style.display = 'none';
         const needUserLink = document.querySelectorAll('.need-user-link');
         needUserLink.forEach((noUserLink) => {
-            noUserLink.href = 'UI/signinpage.html';
+            noUserLink.href = 'signinpage.html';
         });
     } else if (inStore) {
         const inStore = JSON.parse(localStorage.getItem('loggedInUser'));
@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
             console.log('token expired');
             toastr.info('session expired, please login');
             localStorage.clear();
-            window.location.href = 'UI/signinpage.html';
+            window.location.href = 'signinpage.html';
         } else {
             const token = inStore.token;
             const data = {
@@ -47,7 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }  else if (respData.status === 403) {
                     toastr.info('session expired');
                     localStorage.clear();
-                    window.location.href = "./UI/signinpage.html";
+                    window.location.href = "signinpage.html";
                 }
             });
         }
@@ -57,9 +57,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // SIGN OUT
     document.querySelector('.sign-out').onclick = () => {
         localStorage.clear();
-        window.location.href = 'UI/signinpage.html';
+        window.location.href = 'signinpage.html';
     }
-
     
     // CLICK USER SVG
     document.querySelector('.img-svg').onclick = () => {
@@ -96,7 +95,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const getanOrder = () => {
         const postId = window.location.search.slice(1).split("&")[0].split("=")[1];
         console.log(postId);
-        path = `/api/v1/order/${postId}`;
+        const path = `/api/v1/order/${postId}`;
         httpGet(path, (err, response, xhttp) => {
             if (err) {
                 toastr.error('An error occured');
@@ -110,13 +109,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 const orderdetails = response.order;
                 let output = '';
                 for (var i in orderdetails) {
+                    const orderId = orderdetails[i].id || 'N/A';
+                    const isaccepted = orderdetails[i].status == 'accepted';
+                    const updtButton = `<button class="edit"><a href="editorder.html?orderid=${orderId}">Update</a></button>`;
+                    const canclButton = `<button class="delete" value="${orderId}"> Cancel Order </button>`;
                     const image = orderdetails[i].image || 'N/A';
                     const carId = orderdetails[i].car_id || 'N/A';
                     const manufacturer = orderdetails[i].manufacturer || 'N/A';
                     const model = orderdetails[i].model || 'N/A';
                     const status = orderdetails[i].status || 'N/A';
                     const priceOffered = orderdetails[i].amount || 'N/A';
-                    const orderId = orderdetails[i].id || 'N/A';
                     output += `<div class="div-result-wrap wrap-all">
                         <div class="wrapper-result one">
                             <div class="card-pictures">
@@ -127,12 +129,12 @@ document.addEventListener('DOMContentLoaded', () => {
                                     <h4 class="first-heading-card-stories"> Car id: ${carId} </h4>
                                     <h4 class="first-heading-card-stories"> Manufacturer: ${manufacturer} </h4>
                                     <h4 class="first-heading-card-stories"> Model: ${model} </h4>
-                                    <h4 class="first-heading-card-stories"> Status of Order: ${status} </h4>
+                                    <h4 class="first-heading-card-stories"> Status of Order: ${orderdetails[i].status} </h4>
                                     <h3 class="heading-price-card-stories"> Price Offered: ${priceOffered} </h3>
                                 </div>
                                 <p class="para-delete-card-stories">
-                                    <button class="edit"><a href="editorder.html?orderid=${orderId}">Update</a></button>
-                                    <button class="delete" value=${orderId}>Cancel Order</button>
+                                ${!isaccepted ? updtButton:''}
+                                ${!isaccepted ? canclButton:''}
                                 </p>
                             </div>
                         </div>
@@ -141,13 +143,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 document.querySelector('.section-result').innerHTML = output;
                 const deleteOrder = (e) => {
                     const targ = e.target.value;
-                    path = `/api/v1/order/${targ}/`;
+                    const path = `/api/v1/order/${targ}/`;
                     httpDelete( path, (err, response, xhttp) => {
                         if (err) {
                             toastr.error('An error occured');
                             console.log(err);
                         } else {
                             toastr.success(response.message)
+                            window.location.href = 'myorders.html';
                         }
                     })
                 }

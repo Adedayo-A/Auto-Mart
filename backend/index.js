@@ -1,5 +1,6 @@
 "use strict";
 
+/* eslint-disable no-tabs */
 // require('dotenv').config();
 var express = require('express');
 
@@ -9,9 +10,7 @@ var bodyParser = require('body-parser'); // eslint-disable-next-line import/no-e
 
 
 var morgan = require('morgan'); // eslint-disable-next-line import/no-extraneous-dependencies
-
-
-var cloudinary = require('cloudinary').v2; // import express from 'express';
+// import express from 'express';
 // import bodyParser from 'body-parser';
 // import morgan from 'morgan';
 // import cors from 'cors';

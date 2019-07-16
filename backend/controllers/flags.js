@@ -10,20 +10,23 @@ var _require = require('pg'),
 var jwt = require('jsonwebtoken');
 
 var postFlag = function postFlag(req, res) {
-  var newFlag = req.body;
   jwt.verify(req.token, process.env.JWT_KEY, function (err) {
     if (err) {
-      res.status(403).json({
+      res.status(401).json({
+        status: 401,
         message: 'error..invalid token'
       });
     } else {
+      console.log(req.params);
+      var info = req.body.info;
+      var car_id = req.params.id;
       var pg = new Client({
         connectionString: process.env.db_URL
       }); // PG Connect
 
       pg.connect();
       var query = 'INSERT INTO flag(car_id, reason) VALUES($1, $2)';
-      var value = [newFlag.car_id, newFlag.reason]; // eslint-disable-next-line consistent-return
+      var value = [car_id, info]; // eslint-disable-next-line consistent-return
       // PG Query
       // eslint-disable-next-line no-unused-vars
 
@@ -36,7 +39,7 @@ var postFlag = function postFlag(req, res) {
           pg.end();
         } else {
           res.status(200).json({
-            newFlag: newFlag,
+            status: 200,
             message: 'Thank you for reporting this problem'
           });
           pg.end();

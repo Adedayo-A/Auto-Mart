@@ -1,0 +1,380 @@
+@media screen and (max-width: 320px) {
+    /****** PAGE AND BODY STYLING ***********/
+    *,
+    *::before,
+    *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: inherit;
+    }
+  
+    body {
+      font-family: Arial, sans-serif;
+      box-sizing: border-box;
+      line-height: 1.7;
+      overflow: scroll;
+      background-color: #efefef;
+    }
+  
+    .body.disable {
+      pointer-events: none;
+    }
+  
+    /****** NAV STYLING ***********/
+      .nav {
+        display: flex;
+        font-size: 0.8rem;
+        background-color: #260957;
+        height: 3.3rem;
+        align-items: center;
+      }
+  
+      ul {
+        display: none;
+      }
+  
+      .logo {
+        text-decoration: none;
+        margin-left: 2%;
+        color: #C6CEE4;
+      }
+      
+      .none {
+        display: none;
+      }
+  
+      /****** HAMBURGER MENU *******/
+      #nav-toggle { 
+          display: block;
+          position: absolute;
+          right: 2%;
+        }
+  
+      #nav-toggle {
+        cursor: pointer;
+        padding: 10px 35px 16px 0px;
+        }
+  
+      #nav-toggle span, #nav-toggle span:before, #nav-toggle span:after {
+        cursor: pointer;
+        border-radius: 1px;
+        height: 1px;
+        width: 25px;
+        background: white;
+        position: absolute;
+        display: block;
+        content: '';
+        background-color: #beb6cd;
+      }
+  
+      #nav-toggle span:before {
+        top: -8px;
+      }
+      #nav-toggle span:after {
+        bottom: -8px;
+      }
+  
+      #nav-toggle span, #nav-toggle span:before, #nav-toggle span:after {
+        transition: all 500ms ease-in-out;
+      }
+      #nav-toggle.active span {
+        background-color: transparent;
+      }
+      #nav-toggle.active span:before, #nav-toggle.active span:after {
+        top: 0;
+      }
+  
+      #nav-toggle.active span:before {
+        transform: rotate(45deg);
+      }
+  
+      #nav-toggle.active span:after {
+        transform: rotate(-45deg);
+      }
+  
+      /**** RESPONSIVENESS TOGGLE ******/
+    .nav.responsive {
+      position: relative;
+    }
+  
+    .nav.responsive ul {
+      position: absolute;
+      width: 10rem;
+      top: 96%;
+      left: 45%;
+      right: 3%;
+      padding-left: 1.5%;
+      padding-top: 1.5%;
+      padding-bottom: 0%;
+      display: block;
+      float: none;
+      z-index: 2;
+      background: #334E61;
+      border: 2px solid;
+      border-color: #334E61;
+      list-style: none;
+      color: white;
+    }
+  
+    .nav.responsive ul li {
+      margin-left: 1rem;
+      cursor: pointer;
+      margin-bottom: 4%;
+    }
+  
+    /* .nav.responsive ul li:not(:nth-last-child(2)) {
+      margin-bottom: 10%;
+    } */
+  
+    .nav.responsive ul li a {
+      color: white;
+      text-decoration: none;
+      font-size: 0.95rem;
+      opacity: 0.7;
+    }
+  
+    .nav.responsive ul.svg {
+      display: none;
+    }
+    /******* NAV END ******/
+  
+    .section-result {
+        display: flex;
+        flex-direction: column;
+        margin-top: 1rem;
+    }
+  
+    .section-result.show {
+      display: flex;
+      flex-direction: column;
+      margin-top: 1rem;
+      display: none;
+    }
+  
+    .filter-results {
+        display: flex;
+        margin-left: 1rem;
+        align-items: center;
+    }
+  
+    .filter-results.responsive {
+      display: flex;
+      margin-left: 1rem;
+      align-items: center;
+      z-index: -1;
+      /* visibility: hidden; */
+      display: none;
+    }
+  
+    .filter-results h3 {
+      font-size: 0.8rem;
+      margin-right: 0.3rem;
+    }
+  
+    input[type="checkbox"] {
+      display: inline-block;
+      margin-right: 0.1rem;
+    }
+  
+    input[type="checkbox"] + label {
+      font-size: 0.6rem;
+      margin-right: 1.3rem; 
+    }
+  
+    .div-result-wrap {
+        /* width: 55rem; */
+        display: flex;
+        flex-direction: column;
+    }
+    .wrapper-result {
+        display: flex;
+        flex-direction: column;
+        background: #334E61;
+    }
+  
+    .wrapper-result:not(:last-child) {
+        margin-bottom: 2rem;
+    }
+  
+    .card-pictures {
+        height: 18rem;
+    }
+  
+    .one {
+      background-image: url("../../images/car-result1.webp");
+      background-repeat: no-repeat;
+      background-position: center top;
+    }
+  
+    .one.responsive {
+      background-image: url("../../images/car-result1.webp");
+      background-repeat: no-repeat;
+      background-position: center top;
+      z-index: 0;
+      filter: contrast(15%);
+    }
+  
+    .two {
+      background-image: url("../../images/car-result2.webp");
+      background-repeat: no-repeat;
+      background-position: center;
+      background-position: center top;
+    }
+  
+    .three {
+      background-image: url("../../images/car-result3.webp");
+      background-repeat: no-repeat;
+      background-position: center top;
+    }
+  
+    .four {
+      background-image: url("../../images/car-result4.webp");
+      background-repeat: no-repeat;
+      background-position: center top;
+    }
+  
+    .card-stories {
+      padding-left: 2rem;
+      /* margin-top: 15rem; */
+    }
+    .div-inside-card {
+      line-height: 40px;
+      color: white;
+    }
+  
+    .first-heading-card-stories {
+      font-weight: 400;
+      font-size: 0.7rem;
+    }
+  
+    .heading-price-card-stories {
+      margin-top: -1%;
+      font-size: 1rem;
+      font-weight: 550;
+      opacity: 0.6;
+    }
+  
+    .heading-make-card-stories {
+      margin-top: -1%;
+      font-size: 1rem;
+      opacity: 0.6;
+    }
+  
+    .para-ext-card-stories {
+      margin-top: -2.5%;
+      display: flex;
+    }
+  
+    .para-int-card-stories {
+      display: flex;
+      margin-top: -2%;
+    }
+  
+    .para-status-card-stories {
+      font-size: 0.9rem;
+      margin-top: -0.5rem;
+      display: flex;
+    }
+    .para-int-card-stories > span:nth-child(1), .para-status-card-stories > span:nth-child(1) {
+      margin-right: auto;
+    }
+    .para-ext-card-stories > span:nth-child(2), .para-int-card-stories > span:nth-child(2), .para-status-card-stories > span:nth-child(2) {
+      margin-right: 2rem;
+    }
+    .para-contact-card-stories {
+      margin-top: -2%;
+    }
+    .para-delete-card-stories > button:nth-child(1) {
+      color: rgba(255,255, 255, 0.9);
+      cursor: pointer;
+      background-color: blue;
+      box-shadow: none;
+      border: none;
+      padding: 6px;
+      border-radius: 3px;
+      width: 70px;
+    }
+  
+    .para-delete-card-stories > button:nth-child(2) {
+      color: rgba(255,255, 255, 0.9);
+      cursor: pointer;
+      background-color:rgba(255,0, 0, 0.6);
+      box-shadow: none;
+      border: none;
+      padding: 6px;
+      border-radius: 3px;
+      width: 100px;
+    }
+  
+    .report-form {
+      transform: translate( 50px, -2710px);
+      /* z-index: 0; */
+    }
+  
+    @-webkit-keyframes slide-down {
+      0% {
+        transform: translate(50px, -2710px);
+      }
+  
+      100% {
+        transform: translate(20px, 60px);
+      }
+    }
+  
+    @keyframes slide-down {
+      0% {
+        transform: translate(50px, -2710px);
+      }
+  
+      100% {
+        transform: translate(20px, 60px);
+      }
+    }
+  
+    .report-form.show {
+      /* transform: translate(20px, 60px); */
+      animation: slide-down 1s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+      width: 15rem;
+    }
+  
+    .report-form.show.responsive {
+      z-index: 0;
+      filter: contrast(15%);
+      display: none;
+    }
+  
+    .report-form.show div {
+      margin-left: 20%;
+    }
+  
+    .report-form.show textarea {
+      border-style: solid;
+      border-width: 1.5px;
+      justify-content: space-around;
+    }
+  
+    .report-form.show p { 
+      font-size: 13px;
+    }
+  
+    .report-form.show .report-submit {
+      background-color: blueviolet;
+      color: rgba(255,255, 255, 0.9);
+      height: 1.5rem;
+      width: 4rem;
+      border: none;
+      margin-right: 0.5rem;
+    }
+  
+    .report-form.show .report-close {
+      background-color: blueviolet;
+      color: rgba(255,255, 255, 0.9);
+      height: 1.5rem;
+      width: 4rem;
+      border: none;
+    }
+  
+    .report-form.show .report-para-note {
+      margin-top: 1.4rem;
+    }
+  }

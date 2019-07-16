@@ -4,25 +4,25 @@ document.addEventListener('DOMContentLoaded', () => {
     const body = document.querySelector('.body');
     const inStore = JSON.parse(localStorage.getItem('loggedInUser'));
 
-    // VERIFY LOCAL STORAGE
-    if (!inStore) {
-        const needUser = document.querySelector('.need-user');
-            needUser.style.display = 'none';
-        const needUserLink = document.querySelectorAll('.need-user-link');
-        needUserLink.forEach((noUserLink) => {
-            noUserLink.href = 'UI/signinpage.html';
-        });
-    } else if (inStore) {
-        const inStore = JSON.parse(localStorage.getItem('loggedInUser'));
-        console.log(inStore);
-        let firstname = inStore.username;
-        const neednotUser = document.querySelectorAll('.no-user');
-        neednotUser.forEach((neednouser)=> {
-            neednouser.style.display = 'none';
-        })
-        document.querySelector('.dashboard-dropdown').innerHTML = `Welcome ${firstname}`
-    }
-
+        // VERIFY LOCAL STORAGE
+        if (!inStore) {
+            const needUser = document.querySelector('.need-user');
+                needUser.style.display = 'none';
+            const needUserLink = document.querySelectorAll('.need-user-link');
+            needUserLink.forEach((noUserLink) => {
+                noUserLink.href = 'signinpage.html';
+            });
+        } else if (inStore) {
+            const inStore = JSON.parse(localStorage.getItem('loggedInUser'));
+            console.log(inStore);
+            let firstname = inStore.username;
+            const neednotUser = document.querySelectorAll('.no-user');
+            neednotUser.forEach((neednouser)=> {
+                neednouser.style.display = 'none';
+            })
+            document.querySelector('.dashboard-dropdown').innerHTML = `Welcome ${firstname}`
+        }
+    
     // VERIFY TOKEN 
     const tokenVerify = () => {
         const path = '/api/v1/users/auth/tokenverify';
@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
             console.log('token expired');
             toastr.info('session expired, please login');
             localStorage.clear();
-            window.location.href = 'UI/signinpage.html';
+            window.location.href = 'signinpage.html';
         } else {
             const token = inStore.token;
             const data = {
@@ -47,7 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }  else if (respData.status === 403) {
                     toastr.info('session expired');
                     localStorage.clear();
-                    window.location.href = "./UI/signinpage.html";
+                    window.location.href = "signinpage.html";
                 }
             });
         }
@@ -57,7 +57,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // SIGN OUT
     document.querySelector('.sign-out').onclick = () => {
         localStorage.clear();
-        window.location.href = 'UI/signinpage.html';
+        window.location.href = 'signinpage.html';
     }
 
     
@@ -74,21 +74,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // NAV TOGGLE CLICK ON MOBILE
     const nav = document.querySelector('.nav');
-    const firstImage = document.querySelector('.one');
-    const filterResults = document.querySelector('.filter-results');
-    const reportForm = document.querySelector(".report-form");
     
     document.querySelector('#nav-toggle').onclick = () => {
         if(nav.className === "nav") {
             nav.className += " responsive";
-            firstImage.className += " responsive";
-            filterResults.className += " responsive";
-            reportForm.className +=  " show" + " responsive";
         }   else {
                 nav.className = "nav";
-                firstImage.className = "one";
-                filterResults.className = "filter-results";
-                reportForm.className += ".report-form.show";
         }
     }
 
@@ -108,11 +99,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 const orderdetails = response.orders
                 let output = '';
                 for (var i in orderdetails) {
+                    const accept = '<button class="edit"> Accept </button>'
+                    const reject = '<button class=""> Reject </button>'
                     const image = orderdetails[i].image || 'N/A';
                     const carId = orderdetails[i].car_id || 'N/A';
                     const manufacturer = orderdetails[i].manufacturer || 'N/A';
                     const model = orderdetails[i].model || 'N/A';
-                    const status = orderdetails[i].status || 'N/A';
+                    const isaccepted = orderdetails[i].status == 'accepted';
                     const priceOffered = orderdetails[i].amount || 'N/A';
                     const orderId = orderdetails[i].id || 'N/A';
                     output += `<div class="div-result-wrap wrap-all">
@@ -127,13 +120,13 @@ document.addEventListener('DOMContentLoaded', () => {
                                     <h4 class="first-heading-card-stories"> Car id: ${carId} </h4>
                                     <h4 class="first-heading-card-stories"> Manufacturer: ${manufacturer} </h4>
                                     <h4 class="first-heading-card-stories"> Model: ${model} </h4>
-                                    <h4 class="first-heading-card-stories"> Status of Order: ${status} </h4>
+                                    <h4 class="first-heading-card-stories"> Status of Order: ${orderdetails[i].status} </h4>
                                     <h3 class="heading-price-card-stories"> Price Offered: ${priceOffered} </h3>
-                                    <button class="edit"> <a href="acarorder.html?orderid=${orderId}"> View Order</a></button>
+                                    <button class="view"> <a href="acarorder.html?orderid=${orderId}"> View Order</a></button>
                                 </div>
                                 <p class="para-delete-card-stories">
-                                    <button class="edit"> Accept </button>
-                                    <button class=""> Reject </button>
+                                ${!isaccepted ? accept:''}
+                                ${!isaccepted ? reject:''}
                                 </p>
                             </div>
                         </div>

@@ -119,10 +119,11 @@ describe('TEST API ENDPOINTS', () => {
         status: 'available',
         manufacturer: 'Infinity',
         model: 'Jeep',
-        price: 500000,
+        price: 900000,
         body_type: 'car',
         owner: 3,
         state: 'used',
+        image_url: 'http://res.cloudinary.com/ddf91r8gu/image/upload/v1563011174/ie9ntlp2q9ewz0avbhpx.jpg',
       };
       supertest(index)
         .post('/api/v1/car/')
@@ -195,7 +196,7 @@ describe('TEST API ENDPOINTS', () => {
         .send(user)
         .expect('Content-type', /json/)
         .end((err, res) => {
-          res.body.message.should.equal('Success..Welcome Back Swede');
+          res.body.message.should.equal('Success..Welcome Back Swede-Ben');
           res.status.should.equal(200);
           res.error.should.equal(false);
           done();
