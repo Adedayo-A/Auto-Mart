@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // VERIFY TOKEN 
-    const tokenVerify = () => {
+    const token_verify = () => {
         const path = '/api/v1/users/auth/tokenverify';
         const inStore = JSON.parse(localStorage.getItem('loggedInUser'));
         console.log(inStore);
@@ -52,7 +52,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
     }
-    tokenVerify();
+    token_verify();
 
     // SIGN OUT
     document.querySelector('.sign-out').onclick = () => {
@@ -93,7 +93,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // GET SPECIFIC AD
-    const getanAd = () => {
+    const get_an_ad = () => {
         const postId = window.location.search.slice(1).split("&")[0].split("=")[1];
         console.log(postId);
         path = `/api/v1/car/${postId}`;
@@ -125,8 +125,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     const door = cars[i].door || 'N/A';
                     const description = cars[i].description || 'N/A';
                     const status = cars[i].status || 'N/A';
-
-
                     output += 
                      `<div class="div-result-wrap wrap-all">
                             <div class="wrapper-result one">
@@ -159,7 +157,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             </div>
                         </div>`
                 }
-                const deleteAd = (e) => {
+                const delete_ad = (e) => {
                     console.log('targ');
                     const targ = e.target.value;
                     console.log(targ);
@@ -178,7 +176,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 
                 document.querySelector('.section-result').innerHTML = output;
                 if (inStore.admin) {
-                    document.querySelector('.deleteone').onclick = deleteAd;
+                    document.querySelector('.deleteone').onclick = delete_ad;
                 }
             } else {
                 console.log(response);
@@ -186,5 +184,5 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         })
     }
-    getanAd();
+    get_an_ad();
 });

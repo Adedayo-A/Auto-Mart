@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // VERIFY TOKEN 
-    const tokenVerify = () => {
+    const token_verify = () => {
         const path = '/api/v1/users/auth/tokenverify';
         const inStore = JSON.parse(localStorage.getItem('loggedInUser'));
         console.log(inStore);
@@ -52,7 +52,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
     }
-    tokenVerify();
+    token_verify();
 
     // SIGN OUT
     document.querySelector('.sign-out').onclick = () => {
@@ -93,7 +93,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // GET SPECIFIC ORDER
-    const getaCarOrder = () => {
+    const geta_car_order = () => {
         const postId = window.location.search.slice(1).split("&")[0].split("=")[1];
         console.log(postId);
         path = `/api/v1/order/${postId}`;
@@ -136,7 +136,6 @@ document.addEventListener('DOMContentLoaded', () => {
                         </div>
                     </div>`
                 }
-
                 document.querySelector('.section-result').innerHTML = output;
                 const statusAccept = () => {
                     console.log('here');
@@ -187,5 +186,5 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
-    getaCarOrder(); 
+    geta_car_order(); 
 });

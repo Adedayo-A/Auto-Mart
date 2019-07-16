@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // VERIFY TOKEN 
-    const tokenVerify = () => {
+    const token_verify = () => {
         const path = '/api/v1/users/auth/tokenverify';
         const inStore = JSON.parse(localStorage.getItem('loggedInUser'));
         console.log(inStore);
@@ -52,7 +52,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
     }
-    tokenVerify();
+    token_verify();
 
     // SIGN OUT
     document.querySelector('.sign-out').onclick = () => {
@@ -92,7 +92,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // GET SPECIFIC ORDER
-    const getanOrder = () => {
+    const get_an_order = () => {
         const postId = window.location.search.slice(1).split("&")[0].split("=")[1];
         console.log(postId);
         const path = `/api/v1/order/${postId}`;
@@ -141,7 +141,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     </div>`
                 }
                 document.querySelector('.section-result').innerHTML = output;
-                const deleteOrder = (e) => {
+                const delete_order = (e) => {
                     const targ = e.target.value;
                     const path = `/api/v1/order/${targ}/`;
                     httpDelete( path, (err, response, xhttp) => {
@@ -154,7 +154,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         }
                     })
                 }
-                document.querySelector('.delete').onclick = deleteOrder;
+                document.querySelector('.delete').onclick = delete_order;
                 
             } else {
                 console.log(response);
@@ -162,5 +162,5 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         })
     }
-    getanOrder(); 
+    get_an_order(); 
 });
