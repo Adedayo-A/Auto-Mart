@@ -109,7 +109,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const signupForm = document.querySelector('.registration-form');    
     document.querySelector('.registration-form').onsubmit = (e) => {
         e.preventDefault();
-        checkform();
+        // checkform();
         const data = {
             email: email.value,
             password: password.value,
