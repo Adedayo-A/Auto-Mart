@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Auto Mart</title>
+    <link rel="stylesheet" text="text/css" href="UI/toastr/toastr.css" />
     <link rel="stylesheet" text="text/css" href="UI/css/homepage_styles/style.css" />
     <link rel="stylesheet" text="text/css" href="UI/css/homepage_styles/responsive.css" />
     <link rel="stylesheet" text="text/css" href="UI/css/homepage_styles/r-maxwidth375.css" />
@@ -15,71 +16,74 @@
     <nav class="nav">
         <a href="index.html" class="logo"><h2>Auto Mart</h2></a>
         <ul class="nav-links">
-            <li><a href="UI/sell.html">Post a sale Ad</a></li>
-            <li><a href="UI/purchase-order.html">Make a purchase order</a></li>
-            <li><a href="#">My Orders</a></li>
-            <li><a href="UI/ads.html">My Ads</a></li>
-            <li><a href="UI/signinpage.html">Log in</a></li>
-            <li class="sign-up"><a href="UI/signinpage.html">Sign up</a></li>
+            <li><a class="need-user-link post-car" href="# ">Post a sale Ad</a></li>
+            <!-- <li><a class="need-user-link post-order" href="UI/purchase-order.html">Make a purchase order</a></li> -->
+            <li><a class="need-user-link" href="UI/myorders.html">My Orders</a></li>
+            <li><a class="need-user-link" href="UI/myads.html">My Ads</a></li>
+            <li><a class="need-user-link" href="UI/mycaroders.html">My Car Orders</a></li>
+            <li class="no-user"><a href="UI/signinpage.html">Log in</a></li>
+            <li class="sign-up no-user"><a href="UI/signinpage.html">Sign up</a></li>
         </ul>
-        <ul class="svg">
+        <ul class="svg need-user">
             <li>
                 <img src="UI/images/user.svg" class="img-svg"/>
             </li>
         </ul>
         <a id="nav-toggle" href="#"><span></span></a>
     </nav>
-    <div class="arrow-up none" id="arrowup"></div>
-    <div class="dropdown none" id="drpdown">
-        <button class="button-dropdown"><a href="UI/signinpage.html">Sign In</a></button>
-        <p class="para-dropdown">Don't have an account?<a href="UI/signinpage.html"> Sign Up </a></p>
+    <div class="arrow-up" id="arrowup"></div>
+    <div class="dropdown" id="drpdown">
+        <div class="dashboard-dropdown"></div>
+        <p class="para-dropdown"><a href="UI/updateuser.html" class="update">My profile</a></p>
         <hr>
-        <p class="para-dropdown"><a href="UI/ads.html">My Ads</a></p>
-        <p class="para-dropdown"><a href="UI/orders.html">My Orders</a></p>
+        <p class="para-dropdown"><a href="UI/myads.html">My Ads</a></p>
+        <p class="para-dropdown"><a href="UI/myorders.html">My Orders</a></p>
+        <p class="para-dropdown"><a href="UI/mycaroders.html">My Car Orders</a></p>
+        <p class="para-dropdown"><a href="index.html" class="sign-out">Log Out</a></p>
+        <hr>
     </div>
     <main class="main-index">
         <div class="background-img">
             <section class="section-search">
                 <div class="div-search">
-                    <form class="form-search">
+                    <form role="form" class="form-search">
                         <input type="search" class="input-section-search" placeholder="Type a search" />
-                        <div class="div-search-submit">
-                            <a href="UI/result.html"><input type="button" value="Search" class="input-search-submit"/></a>
+                        <div class="div-search-submit need-user-link">
+                            <input type="submit" value="Search" class="input-search-submit need-user-link">
                         </div>
                         <div class="wrapper-search">
                             <div class="div-sub-search-make">
-                                <select class="select-sub-search-make">
-                                    <option selected>Search by Make</option>
-                                    <option>All Makes</option>
-                                    <option>Acura</option>
-                                    <option>Audi</option>
-                                    <option>Bentely</option>
-                                    <option>BMW</option>
-                                    <option>Chevrolet</option>
-                                    <option>Toyota</option>
+                                <select name="select-make" class="select-sub-search-make">
+                                    <option value="">Search by Make</option>
+                                    <option value="All">All Makes</option>
+                                    <option value="Acura">Acura</option>
+                                    <option value="Audi">Audi</option>
+                                    <option value="Bentely">Bentely</option>
+                                    <option value="BMW">BMW</option>
+                                    <option value="Chevrolet">Chevrolet</option>
+                                    <option value="Toyota">Toyota</option>
                                 </select>
                             </div>
-                            <div class="div-sub-search-newness">
-                                    <select>
-                                        <option>Select by Status</option>
-                                        <option>All</option>
-                                        <option>Sold</option>
-                                        <option>Available</option>
+                            <div class="div-sub-search-availability">
+                                    <select name="select-availability" class="select-sub-search-availability we">
+                                        <option value="">Select by Status</option>
+                                        <option value="Sold" class="sold">Sold</option>
+                                        <option value="Available">Available</option>
                                     </select>
                             </div>
                             <div class="div-sub-search-usage">
-                                <select>
-                                    <option>Select by State</option>
-                                    <option>All</option>
-                                    <option>New</option>
-                                    <option>Used</option>
+                                <select name="select-usage" class="select-sub-search-usage">
+                                    <option value="">Select by State</option>
+                                    <option value="All">All</option>
+                                    <option value="New">New</option>
+                                    <option value="Used">Used</option>
                                 </select>
                             </div>
                         </div>
                         <div class="div-sub-search-price">
                             <label class="label-price">Search by price range:</label>
-                            <input type="search" placeholder="minimum price" class="search-price"/>
-                            <input type="search" placeholder="maximum price" class="search-price" />
+                            <input type="search" name="search-min" placeholder="minimum price" class="search-price-min"/>
+                            <input type="search" name="search-max" placeholder="maximum price" class="search-price-max" />
                         </div>
                     </form>
                 </div>
@@ -92,6 +96,29 @@
             <div class="second-img"></div>
         </div>
     </main>
+    <section class="section-result"> 
+        <div class="div-result-wrap wrap-all"></div>
+    </section>
+    <script src="UI/js/api_url.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="UI/toastr/toastr.js"></script>
+    <script src="UI/js/toastr.js"></script>
+    <script src="UI/js/request.js"></script>
     <script src="UI/js/responsive.js"></script>
 </body>
 </html>
+
+<!-- <div class="wrapper-result one">
+                <div class="card-pictures"><img src='UI/images/car1.jpg' class="img-res"/></div>
+                <div class="card-stories">
+                    <div class="div-inside-card">
+                        <h4 class="first-heading-card-stories">New</h4>
+                        <h3 class="heading-price-card-stories">200000</h3>
+                        <h4 class="heading-make-card-stories">toyota</h4>
+                        <h4 class="heading-make-card-stories">car</h4>
+                        <p class="para-status-card-stories">
+                            <span class="span-status">available</span>
+                        </p>
+                    </div>
+                </div> -->
+            <!-- </div> -->

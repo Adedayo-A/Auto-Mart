@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" text="text/css" href="toastr/toastr.css" />
+    <link rel="stylesheet" text="text/css" href="css/updateuser_styles/update_2560.css" />
+    <link rel="stylesheet" text="text/css" href="css/updateuser_styles/update_768.css" />
+    <link rel="stylesheet" text="text/css" href="css/updateuser_styles/update_320.css" />
+</head>
+<body class="body-signup">
+	 <header>
+        <nav class="nav">
+            <a href="../index.html" class="logo"><h2>Auto Mart</h2></a>
+            <ul class="nav-links">
+                <li><a class="need-user-link" href="sell.html">Post a sale Ad</a></li>
+                <!-- <li><a class="need-user-link" href="purchase-order.html">Make a purchase order</a></li> -->
+                <li><a class="need-user-link" href="myorders.html">My Orders</a></li>
+                <li><a class="need-user-link" href="mycarorders.html">My Car Orders</a></li>
+                <li><a class="need-user-link" href="myads.html">My Ads</a></li>
+            </ul>
+            <ul class="svg need-user">
+                <li>
+                    <img src="images/user.svg" class="img-svg"/>
+                </li>
+            </ul>
+            <a id="nav-toggle" href="#"><span></span></a>
+        </nav>
+        <div class="arrow-up none"></div>
+        <div class="dropdown none">
+            <div class="dashboard-dropdown"></div>
+            <p class="para-dropdown"><a href="updateuser.html" class="update">My profile</a></p>
+            <hr>
+            <p class="para-dropdown"><a href="myads.html">My Ads</a></p>
+            <p class="para-dropdown"><a href="myorders.html">My Orders</a></p>
+            <p class="para-dropdown"><a href="mycarorders.html">My Car Orders</a></p>
+            <p class="para-dropdown"><a href="../index.html" class="sign-out">Sign Out</a></p>
+            <hr>
+        </div>
+    <main class="main-signin-page">
+        <div>
+            <header class="header-signin-page">
+                <h3 class="header-update-profile">Update My Profile</h3>
+                <span class="line-three"></span>
+            </header>
+            <hr>
+            <form role="form" class="update-profile">            
+                <!-- <p class="p-signin-page p-email">Email</p>
+                <input type="email" name="email" class="search update-email" required /> -->
+                <p class="p-signin-page p-info">First Name</p>
+                <input type="text" class="search update-firstname" required />
+                <p class="p-signin-page p-info">Last Name</p>
+                <input type="text" class="search update-lastname" required />
+                <p class="p-signin-page p-info">Address</p>
+                <input type="text" class="search update-address" required />
+                <div class="response"></div>
+                <input type="submit" name="submit" value="Update" class="button"/>
+            </form>
+            <div class="profile-result">
+                <h3>MY Profile</h3>
+                Firstname: <h4 class="display-fname"></h4>
+                Lastname: <h4 class="display-lname"></h4>
+                Address: <h4 class="display-address"></h4>
+            </div>
+        </div>
+    </main>
+    <script src="js/api_url.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="toastr/toastr.js"></script>
+    <script src="js/toastr.js"></script>
+    <script src="js/request.js"></script>
+    <script src="js/updateuser.js"></script>
+</body>
+</html>

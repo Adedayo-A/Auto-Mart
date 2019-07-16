@@ -1,87 +1,595 @@
-/* eslint-disable linebreak-style */
-const cars = require('../db/Cars.js');
+"use strict";
 
-// class carControllers {
-// GET REQUESTS
-const getCars = (req, res) => {
-  let allCars = cars;
-  // PRICE-RANGE
-  if (req.query.min_price && req.query.max_price && req.query.status) {
-    const foundStatus = allCars.some(car => car.status === req.query.status);
-    if (foundStatus) {
-      allCars = allCars.filter(availableCar => availableCar.status === req.query.status);
+/* eslint-disable prefer-destructuring */
+
+/* eslint-disable linebreak-style */
+// eslint-disable-next-line import/no-extraneous-dependencies
+var _require = require('pg'),
+    Client = _require.Client;
+
+var jwt = require('jsonwebtoken'); // GET REQUESTS
+
+
+var getCars = function getCars(req, res) {
+  // PRICE-RANGE AND STATUS-AVAILABLE
+  jwt.verify(req.token, process.env.JWT_KEY, function (err, authData) {
+    if (err) {
+      res.status(401).json({
+        status: 401,
+        message: 'invalid token!!!'
+      });
     } else {
-      res.status(400).json({ msg: `No car with the status of ${req.query.status}` });
+      // PG Connect
+      var pg = new Client({
+        connectionString: process.env.db_URL
+      });
+      pg.connect();
+
+      if (req.query.min_price && req.query.max_price && req.query.status) {
+        // eslint-disable-next-line consistent-return
+        var query = 'SELECT * FROM carads WHERE price BETWEEN $1 AND $2 AND LOWER(status) = LOWER($3)';
+        var value = [req.query.min_price, req.query.max_price, 'available'];
+        pg.query(query, value, function (err, dbres) {
+          if (err) {
+            console.log(err);
+            res.status(500).json({
+              message: 'error encountered'
+            });
+            pg.end();
+          } else if (dbres.rows.length === 0) {
+            res.status(200).json({
+              message: 'No car found!!'
+            });
+            pg.end();
+          } else {
+            var carad = dbres.rows;
+            res.status(200).json({
+              state: 'success',
+              message: 'result completed',
+              carad: carad
+            });
+            pg.end();
+          }
+        });
+      } else if (req.query.state && req.query.status) {
+        // eslint-disable-next-line consistent-return
+        var _query = 'SELECT * FROM carads WHERE LOWER(status)=LOWER($1) AND LOWER(state)=LOWER($2)';
+        var _value = ['available', req.query.state];
+        pg.query(_query, _value, function (err, dbres) {
+          if (err) {
+            console.log(err);
+            res.status(500).json({
+              message: 'error encountered'
+            });
+            pg.end();
+          } else if (dbres.rows.length === 0) {
+            res.status(200).json({
+              message: 'No car found!!!'
+            });
+            pg.end();
+          } else {
+            var carad = dbres.rows;
+            res.status(200).json({
+              state: 'success',
+              message: 'result completed',
+              carad: carad
+            });
+            pg.end();
+          }
+        });
+      } else if (req.query.status) {
+        // eslint-disable-next-line consistent-return
+        var _query2 = 'SELECT * FROM carads WHERE LOWER(status) = LOWER($1)';
+        var _value2 = ['available'];
+        pg.query(_query2, _value2, function (err, dbres) {
+          if (err) {
+            console.log(err);
+            res.status(500).json({
+              message: 'error encountered'
+            });
+            pg.end();
+          } else if (dbres.rows.length === 0) {
+            res.status(200).json({
+              message: 'No car found!!!'
+            });
+            pg.end();
+          } else {
+            var carad = dbres.rows;
+            res.status(200).json({
+              state: 'success',
+              message: 'result completed',
+              carad: carad
+            });
+            pg.end();
+          }
+        });
+      } else if (req.query.body_type) {
+        // eslint-disable-next-line consistent-return
+        var _query3 = 'SELECT * FROM carads WHERE LOWER(body_type) = LOWER($1)';
+        var _value3 = [req.query.body_type];
+        pg.query(_query3, _value3, function (err, dbres) {
+          if (err) {
+            console.log(err);
+            res.status(500).json({
+              message: 'error encountered'
+            });
+            pg.end();
+          } else if (dbres.rows.length === 0) {
+            res.status(200).json({
+              status: 200,
+              message: 'No car found!!!'
+            });
+            pg.end();
+          } else {
+            var carad = dbres.rows;
+            res.status(200).json({
+              state: 'success',
+              message: 'result completed',
+              carad: carad
+            });
+            pg.end();
+          }
+        });
+      } else if (req.query.manufacturer) {
+        // eslint-disable-next-line consistent-return
+        var _query4 = 'SELECT * FROM carads WHERE LOWER(manufacturer) = LOWER($1) AND LOWER(status)=LOWER($2)';
+        var _value4 = [req.query.manufacturer, req.query.status];
+        pg.query(_query4, _value4, function (err, dbres) {
+          if (err) {
+            console.log(err);
+            res.status(500).json({
+              message: 'error encountered'
+            });
+            pg.end();
+          } else if (dbres.rows.length === 0) {
+            res.status(200).json({
+              message: 'No car found!!!'
+            });
+            pg.end();
+          } else {
+            var carad = dbres.rows;
+            res.status(200).json({
+              state: 'success',
+              message: 'result completed',
+              carad: carad
+            });
+            pg.end();
+          }
+        });
+      } else {
+        var email = authData.user.email;
+        var _query5 = 'SELECT * FROM users WHERE LOWER(email) = LOWER($1)';
+        var _value5 = [email]; // eslint-disable-next-line consistent-return
+
+        pg.query(_query5, _value5, function (err, dbres) {
+          if (err) {
+            console.error(err);
+          } else if (dbres.rows[0].is_admin === false) {
+            res.status(403).json({
+              message: 'Access Denied!!!'
+            });
+            pg.end();
+          } else {
+            _query5 = 'SELECT * FROM LOWER(carads)';
+            pg.query(_query5, function (err, resdb) {
+              if (err) {
+                console.error(err);
+              } else if (resdb.rows.length === 0) {
+                res.status(404).json({
+                  message: 'No ads present!'
+                });
+                pg.end();
+              } else {
+                var carad = resdb.rows;
+                res.status(200).json({
+                  state: 'success',
+                  message: 'result completed',
+                  carad: carad
+                });
+                pg.end();
+              }
+            });
+          }
+        });
+      }
     }
-    const foundPrice = allCars.some(car => car.price >= parseInt(req.query.min_price, 10) && car.price <= parseInt(req.query.max_price, 10));
-    if (foundPrice) {
-      allCars = allCars.filter(car => car.price >= parseInt(req.query.min_price, 10) && car.price <= parseInt(req.query.max_price, 10));
-      res.status(200).json(allCars);
+  });
+}; // GET SPECIFIC CAR
+
+
+var getCar = function getCar(req, res) {
+  var ad = req.params;
+  jwt.verify(req.token, process.env.JWT_KEY, function (err) {
+    if (err) {
+      res.status(401).json({
+        status: 401,
+        message: 'error..invalid Token'
+      });
     } else {
-      res.status(400).json({ msg: `We could not find ${req.query.status} cars with  within the price range of ${req.query.min_price} and ${req.query.max_price}` });
+      var pg = new Client({
+        connectionString: process.env.db_URL
+      });
+      pg.connect(); // eslint-disable-next-line consistent-return
+
+      var query = 'SELECT * FROM carads WHERE id = $1';
+      var value = [ad.id];
+      pg.query(query, value, function (err, dbres) {
+        console.log(dbres);
+
+        if (err) {
+          // console.log(err);
+          res.status(500).json({
+            message: 'error encountered'
+          });
+          pg.end();
+        } else if (dbres.rows === 0) {
+          res.status(200).json({
+            status: 200,
+            message: 'No car found!!'
+          });
+          pg.end();
+        } else {
+          var carad = dbres.rows;
+          res.status(200).json({
+            state: 'success',
+            message: 'Success, result completed',
+            carad: carad
+          });
+          pg.end();
+        }
+      });
     }
-  }
-  //  State and Status
-  if (req.query.state && req.query.status) {
-    const foundState = allCars.some(car => car.state === req.query.state);
-    if (foundState) {
-      allCars = allCars.filter(car => car.state === req.query.state);
+  });
+}; // GET ADS BY A OWNER
+
+
+var getadsByOwner = function getadsByOwner(req, res) {
+  jwt.verify(req.token, process.env.JWT_KEY, function (err, authData) {
+    if (err) {
+      res.status(403).json({
+        message: 'error..invalid Token'
+      });
     } else {
-      res.status(400).json({ msg: `No car with the state of ${req.query.state}` });
+      var email = authData.user.email;
+      var pg = new Client({
+        connectionString: process.env.db_URL
+      });
+      pg.connect();
+      var query = 'SELECT id FROM users WHERE LOWER(email) = LOWER($1)';
+      var value = [email]; // eslint-disable-next-line consistent-return
+
+      pg.query(query, value, function (err, dbres) {
+        if (err) {
+          console.error(err);
+          pg.end();
+        } else {
+          var owner = dbres.rows[0].id;
+          query = 'SELECT * FROM carads WHERE owner = $1';
+          value = [owner];
+          pg.query(query, value, function (err, dbres) {
+            if (err) {
+              // console.log(err);
+              res.status(500).json({
+                message: 'error encountered'
+              });
+              pg.end();
+            } else if (dbres.rows.length === 0) {
+              res.status(200).json({
+                message: 'No car found!!'
+              });
+              pg.end();
+            } else {
+              var carad = dbres.rows;
+              res.status(200).json({
+                state: 'success',
+                message: 'Success, result completed',
+                carad: carad
+              });
+              pg.end();
+            }
+          });
+        }
+      });
     }
-    const foundStatus = allCars.some(car => car.status === req.query.status);
-    if (foundStatus) {
-      allCars = allCars.filter(car => car.status === req.query.status);
-      res.status(200).json(allCars);
+  });
+}; // POST CAR
+
+
+var postCar = function postCar(req, res) {
+  var newAd = req.body;
+  var price = newAd.price;
+  var door = newAd.door;
+  door = door || null;
+  var owner;
+  jwt.verify(req.token, process.env.JWT_KEY, function (err, authData) {
+    if (err) {
+      res.status(403).json({
+        message: 'error..invalid token'
+      });
     } else {
-      res.status(400).json({ msg: `No car was found with the status of ${req.query.status}` });
+      var email = authData.user.email;
+      var pg = new Client({
+        connectionString: process.env.db_URL
+      });
+      pg.connect();
+      var query = 'SELECT * FROM users WHERE LOWER(email) = LOWER($1)';
+      var value = [email]; // eslint-disable-next-line consistent-return
+
+      pg.query(query, value, function (err, dbres) {
+        if (err) {
+          console.error(err);
+          pg.end();
+        } else if (dbres.rows[0].first_name === null) {
+          res.status(200).json({
+            message: 'Please complete your registration inorder to post a car!!'
+          });
+          pg.end();
+        } else {
+          owner = dbres.rows[0].id;
+          query = 'INSERT INTO carads(status, price, manufacturer, model, body_type, owner, state, ext_col, int_col, transmission, mileage, door, description, image_url) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)';
+          value = [newAd.status, price, newAd.manufacturer, newAd.model, newAd.body_type, owner, newAd.state, newAd.ext_col, newAd.int_col, newAd.transmission, newAd.mileage, door, newAd.description, newAd.image_url]; // eslint-disable-next-line consistent-return
+          // PG Query
+          // eslint-disable-next-line no-unused-vars
+
+          pg.query(query, value, function (err, dbRes) {
+            if (err) {
+              console.error(err);
+              res.status(403).json({
+                message: 'Input error, Please check input!!!',
+                newAd: newAd
+              });
+              pg.end();
+            } else {
+              res.json({
+                state: 'success',
+                status: 200,
+                message: 'Posted successfully',
+                newAd: newAd
+              });
+              pg.end();
+            }
+          });
+        }
+      });
     }
-  }
-  // Status
-  if (req.query.status) {
-    const found = allCars.some(car => car.status === req.query.status);
-    if (found) {
-      allCars = allCars.filter(car => car.status === req.query.status);
-      res.status(200).json(allCars);
+  });
+}; // PATCH CAR AD
+
+
+var patchCar = function patchCar(req, res) {
+  // eslint-disable-next-line no-unused-vars
+  jwt.verify(req.token, process.env.JWT_KEY, function (err, authData) {
+    if (err) {
+      res.status(403).json({
+        message: 'error..invalid token'
+      });
     } else {
-      res.status(400).json({ msg: `No car was found with the status of ${req.query.status}` });
+      var email = authData.user.email;
+      var adId = req.params.id;
+      var ad = req.body;
+      var query;
+      var value;
+      var currUser;
+      var owner;
+      var pg = new Client({
+        connectionString: process.env.db_URL
+      });
+      pg.connect();
+      query = 'SELECT * FROM users WHERE LOWER(email) = LOWER($1)';
+      value = [email]; // eslint-disable-next-line consistent-return
+
+      pg.query(query, value, function (err, dbres) {
+        if (err) {
+          console.error(err);
+          pg.end();
+        } else {
+          currUser = dbres.rows[0].id;
+          query = 'SELECT owner FROM carads WHERE id = $1';
+          value = [adId]; // eslint-disable-next-line consistent-return
+          // eslint-disable-next-line no-shadow
+
+          pg.query(query, value, function (err, dbres) {
+            if (err) {
+              console.error(err);
+              pg.end();
+            } else if (dbres.rows.length === 0) {
+              res.status(200).json({
+                message: 'No ad found'
+              });
+              pg.end();
+            } else {
+              owner = dbres.rows[0].owner;
+
+              if (currUser === owner) {
+                query = 'UPDATE carads SET status=$1, price=$2, manufacturer=$3, model=$4, body_type=$5, owner=$6, state=$7, image_url=$8 WHERE id=$9';
+                value = [ad.status, ad.price, ad.manufacturer, ad.model, ad.body_type, owner, ad.state, ad.image_url, adId]; // eslint-disable-next-line consistent-return
+                // eslint-disable-next-line no-unused-vars
+
+                pg.query(query, value, function (err, dbresponse) {
+                  if (err) {
+                    console.error(err);
+                    res.status(403).json({
+                      message: 'An error occured, Please check input!!!'
+                    });
+                    pg.end();
+                  } else {
+                    res.status(200).json({
+                      state: 'success',
+                      status: 200,
+                      message: 'AD updated successfully!!',
+                      ad: ad
+                    });
+                    pg.end();
+                  }
+                });
+              } else {
+                res.status(403).json({
+                  message: 'You are not permiited to update this ad!!!'
+                });
+                pg.end();
+              }
+            }
+
+            ;
+          });
+        }
+      });
     }
-  }
-  // BodyType
-  if (req.query.body_type) {
-    const foundBodyType = allCars.some(car => car.body_type === req.query.body_type);
-    if (foundBodyType) {
-      allCars = allCars.filter(car => car.body_type === req.query.body_type);
-      res.status(200).json(allCars);
+  });
+}; // DELETE CAR
+
+
+var deleteCar = function deleteCar(req, res) {
+  jwt.verify(req.token, process.env.JWT_KEY, function (err, authData) {
+    var email = authData.user.email;
+
+    if (err) {
+      res.status(403).json({
+        message: 'error..invalid token'
+      });
     } else {
-      res.status(400).json({ msg: `No car was found with the body_type of ${req.query.body_type}` });
+      var pg = new Client({
+        connectionString: process.env.db_URL
+      });
+      pg.connect();
+      var query = 'SELECT * FROM users WHERE LOWER(email) = LOWER($1)';
+      var value = [email]; // eslint-disable-next-line consistent-return
+
+      pg.query(query, value, function (err, dbres) {
+        if (err) {
+          console.error(err);
+          pg.end();
+        } else if (dbres.rows[0].is_admin === false) {
+          res.status(403).json({
+            message: 'You are not permitted to delete this Ad!!!'
+          });
+          pg.end();
+        } else {
+          query = 'DELETE FROM carads WHERE id = $1';
+          value = [req.params.id]; // eslint-disable-next-line consistent-return
+          // eslint-disable-next-line no-unused-vars
+
+          pg.query(query, value, function (err, resdb) {
+            if (err) {
+              console.error(err);
+              pg.end();
+            } else if (resdb.rowCount === 0) {
+              res.status(200).json({
+                message: 'Ad not found!!'
+              });
+              pg.end();
+            } else {
+              res.status(200).json({
+                message: 'AD successfully deleted'
+              });
+              pg.end();
+            }
+          });
+        }
+      });
     }
-  }
-  //  Make
-  if (req.query.manufacturer) {
-    const foundManufacturer = allCars.some(car => car.manufacturer === req.query.manufacturer);
-    if (foundManufacturer) {
-      allCars = allCars.filter(car => car.manufacturer === req.query.manufacturer);
-      res.status(200).json(allCars);
+  });
+}; // GET MY CAR ORDERS
+
+
+var getCarOrders = function getCarOrders(req, res) {
+  jwt.verify(req.token, process.env.JWT_KEY, function (err, authData) {
+    if (err) {
+      res.status(401).json({
+        status: 401,
+        message: 'error..invalid token'
+      });
     } else {
-      res.status(400).json({ msg: `No car was found with the make of ${req.query.manufacturer}` });
+      var email = authData.user.email;
+      var curruser;
+      var query = 'SELECT id FROM user WHERE email = $1';
+      var value = [email];
+      var pg = new Client({
+        connectionString: process.env.db_URL
+      });
+      pg.connect();
+      pg.query(query, value, function (err, resdb) {
+        if (err) {
+          console.error(err);
+          pg.end();
+        } else {
+          curruser = resdb.rows[0].id;
+          query = 'SELECT * FROM purchaseorder WHERE car_owner = $1';
+          value = [curruser];
+          pg.query(query, value, function (err, respo) {
+            if (err) {
+              console.error(err);
+              pg.end();
+            } else {
+              var mycarorders = respo.rows;
+              res.status(403).json({
+                state: 'success',
+                status: 200,
+                message: 'orders retrieved',
+                mycarorders: mycarorders
+              });
+            }
+          });
+        }
+      });
     }
-  }
-  // REST
-  res.status(200).json(cars);
-};
-const getCar = (req, res) => {
-  const found = cars.some(car => car.id === parseInt(req.params.id, 16));
-  if (found) {
-    // eslint-disable-next-line radix
-    const requestedCar = cars.filter(car => car.id === parseInt(req.params.id));
-    res.status(200).json(requestedCar);
-  } else {
-    res.status(400).json({ msg: `No car was found with the id of ${req.params.id}` });
-  }
+  });
+}; // UPDATE MY CAR ORDERS
+
+
+var updateCarOrders = function updateCarOrders(req, res) {
+  jwt.verify(req.token, process.env.JWT_KEY, function (err, authData) {
+    if (err) {
+      res.status(401).json({
+        status: 401,
+        message: 'error..invalid token'
+      });
+    } else {
+      var email = authData.user.email;
+      var query = 'SELECT id FROM users WHERE email = $1';
+      var value = [email];
+      var pg = new Client({
+        connectionString: process.env.db_URL
+      });
+      pg.connect();
+      pg.query(query, value, function (err, resdb) {
+        if (err) {
+          console.error(err);
+          pg.end();
+        } else {
+          var status = req.body.status;
+          console.log(status);
+          var orderid = req.params.id;
+          var curruser = resdb.rows[0].id;
+          query = 'UPDATE purchaseorder SET status=LOWER($1) WHERE id = $2';
+          value = [status, orderid, curruser];
+          console.log(value);
+          pg.query(query, value, function (err, dbres) {
+            // const result = dbres.rows[0];/
+            if (err) {
+              console.error(err);
+              pg.end();
+            } else {
+              res.status(200).json({
+                status: 200,
+                message: 'Order Updated'
+              });
+              pg.end();
+            }
+          });
+        }
+      });
+    }
+  });
 };
 
 module.exports = {
-  getCars,
-  getCar,
+  getCars: getCars,
+  getCar: getCar,
+  postCar: postCar,
+  patchCar: patchCar,
+  deleteCar: deleteCar,
+  getadsByOwner: getadsByOwner,
+  getCarOrders: getCarOrders,
+  updateCarOrders: updateCarOrders
 };
