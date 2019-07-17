@@ -36,49 +36,58 @@ function checkFileType(file, cb) {
   const mimetype = filetypes.test(file.mimetype); 
   if (mimetype && extname) {
     return cb(null, true);
-  } else {
-    cb('Error: Images Only!');
   }
+  cb('Error: Images Only!');
 }
-    
 
 const imgUploader = (req, res) => {
   jwt.verify(req.token, process.env.JWT_KEY, (err, authData) => {
     const email = authData.user.email;
     if (err) {
-      res.status(403).json({
-        message: 'error..invalid token',
+      res.status(401).json({
+        error: {
+          message: 'error..invalid token',
+        }
       });
     } else {
       upload(req, res, (err) => {
         if (err) {
-          console.log('error ' + err );
-          res.send({
-            msg: err,
+          console.log(`error ${err}`);
+          res.status(500).json({
+            error: {
+              msg: err,
+            },
+          });
+        } else if (req.file === undefined) {
+          res.status(401).json({
+            data: {
+              msg: 'Error: No File Selected!',
+            },
           });
         } else {
-          if (req.file == undefined) {
-            res.send({
-             msg: 'Error: No File Selected!',
-            });
-          } else {
-            const file = `public/uploads/${req.file.filename}`;
-            cloudinary.uploader.upload(file, { tags: 'gotemps', resource_type: 'auto' })
+          const file = `public/uploads/${req.file.filename}`;
+          cloudinary.uploader.upload(file, { tags: 'gotemps', resource_type: 'auto' })
             .then((file) => {
-              console.log('Public id of the file is  ' + file.public_id);
-              console.log('Url of the file is  ' + file.url);
+              console.log(`Public id of the file is ${file.public_id}`);
+              console.log(`Url of the file is  ${file.url}`);
               const image_url = file.url;
-              res.send({
-                msg: 'File Uploaded!',
-                image_url,
+              res.status.json({
+                data: {
+                  msg: 'File Uploaded!',
+                  image_url,  
+                },              
               });
             }).catch((err) => {
-                 if (err) { 
-                  console.log('error here' + err);
-                 }
-              });
-          }
+              if (err) {
+                res.status(500).json({
+                  error: {
+                    msg: err,
+                  },
+                }); 
+              }
+            });
         }
+        // }
       });
     }
   });

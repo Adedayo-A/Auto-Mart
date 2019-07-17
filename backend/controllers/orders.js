@@ -13,8 +13,10 @@ var postOrder = function postOrder(req, res) {
   jwt.verify(req.token, process.env.JWT_KEY, function (err, authData) {
     if (err) {
       res.status(401).json({
-        status: 401,
-        message: 'error..invalid Token'
+        error: {
+          status: 401,
+          message: 'error..invalid token'
+        }
       });
     } else {
       var newOrder = req.body;
@@ -31,6 +33,12 @@ var postOrder = function postOrder(req, res) {
       pg.query(query, value, function (err, dbres) {
         if (err) {
           console.error(err);
+          res.status(500).json({
+            error: {
+              status: 500,
+              message: 'error..'
+            }
+          });
           pg.end();
         } else {
           var status = 'pending';
@@ -40,6 +48,12 @@ var postOrder = function postOrder(req, res) {
           pg.query(query, value, function (err, dbresp) {
             if (err) {
               console.log(err);
+              res.status(500).json({
+                error: {
+                  status: 500,
+                  message: 'error..'
+                }
+              });
               pg.end();
             } else {
               var image = dbresp.rows[0].image_url;
@@ -61,9 +75,11 @@ var postOrder = function postOrder(req, res) {
                   pg.end();
                 } else {
                   res.status(200).json({
-                    status: 200,
-                    message: 'Posted successfully',
-                    new_order: new_order
+                    data: {
+                      status: 200,
+                      message: 'Posted successfully',
+                      new_order: new_order
+                    }
                   });
                   pg.end();
                 }
@@ -80,8 +96,10 @@ var getMyOrders = function getMyOrders(req, res) {
   jwt.verify(req.token, process.env.JWT_KEY, function (err, authData) {
     if (err) {
       res.status(401).json({
-        status: 401,
-        message: 'error..invalid Token'
+        error: {
+          status: 401,
+          message: 'error..invalid token'
+        }
       });
     } else {
       // eslint-disable-next-line prefer-destructuring
@@ -99,28 +117,42 @@ var getMyOrders = function getMyOrders(req, res) {
       pg.query(query, value, function (err, dbres) {
         if (err) {
           console.error(err);
+          res.status(500).json({
+            error: {
+              status: 500,
+              message: 'error..'
+            }
+          });
           pg.end();
         } else {
           currUser = dbres.rows[0].id;
           query = 'SELECT * FROM purchaseorder WHERE buyer = $1';
           value = [currUser];
-          console.log('this is current ' + currUser);
           pg.query(query, value, function (err, dbresp) {
             if (err) {
               console.error(err);
+              res.status(500).json({
+                error: {
+                  status: 500,
+                  message: 'error..'
+                }
+              });
               pg.end();
             } else if (dbresp.rows.length === 0) {
               res.status(200).json({
-                message: 'No order found'
+                data: {
+                  message: 'No order found'
+                }
               });
               pg.end();
             } else {
               var orders = dbresp.rows;
-              console.log('this is order ' + orders);
               res.status(200).json({
-                state: 'success',
-                message: 'result completed',
-                orders: orders
+                data: {
+                  state: 'success',
+                  message: 'result completed',
+                  orders: orders
+                }
               });
               pg.end();
             }
@@ -136,8 +168,10 @@ var getAnOrder = function getAnOrder(req, res) {
   jwt.verify(req.token, process.env.JWT_KEY, function (err) {
     if (err) {
       res.status(401).json({
-        status: 401,
-        message: 'error..invalid Token'
+        error: {
+          status: 401,
+          message: 'error..invalid token'
+        }
       });
     } else {
       var orderId = req.params.orderid;
@@ -152,15 +186,19 @@ var getAnOrder = function getAnOrder(req, res) {
         if (err) {
           console.log(err);
           res.status(500).json({
-            message: 'error encountered'
+            error: {
+              message: 'error encountered'
+            }
           });
           pg.end();
         } else {
           var order = dbres.rows;
           res.status(200).json({
-            state: 'success',
-            message: 'Success, result completed',
-            order: order
+            data: {
+              state: 'success',
+              message: 'Success, result completed',
+              order: order
+            }
           });
           pg.end();
         }
@@ -174,8 +212,10 @@ var patchOrder = function patchOrder(req, res) {
   // eslint-disable-next-line no-unused-vars
   jwt.verify(req.token, process.env.JWT_KEY, function (err, authData) {
     if (err) {
-      res.status(403).json({
-        message: 'error..invalid Token'
+      res.status(401).json({
+        error: {
+          message: 'error..invalid token'
+        }
       });
     } else {
       // eslint-disable-next-line prefer-destructuring
@@ -194,10 +234,14 @@ var patchOrder = function patchOrder(req, res) {
 
       pg.query(query, value, function (err, dbres) {
         if (err) {
+          res.status(500).json({
+            error: {
+              message: 'error..'
+            }
+          });
           console.error(err);
           pg.end();
         } else {
-          console.log(dbres);
           currUser = dbres.rows[0].id;
           query = 'SELECT buyer FROM purchaseorder WHERE id = $1';
           value = [req.params.id]; // eslint-disable-next-line consistent-return
@@ -205,10 +249,17 @@ var patchOrder = function patchOrder(req, res) {
           pg.query(query, value, function (err, dbresp) {
             if (err) {
               console.error(err);
+              res.status(500).json({
+                error: {
+                  message: 'error..'
+                }
+              });
               pg.end();
             } else if (dbresp.rows.length === 0) {
               res.status(200).json({
-                message: 'No order found'
+                data: {
+                  message: 'No order found'
+                }
               });
               pg.end();
             } else {
@@ -223,22 +274,28 @@ var patchOrder = function patchOrder(req, res) {
                 pg.query(query, value, function (err, dbresponse) {
                   if (err) {
                     // console.error(err);
-                    res.status(403).json({
-                      message: 'An error occured, Please check input!!!'
+                    res.status(500).json({
+                      error: {
+                        message: 'An error occured, Please check input!!!'
+                      }
                     });
                     pg.end();
                   } else {
                     res.status(200).json({
-                      status: 200,
-                      message: 'Order updated successfully!!',
-                      order: order
+                      data: {
+                        status: 200,
+                        message: 'Order updated successfully!!',
+                        order: order
+                      }
                     });
                     pg.end();
                   }
                 });
               } else {
                 res.status(403).json({
-                  message: 'You are not permiited to update this ad!!!'
+                  error: {
+                    message: 'You are not permiited to update this ad!!!'
+                  }
                 });
                 pg.end();
               }
@@ -254,8 +311,10 @@ var patchOrder = function patchOrder(req, res) {
 var deleteOrder = function deleteOrder(req, res) {
   jwt.verify(req.token, process.env.JWT_KEY, function (err, authData) {
     if (err) {
-      res.status(403).json({
-        message: 'error..invalid token'
+      res.status(401).json({
+        error: {
+          message: 'error..invalid token'
+        }
       });
     } else {
       var email = authData.user.email;
@@ -269,6 +328,11 @@ var deleteOrder = function deleteOrder(req, res) {
       pg.query(query, value, function (err, dbres) {
         if (err) {
           console.error(err);
+          res.status(500).json({
+            error: {
+              message: 'error..'
+            }
+          });
           pg.end();
         } else {
           var user = dbres.rows[0].id;
@@ -277,6 +341,11 @@ var deleteOrder = function deleteOrder(req, res) {
           value = [order];
           pg.query(query, value, function (err, resp) {
             if (err) {
+              res.status(500).json({
+                error: {
+                  message: 'error..'
+                }
+              });
               console.error(err);
               pg.end();
             } else if (resp.rows[0].buyer === user) {
@@ -286,20 +355,29 @@ var deleteOrder = function deleteOrder(req, res) {
 
               pg.query(query, value, function (err, resdb) {
                 if (err) {
+                  res.status(500).json({
+                    error: {
+                      message: 'error..'
+                    }
+                  });
                   console.error(err);
                   pg.end();
                 } else {
                   res.status(200).json({
-                    status: 200,
-                    message: 'AD successfully deleted'
+                    data: {
+                      status: 200,
+                      message: 'AD successfully deleted'
+                    }
                   });
                   pg.end();
                 }
               });
             } else {
               res.status(403).json({
-                status: 403,
-                message: 'You are not permitted to delete this Ad'
+                error: {
+                  status: 403,
+                  message: 'You are not permitted to delete this Ad'
+                }
               });
               pg.end();
             }

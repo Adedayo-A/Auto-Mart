@@ -34,13 +34,17 @@ const signUp = (req, res) => {
           if (err.constraint === 'users_email_key') {
             console.log(err);
             res.status(500).json({
-              message: 'email already exist, please choose another email',
+              error: {
+                message: 'email already exist, please choose another email',
+              },
             });
             pg.end();
           } else if (err) {
             console.log(err);
             res.status(500).json({
-              message: 'error encountered',
+              error: {
+                message: 'error encountered',
+              },
             });
             pg.end();
           }
@@ -52,7 +56,9 @@ const signUp = (req, res) => {
               if (err) {
                 console.log(err.stack);
                 res.status(500).json({
-                  message: 'error encountered',
+                  error: {
+                    message: 'error encountered',
+                  },
                 });
                 pg.end();
               } else {
@@ -61,11 +67,13 @@ const signUp = (req, res) => {
                   username = 'user';
                 }
                 res.status(200).send({
-                  username,
-                  state: 'success',
-                  status: 200,
-                  message: 'Sign up successful',
-                  token,
+                  data: {
+                    username,
+                    state: 'success',
+                    status: 200,
+                    message: 'Sign up successful',
+                    token, 
+                  },
                 });
                 pg.end();
               }
@@ -96,12 +104,16 @@ const verifyUser = (req, res) => {
     if (err) {
       console.log(err.stack);
       res.status(500).json({
-        message: 'error encountered',
+        error: {
+          message: 'error encountered',
+        },
       });
       pg.end();
     } else if (dbres.rows.length === 0) {
       res.status(403).json({
-        message: 'error encountered, Invalid Email',
+        error: {
+          message: 'error encountered, Invalid Email',
+        },
       });
       pg.end();
     } else {
@@ -114,20 +126,29 @@ const verifyUser = (req, res) => {
       bcrypt.compare(myPassword, dbPsw, (err, match) => {
         if (err) {
           console.log(err.stack);
+          res.status(403).json({
+            error: {
+              message: 'error encountered',
+            },
+          });
           pg.end();
         } else if (!match) {
           res.status(403).json({
-            message: 'error encountered, Invalid password',
+            error: {
+              message: 'error encountered, Invalid password',
+            },
           });
           pg.end();   
         } else {
           jwt.sign({ user }, process.env.JWT_KEY, { expiresIn: '20m' }, (err, token) => {
             res.status(200).json({
-              username,
-              admin,
-              status: 200,
-              message: `Success..Welcome Back ${username}`,
-              token,
+              data: {
+                username,
+                admin,
+                status: 200,
+                message: `Success..Welcome Back ${username}`,
+                token,
+              },
             });
           });
           pg.end();
@@ -144,7 +165,9 @@ const updateUser = (req, res) => {
     // eslint-disable-next-line prefer-destructuring    
     if (err) {
       res.status(403).json({
-        message: 'error..invalid token',
+        error: {
+          message: 'error..invalid token',
+        },
       });
     } else {
       // eslint-disable-next-line prefer-destructuring
@@ -159,23 +182,30 @@ const updateUser = (req, res) => {
       // eslint-disable-next-line consistent-return
       pg.query(query, value, (err, dbres) => {
         if (err) {
+          res.status(403).json({
+            error: {
+              message: 'error..',
+            },
+          });
           console.error(err);
           pg.end();
         } else if (dbres.rowCount === 0) {
-          console.log('An error occured, please check input');
           res.status(403).json({
-            message: 'An error occured, please check input',
+            error: {
+              message: 'An error occured, please check input',
+            },
           });
           pg.end();
         } else {
           query = 'SELECT * FROM users WHERE email = $1';
           value = [email];
-          console.log('this is ' + value);
           pg.query(query, value, (err, dbres) => {
             if (err) {
               console.log(err.stack);
               res.status(500).json({
-                message: 'error encountered',
+                error: {
+                  message: 'error encountered',
+                },
               });
               pg.end();
             } else {
@@ -184,11 +214,13 @@ const updateUser = (req, res) => {
                 username = 'user';
               }
               res.status(200).send({
-                username,
-                state: 'success',
-                status: 200,
-                message: 'Profile updated',
-                token,
+                data: {
+                  username,
+                  state: 'success',
+                  status: 200,
+                  message: 'Profile updated',
+                  token,
+                },
               });
               pg.end();
             }
@@ -205,7 +237,9 @@ const getAUser = (req, res) => {
     const token = req.token;
     if (err) {
       res.status(403).json({
-        message: 'error..invalid token',
+        error: {
+          message: 'error..invalid token',
+        },
       });
     } else {
       const useremail = authData.user.email;
@@ -218,6 +252,11 @@ const getAUser = (req, res) => {
       // eslint-disable-next-line consistent-return
       pg.query(query, value, (err, dbres) => {
         if (err) {
+          res.status(403).json({
+            error: {
+              message: 'error..',
+            },
+          });
           console.error(err);
           pg.end();
         } else {
@@ -226,11 +265,13 @@ const getAUser = (req, res) => {
             email, first_name, last_name, address,
           } = data;
           res.status(200).json({
-            email, 
-            first_name,
-            last_name,
-            address,
-            token,
+            data: {
+              email, 
+              first_name,
+              last_name,
+              address,
+              token,
+            },
           });
           pg.end();
         }
@@ -244,8 +285,10 @@ const tokenVerify = (req, res) => {
   jwt.verify(req.body.token, process.env.JWT_KEY, (err) => {
     if (err) {
       res.json({
-        status: 403,
-        message: 'Session Expired',
+        error: {
+          status: 403,
+          message: 'Session Expired',
+        },
       });
     } else {
       res.json({

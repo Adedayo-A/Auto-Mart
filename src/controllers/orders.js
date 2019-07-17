@@ -9,8 +9,10 @@ const postOrder = (req, res) => {
   jwt.verify(req.token, process.env.JWT_KEY, (err, authData) => {
     if (err) {
       res.status(401).json({
-        status: 401,
-        message: 'error..invalid Token',
+        error: {
+          status: 401,
+          message: 'error..invalid token',
+        },
       });
     } else {
       const newOrder = req.body;
@@ -27,6 +29,12 @@ const postOrder = (req, res) => {
       pg.query(query, value, (err, dbres) => {
         if (err) {
           console.error(err);
+          res.status(500).json({
+            error: {
+              status: 500,
+              message: 'error..',
+            },
+          });
           pg.end();
         } else {
           const status = 'pending';
@@ -36,6 +44,12 @@ const postOrder = (req, res) => {
           pg.query(query, value, (err, dbresp) => {
             if (err) {
               console.log(err);
+              res.status(500).json({
+                error: {
+                  status: 500,
+                  message: 'error..',
+                },
+              });
               pg.end();
             } else {
               const image = dbresp.rows[0].image_url;
@@ -57,9 +71,11 @@ const postOrder = (req, res) => {
                   pg.end();
                 } else {
                   res.status(200).json({
-                    status: 200,
-                    message: 'Posted successfully',
-                    new_order,
+                    data: {
+                      status: 200,
+                      message: 'Posted successfully',
+                      new_order,
+                    },
                   });
                   pg.end();
                 }
@@ -76,8 +92,10 @@ const getMyOrders = (req, res) => {
   jwt.verify(req.token, process.env.JWT_KEY, (err, authData) => {
     if (err) {
       res.status(401).json({
-        status: 401,
-        message: 'error..invalid Token',
+        error: {
+          status: 401,
+          message: 'error..invalid token',
+        },
       });
     } else {
     // eslint-disable-next-line prefer-destructuring
@@ -95,28 +113,42 @@ const getMyOrders = (req, res) => {
       pg.query(query, value, (err, dbres) => {
         if (err) {
           console.error(err);
+          res.status(500).json({
+            error: {
+              status: 500,
+              message: 'error..',
+            },
+          });
           pg.end();
         } else {
           currUser = dbres.rows[0].id;
           query = 'SELECT * FROM purchaseorder WHERE buyer = $1';
           value = [currUser];
-          console.log('this is current '+ currUser);
           pg.query(query, value, (err, dbresp) => {
             if (err) {
               console.error(err);
+              res.status(500).json({
+                error: {
+                  status: 500,
+                  message: 'error..',
+                },
+              });
               pg.end();
             } else if (dbresp.rows.length === 0) {
               res.status(200).json({
-                message: 'No order found',
+                data: {
+                  message: 'No order found',
+                },
               });
               pg.end();
             } else {
               const orders = dbresp.rows;
-              console.log('this is order '+ orders);
               res.status(200).json({
-                state: 'success',
-                message: 'result completed',
-                orders,
+                data: {
+                  state: 'success',
+                  message: 'result completed',
+                  orders,
+                },
               });
               pg.end();
             }           
@@ -132,8 +164,10 @@ const getAnOrder = (req, res) => {
   jwt.verify(req.token, process.env.JWT_KEY, (err) => {
     if (err) {
       res.status(401).json({
-        status: 401,
-        message: 'error..invalid Token',
+        error: {
+          status: 401,
+          message: 'error..invalid token',
+        },
       });
     } else {
       const orderId = req.params.orderid;
@@ -149,15 +183,19 @@ const getAnOrder = (req, res) => {
         if (err) {
           console.log(err);
           res.status(500).json({
-            message: 'error encountered',
+            error: {
+              message: 'error encountered',
+            },
           });
           pg.end();
         } else {
           const order = dbres.rows;
           res.status(200).json({
-            state: 'success',
-            message: 'Success, result completed',
-            order,
+            data: {
+              state: 'success',
+              message: 'Success, result completed',
+              order,
+            },
           });
           pg.end();
         }
@@ -171,8 +209,10 @@ const patchOrder = (req, res) => {
   // eslint-disable-next-line no-unused-vars
   jwt.verify(req.token, process.env.JWT_KEY, (err, authData) => {
     if (err) {
-      res.status(403).json({
-        message: 'error..invalid Token',
+      res.status(401).json({
+        error: {
+          message: 'error..invalid token',
+        },
       });
     } else {
     // eslint-disable-next-line prefer-destructuring
@@ -192,10 +232,14 @@ const patchOrder = (req, res) => {
       // eslint-disable-next-line consistent-return
       pg.query(query, value, (err, dbres) => {
         if (err) {
+          res.status(500).json({
+            error: {
+              message: 'error..',
+            },
+          });
           console.error(err);
           pg.end();
         } else {
-          console.log(dbres);
           currUser = dbres.rows[0].id;
         
           query = 'SELECT buyer FROM purchaseorder WHERE id = $1';
@@ -204,10 +248,17 @@ const patchOrder = (req, res) => {
           pg.query(query, value, (err, dbresp) => {
             if (err) {
               console.error(err);
+              res.status(500).json({
+                error: {
+                  message: 'error..',
+                },
+              });
               pg.end();
             } else if (dbresp.rows.length === 0) {
               res.status(200).json({
-                message: 'No order found',
+                data: {
+                  message: 'No order found',
+                },
               });
               pg.end();
             } else {
@@ -222,22 +273,28 @@ const patchOrder = (req, res) => {
                 pg.query(query, value, (err, dbresponse) => {
                   if (err) {
                     // console.error(err);
-                    res.status(403).json({
-                      message: 'An error occured, Please check input!!!',
+                    res.status(500).json({
+                      error: {
+                        message: 'An error occured, Please check input!!!',
+                      },
                     });
                     pg.end();
                   } else {
                     res.status(200).json({
-                      status: 200,
-                      message: 'Order updated successfully!!',
-                      order,
+                      data: {
+                        status: 200,
+                        message: 'Order updated successfully!!',
+                        order,
+                      },
                     });
                     pg.end();
                   }
                 });
               } else {
                 res.status(403).json({
-                  message: 'You are not permiited to update this ad!!!',
+                  error: {
+                    message: 'You are not permiited to update this ad!!!',
+                  },
                 });
                 pg.end();
               }
@@ -253,8 +310,10 @@ const patchOrder = (req, res) => {
 const deleteOrder = (req, res) => {
   jwt.verify(req.token, process.env.JWT_KEY, (err, authData) => {
     if (err) {
-      res.status(403).json({
-        message: 'error..invalid token',
+      res.status(401).json({
+        error: {
+          message: 'error..invalid token',
+        },
       });
     } else {
       const email = authData.user.email;
@@ -268,6 +327,11 @@ const deleteOrder = (req, res) => {
       pg.query(query, value, (err, dbres) => {
         if (err) {
           console.error(err);
+          res.status(500).json({
+            error: {
+              message: 'error..',
+            },
+          });
           pg.end();
         } else {
           const user = dbres.rows[0].id;
@@ -276,6 +340,11 @@ const deleteOrder = (req, res) => {
           value = [order];
           pg.query(query, value, (err, resp) => {
             if (err) {
+              res.status(500).json({
+                error: {
+                  message: 'error..',
+                },
+              });
               console.error(err);
               pg.end();
             } else if (resp.rows[0].buyer === user) {
@@ -285,20 +354,29 @@ const deleteOrder = (req, res) => {
               // eslint-disable-next-line no-unused-vars
               pg.query(query, value, (err, resdb) => {
                 if (err) {
+                  res.status(500).json({
+                    error: {
+                      message: 'error..',
+                    },
+                  });
                   console.error(err);
                   pg.end();
                 } else {
                   res.status(200).json({
-                    status: 200,
-                    message: 'AD successfully deleted',
+                    data: {
+                      status: 200,
+                      message: 'AD successfully deleted',
+                    },
                   });
                   pg.end();
                 }
               });
             } else {
               res.status(403).json({
-                status: 403,
-                message: 'You are not permitted to delete this Ad',
+                error: {
+                  status: 403,
+                  message: 'You are not permitted to delete this Ad',
+                },
               });
               pg.end();
             }
