@@ -3,31 +3,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const mainIndex = document.querySelector('.main-index');
     const inStore = JSON.parse(localStorage.getItem('loggedInUser'));
 
-    // VERIFY LOCAL STORAGE
-    if (!inStore) {
-        const needUser = document.querySelector('.need-user');
-            needUser.style.display = 'none';
-        const needUserLink = document.querySelectorAll('.need-user-link');
-        needUserLink.forEach((noUserLink) => {
-            noUserLink.href = 'UI/signinpage.html';
-        });
-    } else if (inStore) {
-        const inStore = JSON.parse(localStorage.getItem('loggedInUser'));
-        console.log(inStore);
-        let firstname = inStore.data.username;
-        const neednotUser = document.querySelectorAll('.no-user');
-        neednotUser.forEach((neednouser)=> {
-            neednouser.style.display = 'none';
-        })
-        document.querySelector('.dashboard-dropdown').innerHTML = `Welcome ${firstname}`
-    }
-
     // VERIFY TOKEN 
     const tokenVerify = () => {
         const path = '/api/v1/users/auth/tokenverify';
         const inStore = JSON.parse(localStorage.getItem('loggedInUser'));
         console.log(inStore);
-        if (inStore === null) {
+        if (inStore == null) {
             console.log('token expired');
             toastr.info('session expired, please login');
             localStorage.clear();
@@ -52,6 +33,25 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
     tokenVerify();
+
+    // VERIFY LOCAL STORAGE
+    if (!inStore) {
+    const needUser = document.querySelector('.need-user');
+        needUser.style.display = 'none';
+    const needUserLink = document.querySelectorAll('.need-user-link');
+    needUserLink.forEach((noUserLink) => {
+        noUserLink.href = 'UI/signinpage.html';
+    });
+} else if (inStore) {
+    const inStore = JSON.parse(localStorage.getItem('loggedInUser'));
+    console.log(inStore);
+    let firstname = inStore.data.username;
+    const neednotUser = document.querySelectorAll('.no-user');
+    neednotUser.forEach((neednouser)=> {
+        neednouser.style.display = 'none';
+    })
+    document.querySelector('.dashboard-dropdown').innerHTML = `Welcome ${firstname}`
+}
 
     // SIGN OUT
     document.querySelector('.sign-out').onclick = () => {
