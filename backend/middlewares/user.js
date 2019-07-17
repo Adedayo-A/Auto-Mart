@@ -24,7 +24,10 @@ var validateInfo = function validateInfo(req, res, next) {
   }
 
   res.status(403).json({
-    message: 'Invalid email format!! Please check with this format (something@something.com) and retry!!'
+    status: 403,
+    error: {
+      message: 'Invalid email format!! Please check with this format (something@something.com) and retry!!'
+    }
   });
 }; // const passwordCheck = (req, res, next) => {
 //   if (req.body.password !== req.body.confirm_password) {

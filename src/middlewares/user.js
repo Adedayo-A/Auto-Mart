@@ -19,7 +19,10 @@ const validateInfo = (req, res, next) => {
     return;
   }
   res.status(403).json({
-    message: 'Invalid email format!! Please check with this format (something@something.com) and retry!!',
+    status: 403,
+    error: {
+      message: 'Invalid email format!! Please check with this format (something@something.com) and retry!!',
+    },
   });
 };
 
