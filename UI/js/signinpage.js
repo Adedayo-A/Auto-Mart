@@ -107,7 +107,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // REDIRECT TO HOMEPAGE
     const redirection = () => {
         window.location.href = "../index.html";
-    }
+    };
 
     // FORMS
     // SIGN UP FORM
@@ -125,7 +125,7 @@ document.addEventListener('DOMContentLoaded', () => {
         httpPost(path, data, (err, respData, xhttp) => {
             if (err) {
                 console.log(err);
-            }  else if (respData.status === 200) {
+            }  else if (respData.status === 200)
                 document.querySelector('.response').innerHTML = respData;
                 document.querySelector('.response').style.color = 'green';
                 localStorage.setItem('loggedInUser', JSON.stringify(respData));
