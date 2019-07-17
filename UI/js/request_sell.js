@@ -24,7 +24,7 @@ function httpPost (path, data, callback) {
 
 function httpPostCar (path, data, callback) {
     const inStore = JSON.parse(localStorage.getItem('loggedInUser'));
-    const token = inStore.token.token;
+    const { token } = inStore.data;
     let xhttp = new XMLHttpRequest();
     xhttp.open("POST", window.api_url+path, true);
     xhttp.setRequestHeader('Content-type','application/json');
