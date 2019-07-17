@@ -20,7 +20,7 @@ function httpPost (path, data, callback) {
         callback(null, JSON.parse(xhttp.responseText || '{}'), xhttp);
     }
     xhttp.send(JSON.stringify(data));
-}
+};
 
 function httpPostCar (path, data, callback) {
     const inStore = JSON.parse(localStorage.getItem('loggedInUser'));
