@@ -367,7 +367,7 @@ var getadsByOwner = function getadsByOwner(req, res) {
 
 var postCar = function postCar(req, res) {
   var newAd = req.body;
-  var created_on = newAd.Date.now();
+  var created_on = Date.now();
   var price = newAd.price;
   var door = newAd.door;
   door = door || null;
@@ -406,6 +406,7 @@ var postCar = function postCar(req, res) {
           pg.end();
         } else {
           owner = dbres.rows[0].id;
+          console.log(owner);
           query = 'INSERT INTO carads(status, price, manufacturer, model, body_type, owner, state, ext_col, int_col, transmission, mileage, door, description, image_url) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)';
           value = [newAd.status, price, newAd.manufacturer, newAd.model, newAd.body_type, owner, newAd.state, newAd.ext_col, newAd.int_col, newAd.transmission, newAd.mileage, door, newAd.description, newAd.image_url]; // eslint-disable-next-line consistent-return
           // PG Query

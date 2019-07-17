@@ -362,7 +362,7 @@ const getadsByOwner = (req, res) => {
 // POST CAR
 const postCar = (req, res) => {
   const newAd = req.body;
-  const created_on = newAd.Date.now();
+  const created_on = Date.now();
   const price = newAd.price;
   let door = newAd.door;
   door = door || null;
@@ -401,6 +401,7 @@ const postCar = (req, res) => {
           pg.end();
         } else {
           owner = dbres.rows[0].id;
+          console.log(owner);
           query = 'INSERT INTO carads(status, price, manufacturer, model, body_type, owner, state, ext_col, int_col, transmission, mileage, door, description, image_url) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)';
           value = [
             newAd.status, price, newAd.manufacturer,
