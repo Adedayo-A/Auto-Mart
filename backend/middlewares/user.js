@@ -10,7 +10,10 @@ var tokenAuth = function tokenAuth(req, res, next) {
     next();
   } else {
     res.status(403).json({
-      message: 'A token is required for access'
+      status: 403,
+      error: {
+        message: 'A token is required for access'
+      }
     });
   }
 };
