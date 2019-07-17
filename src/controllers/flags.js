@@ -38,6 +38,7 @@ const postFlag = (req, res) => {
           pg.end();
         } else {
           res.status(200).json({
+            status: 200,
             data: {
               status: 200,
               message: 'Thank you for reporting this problem',

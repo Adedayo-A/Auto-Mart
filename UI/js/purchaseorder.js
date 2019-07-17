@@ -89,11 +89,11 @@ document.addEventListener('DOMContentLoaded', () => {
     // SUBMIT PURCHASE ORDER
     document.querySelector('.order').onsubmit = (e) => {
         e.preventDefault();
-        const amount = document.querySelector('.price').value;
+        const price_offered = document.querySelector('.price').value;
         const description = document.querySelector('.description').value;
 
         const data = {
-            amount,
+            price_offered,
             description,
         } 
         const postId = window.location.search.slice(1).split("&")[0].split("=")[1];

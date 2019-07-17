@@ -1,5 +1,8 @@
 const express = require('express');
+// import exprress from 'express'
 const carControllers = require('../controllers/cars.js');
+// import * as userControllers from ''
+// import { verifyUser } from ''
 const userControllers = require('../controllers/users.js');
 const orderControllers = require('../controllers/orders.js');
 const flagControllers = require('../controllers/flags.js');
@@ -59,7 +62,7 @@ router.post('/auth/signin', verifyUser);
 router.get('/api/v1/order/user', tokenAuth, getMyOrders);
 router.get('/api/v1/order/:orderid', tokenAuth, getAnOrder);
 router.post('/api/v1/order/:id', tokenAuth, postOrder);
-router.post('/order', tokenAuth, postOrder);
+router.post('/order/:id', tokenAuth, postOrder);
 router.patch('/api/v1/order/:id/', tokenAuth, patchOrder);
 router.patch('/order/:id/price', tokenAuth, patchOrder);
 router.delete('/api/v1/order/:id/', tokenAuth, deleteOrder);
@@ -67,9 +70,13 @@ router.delete('/api/v1/order/:id/', tokenAuth, deleteOrder);
 
 // FLAGS API ROUTES
 router.post('/api/v1/flag/:id', tokenAuth, postFlag);
+router.post('/flag/:id', tokenAuth, postFlag);
+
 
 // IMG API ROUTES
 router.post('/api/v1/upload/', tokenAuth, imgUploader);
 
 
 module.exports = router;
+// export default router
+

@@ -22,7 +22,7 @@ describe('TEST API ENDPOINTS', () => {
         .send(user)
         .end((err, res) => {
         // eslint-disable-next-line prefer-destructuring
-          token = res.body.token;
+          token = res.body.data.token;
           done();
         });
     });
@@ -55,7 +55,7 @@ describe('TEST API ENDPOINTS', () => {
         .end((err, res) => {
           // const bodyType = res.carad.body_type;
           res.status.should.equal(200);
-          res.body.message.should.equal('result completed');
+          res.body.data.message.should.equal('result completed');
           res.error.should.equal(false);
           done();
         });
@@ -123,7 +123,6 @@ describe('TEST API ENDPOINTS', () => {
         body_type: 'car',
         owner: 3,
         state: 'used',
-        // image_url: 'http://res.cloudinary.com/ddf91r8gu/image/upload/v1563011174/ie9ntlp2q9ewz0avbhpx.jpg',
       };
       supertest(index)
         .post('/api/v1/car/')
@@ -139,16 +138,16 @@ describe('TEST API ENDPOINTS', () => {
     });
     it('should mark a posted AD as sold', (done) => {
       const ad = {
-        status: 'available',
+        status: 'sold',
         price: 850000,
       };
       supertest(index)
-        .patch('/api/v1/car/29/')
+        .patch('/api/v1/car/199/')
         .set('Authorization', `Bearer ${token}`)
         .send(ad)
         .expect('Content-type', /json/)
         .end((err, res) => {
-          res.body.message.should.equal('AD updated successfully!!');
+          res.body.data.message.should.equal('AD updated successfully!!');
           res.status.should.equal(200);
           res.error.should.equal(false);
           done();
@@ -156,17 +155,16 @@ describe('TEST API ENDPOINTS', () => {
     });
     it('should update the price of a posted AD', (done) => {
       const ad = {
-        price: 850000,
+        price: 750000,
         status: 'available',
       };
       supertest(index)
-        .patch('/api/v1/car/41/')
+        .patch('/api/v1/car/199/')
         .set('Authorization', `Bearer ${token}`)
         .send(ad)
         .expect('Content-type', /json/)
         .end((err, res) => {
-          // res.body.message.should.equal('Updated successfully');
-          // res.body.editCar.price.should.equal(650000);
+          res.body.data.message.should.equal('AD updated successfully!!');
           res.status.should.equal(200);
           res.error.should.equal(false);
           done();
@@ -174,7 +172,7 @@ describe('TEST API ENDPOINTS', () => {
     });
     it('should delete a posted AD record', (done) => {
       supertest(index)
-        .delete('/api/v1/car/34/')
+        .delete('/api/v1/car/219/')
         .set('Authorization', `Bearer ${token}`)
         .expect('Content-type', /json/)
         .end((err, res) => {
@@ -196,7 +194,7 @@ describe('TEST API ENDPOINTS', () => {
         .send(user)
         .expect('Content-type', /json/)
         .end((err, res) => {
-          res.body.message.should.equal('Success..Welcome Back Swede-Ben');
+          res.body.data.message.should.equal('Success..Welcome Back Swede');
           res.status.should.equal(200);
           res.error.should.equal(false);
           done();
@@ -215,7 +213,7 @@ describe('TEST API ENDPOINTS', () => {
         .expect('Content-type', /json/)
         .end((err, res) => {
           // eslint-disable-next-line no-unused-vars
-          res.body.message.should.equal('Profile updated');
+          res.body.data.message.should.equal('Profile updated');
           res.status.should.equal(200);
           res.error.should.equal(false);
           done();
@@ -226,18 +224,16 @@ describe('TEST API ENDPOINTS', () => {
     it('should make a purchase order', (done) => {
       const order = {
         car_id: 3,
-        id: 2,
-        amount: 500000,
-        buyer: 4,
-        status: 'pending',
+        price_offered: 500000,
       };
       supertest(index)
-        .post('/api/v1/order/')
+        .post('/api/v1/order/177')
         .set('Authorization', `Bearer ${token}`)
         .send(order)
         .expect('Content-type', /json/)
         .end((err, res) => {
-          res.body.message.should.equal('Posted successfully');
+          console.log(res.body);
+          res.body.data.message.should.equal('Posted successfully');
           res.status.should.equal(200);
           res.error.should.equal(false);
           done();
@@ -245,15 +241,16 @@ describe('TEST API ENDPOINTS', () => {
     });
     it('should update the price of purchase order', (done) => {
       const order = {
-        amount: 550000,
+        price_offered: 590000,
       };
       supertest(index)
-        .patch('/api/v1/order/4/price')
+        .patch('/api/v1/order/8/')
         .set('Authorization', `Bearer ${token}`)
         .send(order)
         .expect('Content-type', /json/)
         .end((err, res) => {
-          res.body.message.should.equal('Order updated successfully!!');
+          console.log(res.body);
+          res.body.data.message.should.equal('Order updated successfully!!');
           res.status.should.equal(200);
           res.error.should.equal(false);
           done();
@@ -267,13 +264,13 @@ describe('TEST API ENDPOINTS', () => {
         reason: 'pricing',
       };
       supertest(index)
-        .post('/api/v1/flag/')
+        .post('/api/v1/flag/76')
         .set('Authorization', `Bearer ${token}`)
         .send(report)
         .expect('Content-type', /json/)
         .end((err, res) => {
-          res.body.message.should.equal('Thank you for reporting this problem');
-          res.body.newFlag.reason.should.equal('pricing');
+          res.body.data.message.should.equal('Thank you for reporting this problem');
+          // res.body.data.reason.should.equal('pricing');
           res.status.should.equal(200);
           res.error.should.equal(false);
           done();

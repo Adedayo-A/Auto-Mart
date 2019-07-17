@@ -9,6 +9,7 @@ const bcrypt = require('bcrypt');
 
 // const users = require('../db/Users.js');
 // class userControllers { 
+// export
 const signUp = (req, res) => {
   const user = req.body;
   const myPassword = user.password;
@@ -171,7 +172,8 @@ const updateUser = (req, res) => {
   jwt.verify(req.token, process.env.JWT_KEY, (err, authData) => {
     // eslint-disable-next-line prefer-destructuring    
     if (err) {
-      res.status(403).json({
+      res.status(401).json({
+        status: 401,
         error: {
           message: 'error..invalid token',
         },
