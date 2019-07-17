@@ -366,6 +366,8 @@ const postCar = (req, res) => {
   const price = newAd.price;
   let door = newAd.door;
   door = door || null;
+  let image_url = newAd.image_url;
+  image_url = image_url || '';
   let owner;
   jwt.verify(req.token, process.env.JWT_KEY, (err, authData) => {
     if (err) {
@@ -407,7 +409,7 @@ const postCar = (req, res) => {
             newAd.status, price, newAd.manufacturer,
             newAd.model, newAd.body_type, owner, newAd.state,
             newAd.ext_col, newAd.int_col, newAd.transmission,
-            newAd.mileage, door, newAd.description, newAd.image_url,
+            newAd.mileage, door, newAd.description, image_url,
           ];
           // eslint-disable-next-line consistent-return
           // PG Query

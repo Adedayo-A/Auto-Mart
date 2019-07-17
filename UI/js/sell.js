@@ -88,27 +88,27 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // IMAGE UPLOAD TO CLOUDINARY
-    const fileupload =  document.querySelector('.file-upload');
-    fileupload.addEventListener('change', (event) => {
-        console.log(event);
-        const file = event.target.files[0];
-        console.log(file);
-        let formData = new FormData();
-        formData.append('myImage', file);
+    // const fileupload =  document.querySelector('.file-upload');
+    // fileupload.addEventListener('change', (event) => {
+    //     console.log(event);
+    //     const file = event.target.files[0];
+    //     console.log(file);
+    //     let formData = new FormData();
+    //     formData.append('myImage', file);
         
-        const path = '/api/v1/upload/';
+    //     const path = '/api/v1/upload/';
 
-        httpPostImage(path, formData, (err, respData, xhttp) => {
-            if(err) {
-                console.log(err);
-            } else {
-                console.log(respData);
-                document.querySelector('.preview').src = respData.image_url;
-                // GOOD DATA
-                // toastr.success('respData.message');
-            }
-        })
-    })
+    //     httpPostImage(path, formData, (err, respData, xhttp) => {
+    //         if(err) {
+    //             console.log(err);
+    //         } else {
+    //             console.log(respData);
+    //             document.querySelector('.preview').src = respData.image_url;
+    //             // GOOD DATA
+    //             // toastr.success('respData.message');
+    //         }
+    //     })
+    // })
 
     // FORM SUBMIT
     document.querySelector('.post').onsubmit = (e) => {
@@ -125,7 +125,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const mileage = document.querySelector('.mileage').value;
         const door = document.querySelector('.doors').value;
         const description = document.querySelector('.description').value;
-        const image_url = document.querySelector('.preview').src;
+        // const image_url = document.querySelector('.preview').src;
         
         data = {
             status,
@@ -140,7 +140,7 @@ document.addEventListener('DOMContentLoaded', () => {
             mileage,
             door,
             description,
-            image_url,
+            // image_url,
         }
         const path = '/api/v1/car/';
 
@@ -151,7 +151,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 console.log(respData);
                 // GOOD DATA
                 toastr.success(respData.message);
-                window.location.href = "ads.html";
+                // window.location.href = "ads.html";
             } else {
                 console.log(respData);
                 // BAD DATA
