@@ -131,7 +131,8 @@ const verifyUser = (req, res) => {
       bcrypt.compare(myPassword, dbPsw, (err, match) => {
         if (err) {
           console.log(err.stack);
-          res.status(403).json({
+          res.status(503).json({
+            status: 403,
             error: {
               message: 'error encountered',
             },
