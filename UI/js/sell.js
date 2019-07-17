@@ -87,7 +87,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    IMAGE UPLOAD TO CLOUDINARY
+    // IMAGE UPLOAD TO CLOUDINARY
     const fileupload =  document.querySelector('.file-upload');
     fileupload.addEventListener('change', (event) => {
         console.log(event);
@@ -110,11 +110,17 @@ document.addEventListener('DOMContentLoaded', () => {
         })
     });
 
-    // SELECT FIELD
-    const select = document.querySelector('.status');
-    if (select.value === 'Available') {
-        
+    // SELECT FIELD MANIPULATION
+    const select = document.querySelector('.select-status');
+
+    const sel_man = () => {
+        if (select.value === "") {
+            document.querySelector('.sold').style.display = 'none';
+        } else {
+            document.querySelector('.sold').style.display = 'block';
+        }
     }
+    sel_man();
 
     // FORM SUBMIT
     document.querySelector('.post').onsubmit = (e) => {

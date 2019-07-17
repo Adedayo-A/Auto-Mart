@@ -241,7 +241,7 @@ const updateUser = (req, res) => {
 // GET A USER
 const getAUser = (req, res) => {
   jwt.verify(req.token, process.env.JWT_KEY, (err, authData) => {
-    const token = req.token;
+    const { token } = req.token;
     if (err) {
       res.status(403).json({
         error: {
@@ -260,11 +260,12 @@ const getAUser = (req, res) => {
       pg.query(query, value, (err, dbres) => {
         if (err) {
           res.status(403).json({
+            status: 403,
             error: {
               message: 'error..',
             },
           });
-          console.error(err);
+          console.log(err);
           pg.end();
         } else {
           const data = dbres.rows[0];
@@ -272,6 +273,7 @@ const getAUser = (req, res) => {
             email, first_name, last_name, address,
           } = data;
           res.status(200).json({
+            status: 200,
             data: {
               email, 
               first_name,
@@ -292,8 +294,8 @@ const tokenVerify = (req, res) => {
   jwt.verify(req.body.token, process.env.JWT_KEY, (err) => {
     if (err) {
       res.json({
+        status: 401,
         error: {
-          status: 403,
           message: 'Session Expired',
         },
       });

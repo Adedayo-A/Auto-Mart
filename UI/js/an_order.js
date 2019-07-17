@@ -103,10 +103,10 @@ document.addEventListener('DOMContentLoaded', () => {
             } else if (response.status === 401) {
                 toastr.info('session expired');
                 window.location.href = "signinpage.html";
-            } else if (response.state === 'success') {
+            } else if (response.data.state === 'success') {
                 console.log(response);
-                toastr.info(response.message);
-                const orderdetails = response.order;
+                toastr.info(response.data.message);
+                const orderdetails = response.data.order;
                 let output = '';
                 for (var i in orderdetails) {
                     const orderId = orderdetails[i].id || 'N/A';
@@ -129,7 +129,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                     <h4 class="first-heading-card-stories"> Car id: ${carId} </h4>
                                     <h4 class="first-heading-card-stories"> Manufacturer: ${manufacturer} </h4>
                                     <h4 class="first-heading-card-stories"> Model: ${model} </h4>
-                                    <h4 class="first-heading-card-stories"> Status of Order: ${orderdetails[i].status} </h4>
+                                    <h4 class="first-heading-card-stories"> Status of Order: ${status} </h4>
                                     <h3 class="heading-price-card-stories"> Price Offered: ${priceOffered} </h3>
                                 </div>
                                 <p class="para-delete-card-stories">
@@ -149,7 +149,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             toastr.error('An error occured');
                             console.log(err);
                         } else {
-                            toastr.success(response.message)
+                            toastr.success(response.data.message)
                             window.location.href = 'myorders.html';
                         }
                     })

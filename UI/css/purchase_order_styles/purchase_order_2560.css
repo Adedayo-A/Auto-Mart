@@ -166,7 +166,7 @@
     outline: none;
     }
 
-    form button {
+    .sell-submit-button {
     display: block;
     margin-top: 2rem;
     width: 15rem;

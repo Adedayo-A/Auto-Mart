@@ -19,9 +19,6 @@ var postOrder = function postOrder(req, res) {
         }
       });
     } else {
-      var newOrder = req.body;
-      var carId = req.params.id;
-      var description = newOrder.description;
       var email = authData.user.email;
       var pg = new Client({
         connectionString: process.env.db_URL
@@ -32,7 +29,7 @@ var postOrder = function postOrder(req, res) {
 
       pg.query(query, value, function (err, dbres) {
         if (err) {
-          console.error(err);
+          console.log(err);
           res.status(500).json({
             error: {
               status: 500,
@@ -41,10 +38,16 @@ var postOrder = function postOrder(req, res) {
           });
           pg.end();
         } else {
-          var status = 'pending';
+          console.log(dbres);
           var buyer = dbres.rows[0].id;
+          var newOrder = req.body;
+          var car_id = req.params.id;
+          var description = newOrder.description;
+          var amount = newOrder.amount;
+          console.log(amount);
+          var status = 'pending';
           query = 'SELECT * FROM carads WHERE id = $1';
-          value = [carId];
+          value = [car_id];
           pg.query(query, value, function (err, dbresp) {
             if (err) {
               console.log(err);
@@ -59,9 +62,11 @@ var postOrder = function postOrder(req, res) {
               var image = dbresp.rows[0].image_url;
               var manufacturer = dbresp.rows[0].manufacturer;
               var model = dbresp.rows[0].model;
-              var carowner = dbresp.rows[0].owner;
+              var car_owner = dbresp.rows[0].owner;
+              var priceofCar = dbresp.rows[0].price;
               query = 'INSERT INTO purchaseorder(status, amount, car_id, buyer, description, image, manufacturer, model, car_owner) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9)';
-              value = [status, newOrder.amount, carId, buyer, description, image, manufacturer, model, carowner]; // eslint-disable-next-line consistent-return
+              value = [status, amount, car_id, buyer, description, image, manufacturer, model, car_owner];
+              console.log(value); // eslint-disable-next-line consistent-return
               // PG Query
 
               pg.query(query, value, function (err) {
@@ -69,16 +74,27 @@ var postOrder = function postOrder(req, res) {
                   console.error(err);
                   res.status(403).json({
                     status: 403,
-                    message: 'Input error, Please check input!!!',
-                    new_order: new_order
+                    error: {
+                      message: 'Input error, Please check input!!!'
+                    }
                   });
                   pg.end();
                 } else {
+                  var created_on = Date.now();
                   res.status(200).json({
+                    status: 200,
                     data: {
-                      status: 200,
                       message: 'Posted successfully',
-                      new_order: new_order
+                      buyer: buyer,
+                      car_id: car_id,
+                      created_on: created_on,
+                      status: status,
+                      priceofCar: priceofCar,
+                      manufacturer: manufacturer,
+                      model: model,
+                      car_owner: car_owner,
+                      image: image,
+                      amount: amount
                     }
                   });
                   pg.end();

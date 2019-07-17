@@ -44,7 +44,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     console.log(err);
                 }  else if (respData.status === 200) {
                         console.log('still on');
-                }  else if (respData.status === 403) {
+                }  else if (respData.status === 401) {
                     toastr.info('session expired');
                     localStorage.clear();
                     window.location.href = "signinpage.html";
@@ -104,10 +104,10 @@ document.addEventListener('DOMContentLoaded', () => {
             } else if (response.status === 401) {
                 toastr.info('session expired');
                 window.location.href = "signinpage.html";
-            } else if (response.state === 'success') {
+            } else if (response.data.state === 'success') {
                 console.log(response);
-                toastr.info(response.message);
-                const cars = response.carad;
+                toastr.info(response.data.message);
+                const cars = response.data.car_ad;
                 let output = '';
                 for (var i in cars) {
                     const adId = cars[i].id || 'N/A';
@@ -146,7 +146,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                             <span> Availability: ${status} </span>
                                         </p>
                                         <p>
-                                            <button class="viewone"><a href="editad.html?adId=${adId}">Make a purchase order</a></button>
+                                            <button class="viewone"><a href="purchase-order.html?adId=${adId}">Make a purchase order</a></button>
                                         </p>
                                         <p>
                                             <button class="editone">Flag</button>
@@ -168,7 +168,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             console.log(err);
                         } else {
                             console.log(response);
-                            toastr.success(response.message);
+                            toastr.success(response.data.message);
                             window.location.href = '../index.html';
                         }
                     })

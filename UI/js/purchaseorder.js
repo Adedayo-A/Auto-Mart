@@ -108,12 +108,12 @@ document.addEventListener('DOMContentLoaded', () => {
             } else if (response.status === 200) {
                 console.log(response);
                 // GOOD DATA
-                toastr.success(response.message);
+                toastr.success(response.data.message);
                 window.location.href = "ads.html";
             } else {
                 console.log(response);
                 // BAD DATA
-                toastr.error(response.message);
+                toastr.error(response.error.message);
             }
         });
     }

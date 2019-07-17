@@ -258,7 +258,7 @@ var updateUser = function updateUser(req, res) {
 
 var getAUser = function getAUser(req, res) {
   jwt.verify(req.token, process.env.JWT_KEY, function (err, authData) {
-    var token = req.token;
+    var token = req.token.token;
 
     if (err) {
       res.status(403).json({
@@ -278,11 +278,12 @@ var getAUser = function getAUser(req, res) {
       pg.query(query, value, function (err, dbres) {
         if (err) {
           res.status(403).json({
+            status: 403,
             error: {
               message: 'error..'
             }
           });
-          console.error(err);
+          console.log(err);
           pg.end();
         } else {
           var data = dbres.rows[0];
@@ -291,6 +292,7 @@ var getAUser = function getAUser(req, res) {
               last_name = data.last_name,
               address = data.address;
           res.status(200).json({
+            status: 200,
             data: {
               email: email,
               first_name: first_name,
@@ -311,8 +313,8 @@ var tokenVerify = function tokenVerify(req, res) {
   jwt.verify(req.body.token, process.env.JWT_KEY, function (err) {
     if (err) {
       res.json({
+        status: 401,
         error: {
-          status: 403,
           message: 'Session Expired'
         }
       });

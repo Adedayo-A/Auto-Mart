@@ -43,7 +43,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     console.log(err);
                 }  else if (respData.status === 200) {
                         console.log('still on');
-                }  else if (respData.status === 403) {
+                }  else if (respData.status === 401) {
                     toastr.info('session expired');
                     localStorage.clear();
                     window.location.href = "UI/signinpage.html";
@@ -92,7 +92,7 @@ document.addEventListener('DOMContentLoaded', () => {
         httpGet(path, (err, respData, xhttp) => {
             if (err) {
                 console.log(err);
-            } else if (respData.first_name === null || respData.last_name === null || respData.address === null) {
+            } else if (respData.data.first_name === null || respData.data.last_name === null || respData.data.address === null) {
                 console.log(respData);
                 toastr.info('Please complete your profile in order to post your car!!');
                 window.location.href = "./UI/updateuser.html"
@@ -130,12 +130,12 @@ document.addEventListener('DOMContentLoaded', () => {
             } else if (response.status === 401) {
                 window.location.href = 'UI/signinpage.html';
                 toastr.info('session expired');
-            } else if (response.state === 'success') {
+            } else if (response.data.state === 'success') {
                 document.querySelector('.section-search').style.display = 'none';
                 const result = document.querySelector('.section-result')
                 console.log(response);
-                toastr.info(response.message);
-                const cars = response.carad;
+                toastr.info(response.data.message);
+                const cars = response.data.car_ad;
                 let output = '';
                 for (var i in cars) {
                     const carId = cars[i].id || 'N/A';
