@@ -153,14 +153,14 @@ document.addEventListener('DOMContentLoaded', () => {
             if(err) {
                 console.log(err);
             } else if (respData.status === 200) {
-                localStorage.setItem('loggedInUser', JSON.stringify(respData));
+                localStorage.setItem('loggedInUser', JSON.stringify(respData.data));
                 const inStore = JSON.parse(localStorage.getItem('loggedInUser'));
                 console.log(inStore);
                 setTimeout(redirection(), 2000);
-                toastr.success(respData.message);
+                toastr.success(respData.data.message);
             } else {
                 document.querySelector('.response').style.color = 'red';
-                toastr.error(respData.message);
+                toastr.error(respData.data.message);
             }
         })
     }

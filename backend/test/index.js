@@ -89,11 +89,11 @@ describe('TEST API ENDPOINTS', function () {
         price: 900000,
         body_type: 'car',
         owner: 3,
-        state: 'used',
-        image_url: 'http://res.cloudinary.com/ddf91r8gu/image/upload/v1563011174/ie9ntlp2q9ewz0avbhpx.jpg'
+        state: 'used' // image_url: 'http://res.cloudinary.com/ddf91r8gu/image/upload/v1563011174/ie9ntlp2q9ewz0avbhpx.jpg',
+
       };
       supertest(index).post('/api/v1/car/').set('Authorization', "Bearer ".concat(token)).send(ad).expect('Content-type', /json/).end(function (err, res) {
-        res.body.message.should.equal('Posted successfully');
+        res.body.data.message.should.equal('Posted successfully');
         res.status.should.equal(200);
         res.error.should.equal(false);
         done();

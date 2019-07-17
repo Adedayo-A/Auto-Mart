@@ -367,6 +367,7 @@ var getadsByOwner = function getadsByOwner(req, res) {
 
 var postCar = function postCar(req, res) {
   var newAd = req.body;
+  var created_on = newAd.Date.now();
   var price = newAd.price;
   var door = newAd.door;
   door = door || null;
@@ -420,12 +421,20 @@ var postCar = function postCar(req, res) {
               });
               pg.end();
             } else {
+              console.log(dbRes);
+              var id = owner;
+              var manufacturer = newAd.manufacturer;
+              var model = newAd.model;
               res.json({
+                status: 200,
                 data: {
                   state: 'success',
-                  status: 200,
                   message: 'Posted successfully',
-                  new_ad: new_ad
+                  id: id,
+                  email: email,
+                  created_on: created_on,
+                  manufacturer: manufacturer,
+                  model: model
                 }
               });
               pg.end();
