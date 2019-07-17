@@ -33,9 +33,9 @@ document.addEventListener('DOMContentLoaded', () => {
             localStorage.clear();
             window.location.href = 'signinpage.html';
         } else {
-            const token = inStore.token;
+            const { token } = inStore.data;
             const data = {
-                token: token,
+                token,
             }
             httpPost(path, data, (err, respData, xhttp) => {
                 console.log(respData);
@@ -43,7 +43,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     console.log(err);
                 }  else if (respData.status === 200) {
                         console.log('still on');
-                }  else if (respData.status === 403) {
+                }  else if (respData.status === 401) {
                     toastr.info('session expired');
                     localStorage.clear();
                     window.location.href = "signinpage.html";
@@ -87,21 +87,24 @@ document.addEventListener('DOMContentLoaded', () => {
         httpGet(path, (err, respData, xhttp) => {
             if (err) {
                 console.log(err);
+            } else if (respData.status === 401) {
+                toastr.info('session expired');
+                window.location.href = "signinpage.html";
             } else {
                 console.log(respData);
-                document.querySelector('.status').value = respData.carad[0].status || '';
-                document.querySelector('.state').value = respData.carad[0].state || '';
-                document.querySelector('.manufacturer').value = respData.carad[0].manufacturer || '';
-                document.querySelector('.model').value = respData.carad[0].model || '';
-                document.querySelector('.body_type').value = respData.carad[0].body_type || '';
-                document.querySelector('.amount').value = respData.carad[0].price || '';
-                document.querySelector('.ext_col').value = respData.carad[0].ext_col || '';
-                document.querySelector('.int_col').value = respData.carad[0].int_col || '';
-                document.querySelector('.transmission').value = respData.carad[0].transmission || '';
-                document.querySelector('.mileage').value = respData.carad[0].mileage || '';
-                document.querySelector('.doors').value = respData.carad[0].door || '';
-                document.querySelector('.description').value = respData.carad[0].description || '';
-                document.querySelector('.preview').src = respData.carad[0].image_url || '';        
+                document.querySelector('.status').value = respData.data.car_ad[0].status || '';
+                document.querySelector('.state').value = respData.data.car_ad[0].state || '';
+                document.querySelector('.manufacturer').value = respData.data.car_ad[0].manufacturer || '';
+                document.querySelector('.model').value = respData.data.car_ad[0].model || '';
+                document.querySelector('.body_type').value = respData.data.car_ad[0].body_type || '';
+                document.querySelector('.amount').value = respData.data.car_ad[0].price || '';
+                document.querySelector('.ext_col').value = respData.data.car_ad[0].ext_col || '';
+                document.querySelector('.int_col').value = respData.data.car_ad[0].int_col || '';
+                document.querySelector('.transmission').value = respData.data.car_ad[0].transmission || '';
+                document.querySelector('.mileage').value = respData.data.car_ad[0].mileage || '';
+                document.querySelector('.doors').value = respData.data.car_ad[0].door || '';
+                document.querySelector('.description').value = respData.data.car_ad[0].description || '';
+                document.querySelector('.preview').src = respData.data.car_ad[0].image_url || '';        
             }
         })
     }
@@ -148,12 +151,12 @@ document.addEventListener('DOMContentLoaded', () => {
             } else if (respData.status === 200) {
                 console.log(respData);
                 // GOOD DATA
-                toastr.success(respData.message);
                 window.location.href = "myads.html";
+                toastr.success(respData.data.message);
             } else {
                 console.log(respData);
                 // BAD DATA
-                toastr.error(respData.message);
+                toastr.error(respData.error.message);
             }
         });
     }

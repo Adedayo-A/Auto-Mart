@@ -89,11 +89,11 @@ document.addEventListener('DOMContentLoaded', () => {
     // SUBMIT PURCHASE ORDER
     document.querySelector('.order').onsubmit = (e) => {
         e.preventDefault();
-        const amount = document.querySelector('.price').value;
+        const price_offered = document.querySelector('.price').value;
         const description = document.querySelector('.description').value;
 
         const data = {
-            amount,
+            price_offered,
             description,
         } 
         const postId = window.location.search.slice(1).split("&")[0].split("=")[1];
@@ -108,12 +108,12 @@ document.addEventListener('DOMContentLoaded', () => {
             } else if (response.status === 200) {
                 console.log(response);
                 // GOOD DATA
-                toastr.success(response.message);
+                toastr.success(response.data.message);
                 window.location.href = "ads.html";
             } else {
                 console.log(response);
                 // BAD DATA
-                toastr.error(response.message);
+                toastr.error(response.error.message);
             }
         });
     }

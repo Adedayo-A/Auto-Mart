@@ -41,9 +41,9 @@ function checkFileType(file, cb) {
 
   if (mimetype && extname) {
     return cb(null, true);
-  } else {
-    cb('Error: Images Only!');
   }
+
+  cb('Error: Images Only!');
 }
 
 var imgUploader = function imgUploader(req, res) {
@@ -51,45 +51,52 @@ var imgUploader = function imgUploader(req, res) {
     var email = authData.user.email;
 
     if (err) {
-      res.status(403).json({
-        message: 'error..invalid token'
+      res.status(401).json({
+        error: {
+          message: 'error..invalid token'
+        }
       });
     } else {
       upload(req, res, function (err) {
         if (err) {
-          console.log('error ' + err);
-          res.send({
-            msg: err
+          console.log("error ".concat(err));
+          res.status(500).json({
+            error: {
+              msg: err
+            }
+          });
+        } else if (req.file === undefined) {
+          res.status(401).json({
+            data: {
+              msg: 'Error: No File Selected!'
+            }
           });
         } else {
-          if (req.file == undefined) {
-            console.log('undefined');
-            res.send({
-              msg: 'Error: No File Selected!'
-            });
-          } else {
-            var file = "public/uploads/".concat(req.file.filename);
-            cloudinary.uploader.upload(file, {
-              tags: 'gotemps',
-              resource_type: 'auto'
-            }).then(function (file) {
-              console.log('Public id of the file is  ' + file.public_id);
-              console.log('Url of the file is  ' + file.url);
-              var image_url = file.url; // save the url to your model
-
-              console.log('uploaded');
-              console.log(image_url);
-              res.send({
+          var file = "public/uploads/".concat(req.file.filename);
+          cloudinary.uploader.upload(file, {
+            tags: 'gotemps',
+            resource_type: 'auto'
+          }).then(function (file) {
+            console.log("Public id of the file is ".concat(file.public_id));
+            console.log("Url of the file is  ".concat(file.url));
+            var image_url = file.url;
+            res.status.json({
+              data: {
                 msg: 'File Uploaded!',
                 image_url: image_url
-              });
-            })["catch"](function (err) {
-              if (err) {
-                console.warn('error heere' + err);
               }
             });
-          }
-        }
+          })["catch"](function (err) {
+            if (err) {
+              res.status(500).json({
+                error: {
+                  msg: err
+                }
+              });
+            }
+          });
+        } // }
+
       });
     }
   });

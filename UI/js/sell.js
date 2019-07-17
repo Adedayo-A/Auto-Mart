@@ -108,7 +108,19 @@ document.addEventListener('DOMContentLoaded', () => {
                 // toastr.success('respData.message');
             }
         })
-    })
+    });
+
+    // SELECT FIELD MANIPULATION
+    const select = document.querySelector('.select-status');
+
+    const sel_man = () => {
+        if (select.value === "") {
+            document.querySelector('.sold').style.display = 'none';
+        } else {
+            document.querySelector('.sold').style.display = 'block';
+        }
+    }
+    sel_man();
 
     // FORM SUBMIT
     document.querySelector('.post').onsubmit = (e) => {
@@ -151,7 +163,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 console.log(respData);
                 // GOOD DATA
                 toastr.success(respData.message);
-                window.location.href = "ads.html";
+                // window.location.href = "ads.html";
             } else {
                 console.log(respData);
                 // BAD DATA

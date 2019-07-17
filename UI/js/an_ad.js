@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // VERIFY TOKEN 
-    const tokenVerify = () => {
+    const token_verify = () => {
         const path = '/api/v1/users/auth/tokenverify';
         const inStore = JSON.parse(localStorage.getItem('loggedInUser'));
         console.log(inStore);
@@ -34,9 +34,9 @@ document.addEventListener('DOMContentLoaded', () => {
             localStorage.clear();
             window.location.href = 'signinpage.html';
         } else {
-            const token = inStore.token;
+            const { token } = inStore.data;
             const data = {
-                token: token,
+                token,
             }
             httpPost(path, data, (err, respData, xhttp) => {
                 console.log(respData);
@@ -44,7 +44,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     console.log(err);
                 }  else if (respData.status === 200) {
                         console.log('still on');
-                }  else if (respData.status === 403) {
+                }  else if (respData.status === 401) {
                     toastr.info('session expired');
                     localStorage.clear();
                     window.location.href = "signinpage.html";
@@ -52,7 +52,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
     }
-    tokenVerify();
+    token_verify();
 
     // SIGN OUT
     document.querySelector('.sign-out').onclick = () => {
@@ -93,7 +93,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // GET SPECIFIC AD
-    const getanAd = () => {
+    const getAnAd = () => {
         const postId = window.location.search.slice(1).split("&")[0].split("=")[1];
         console.log(postId);
         path = `/api/v1/car/${postId}`;
@@ -104,14 +104,14 @@ document.addEventListener('DOMContentLoaded', () => {
             } else if (response.status === 401) {
                 toastr.info('session expired');
                 window.location.href = "signinpage.html";
-            } else if (response.state === 'success') {
+            } else if (response.data.state === 'success') {
                 console.log(response);
-                toastr.info(response.message);
-                const cars = response.carad;
+                // toastr.info(response.data.message);
+                const cars = response.data.car_ad;
                 let output = '';
                 for (var i in cars) {
                     const adId = cars[i].id || 'N/A';
-                    const delButton = `<button class="deleteone" value="${adId}"> Delete AD </button>`;
+                    const delButton = `<button class="deleteone" value=${adId}> Delete AD </button>`;
                     const int_color = cars[i].int_color || 'N/A';
                     const image = cars[i].image_url || 'N/A';
                     const price = cars[i].state || 'N/A';
@@ -125,8 +125,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     const door = cars[i].door || 'N/A';
                     const description = cars[i].description || 'N/A';
                     const status = cars[i].status || 'N/A';
-
-
                     output += 
                      `<div class="div-result-wrap wrap-all">
                             <div class="wrapper-result one">
@@ -148,11 +146,11 @@ document.addEventListener('DOMContentLoaded', () => {
                                             <span> Availability: ${status} </span>
                                         </p>
                                         <p>
-                                            <button class="viewone"><a href="editad.html?adId=${adId}">Make a purchase order</a></button>
+                                            <button class="viewone"><a href="purchase-order.html?adId=${adId}">Make a purchase order</a></button>
                                         </p>
                                         <p>
-                                            <button class="editone">Flag</button>
-                                            ${inStore.admin ? delButton: ''}
+                                            <button class="editone"><a href="flag.html?adId=${adId}">Flag</a></button>
+                                            ${inStore.data.admin ? delButton: ''}
                                         </p>
                                     </div>
                                 </div>
@@ -163,21 +161,21 @@ document.addEventListener('DOMContentLoaded', () => {
                     console.log('targ');
                     const targ = e.target.value;
                     console.log(targ);
-                    const path = `/api/v1/car/${targ}/`;
+                    const path = `/api/v1/car/${targ}`;
                     httpDelete( path, (err, response, xhttp) => {
                         if (err) {
                             toastr.error('An error occured');
                             console.log(err);
                         } else {
                             console.log(response);
-                            toastr.success(response.message);
+                            toastr.success(response.data.message);
                             window.location.href = '../index.html';
                         }
                     })
                 }
                 
                 document.querySelector('.section-result').innerHTML = output;
-                if (inStore.admin) {
+                if (inStore.data.admin) {
                     document.querySelector('.deleteone').onclick = deleteAd;
                 }
             } else {
@@ -186,5 +184,5 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         })
     }
-    getanAd();
+    getAnAd();
 });

@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // VERIFY TOKEN 
-    const tokenVerify = () => {
+    const token_verify = () => {
         const path = '/api/v1/users/auth/tokenverify';
         const inStore = JSON.parse(localStorage.getItem('loggedInUser'));
         console.log(inStore);
@@ -34,17 +34,18 @@ document.addEventListener('DOMContentLoaded', () => {
             localStorage.clear();
             window.location.href = 'signinpage.html';
         } else {
-            const token = inStore.token;
+            const { token } = inStore.data;
+            console.log(token);
             const data = {
-                token: token,
+                token,
             }
             httpPost(path, data, (err, respData, xhttp) => {
                 console.log(respData);
                 if (err) {
                     console.log(err);
                 }  else if (respData.status === 200) {
-                        console.log('still on');
-                }  else if (respData.status === 403) {
+                    console.log('still on');
+                }  else if (respData.status === 401) {
                     toastr.info('session expired');
                     localStorage.clear();
                     window.location.href = "signinpage.html";
@@ -52,7 +53,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
     }
-    tokenVerify();
+    token_verify();
 
     // SIGN OUT
     document.querySelector('.sign-out').onclick = () => {
@@ -92,7 +93,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // GET SPECIFIC ORDER
-    const getanOrder = () => {
+    const get_an_order = () => {
         const postId = window.location.search.slice(1).split("&")[0].split("=")[1];
         console.log(postId);
         const path = `/api/v1/order/${postId}`;
@@ -103,10 +104,9 @@ document.addEventListener('DOMContentLoaded', () => {
             } else if (response.status === 401) {
                 toastr.info('session expired');
                 window.location.href = "signinpage.html";
-            } else if (response.state === 'success') {
+            } else if (response.data.state === 'success') {
                 console.log(response);
-                toastr.info(response.message);
-                const orderdetails = response.order;
+                const orderdetails = response.data.order;
                 let output = '';
                 for (var i in orderdetails) {
                     const orderId = orderdetails[i].id || 'N/A';
@@ -129,7 +129,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                     <h4 class="first-heading-card-stories"> Car id: ${carId} </h4>
                                     <h4 class="first-heading-card-stories"> Manufacturer: ${manufacturer} </h4>
                                     <h4 class="first-heading-card-stories"> Model: ${model} </h4>
-                                    <h4 class="first-heading-card-stories"> Status of Order: ${orderdetails[i].status} </h4>
+                                    <h4 class="first-heading-card-stories"> Status of Order: ${status} </h4>
                                     <h3 class="heading-price-card-stories"> Price Offered: ${priceOffered} </h3>
                                 </div>
                                 <p class="para-delete-card-stories">
@@ -141,7 +141,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     </div>`
                 }
                 document.querySelector('.section-result').innerHTML = output;
-                const deleteOrder = (e) => {
+                const delete_order = (e) => {
                     const targ = e.target.value;
                     const path = `/api/v1/order/${targ}/`;
                     httpDelete( path, (err, response, xhttp) => {
@@ -149,12 +149,13 @@ document.addEventListener('DOMContentLoaded', () => {
                             toastr.error('An error occured');
                             console.log(err);
                         } else {
-                            toastr.success(response.message)
+                            toastr.success(response.data.message)
                             window.location.href = 'myorders.html';
                         }
                     })
                 }
-                document.querySelector('.delete').onclick = deleteOrder;
+                document.querySelector('.delete').onclick = delete_order;
+                toastr.info(response.data.message);
                 
             } else {
                 console.log(response);
@@ -162,5 +163,5 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         })
     }
-    getanOrder(); 
+    get_an_order(); 
 });

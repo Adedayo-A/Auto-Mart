@@ -17,7 +17,7 @@
             <li><a class="need-user-link post-car" href="sell.html">Post a car sale</a></li>
             <!-- <li><a class="need-user-link post-order" href="purchase-order.html">Make a purchase order</a></li> -->
             <li><a class="need-user-link" href="myorders.html">My Orders</a></li>
-            <li><a class="need-user-link" href="mycaroders.html">My Car Orders</a></li>
+            <li><a class="need-user-link" href="mycarorders.html">My Car Orders</a></li>
             <li><a class="need-user-link" href="myads.html">My Ads</a></li>
         </ul>
         <ul class="svg need-user">
@@ -48,10 +48,10 @@
                 <fieldset>
                     <label>Status</label>
                     <div>
-                        <select name="status" class="status" required>
-                            <option value="">Select status of vehicle</option>
+                        <select name="status" class="select-status" required>
+                            <option value="" class="sel-status" selected >Select status of vehicle</option>
                             <option value="available">Available</option>
-                            <option value="sold">Sold</option>
+                            <option value="sold" class="sold">Sold</option>
                         </select>
                     </div>
                 </fieldset>
@@ -165,7 +165,7 @@
                     <label>Add Image</label>
                     <small>(To select multiple files, hold down hold down the CTRL or SHIFT key while selecting.)</small>
                     <div>
-                        <input type="file" accept="images" name="image/*" class="file-upload" multiple required>
+                        <input type="file" accept="images" name="image/*" class="file-upload" multiple />
                         <img src="" class="preview" />
                     </div>
                 </fieldset>

@@ -33,9 +33,9 @@ document.addEventListener('DOMContentLoaded', () => {
             localStorage.clear();
             window.location.href = 'signinpage.html';
         } else {
-            const token = inStore.token;
+            const { token } = inStore.data;
             const data = {
-                token: token,
+                token,
             }
             httpPost(path, data, (err, respData, xhttp) => {
                 console.log(respData);
@@ -85,12 +85,12 @@ document.addEventListener('DOMContentLoaded', () => {
             if (err) {
                 console.log(err);
             } else if (respData.status === 401){
-                toastr.success(respData.message);
+                toastr.success(respData.error.message);
                 window.location.href = "signinpage.html";
             } else {
                 console.log(respData)
-                document.querySelector('.price').value = respData.order[0].amount;
-                document.querySelector('.description').value = respData.order[0].description;
+                document.querySelector('.price').value = respData.data.order[0].amount;
+                document.querySelector('.description').value = respData.data.order[0].description;
             }
         })
     }
@@ -98,11 +98,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     document.querySelector('.order').onsubmit = (e) => {
         e.preventDefault();
-        const amount = document.querySelector('.price').value;
+        const price_offered = document.querySelector('.price').value;
         const description = document.querySelector('.description').value;
 
         const data = {
-            amount,
+            price_offered,
             description,
         }
         const orderId = window.location.search.slice(1).split("&")[0].split("=")[1];
@@ -112,13 +112,13 @@ document.addEventListener('DOMContentLoaded', () => {
             if (err) {
                 console.log(err);
             } else if (respData.status === 401){
-                toastr.success(respData.message);
+                toastr.success(respData.error.message);
                 window.location.href = "signinpage.html";
             } else if (respData.status === 200) {
-                toastr.success(respData.message);
                 window.location.href = "myorders.html";
+                toastr.success(respData.data.message);
             } else {
-                toastr.error(respData.message);
+                toastr.error(respData.error.message);
             }
         });
     }
