@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const path = '/api/v1/users/auth/tokenverify';
         const inStore = JSON.parse(localStorage.getItem('loggedInUser'));
         console.log(inStore);
-        if (inStore == null) {
+        if (inStore === null) {
             console.log('token expired');
             toastr.info('session expired, please login');
             localStorage.clear();
@@ -92,6 +92,9 @@ document.addEventListener('DOMContentLoaded', () => {
         httpGet(path, (err, respData, xhttp) => {
             if (err) {
                 console.log(err);
+            } else if (respData.status == 401) {
+                toastr.error(respData.error.message);
+                window.location.href = signinpage.html;
             } else if (respData.data.first_name === null || respData.data.last_name === null || respData.data.address === null) {
                 console.log(respData);
                 toastr.info('Please complete your profile in order to post your car!!');

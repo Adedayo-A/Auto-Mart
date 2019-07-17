@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
             localStorage.clear();
             window.location.href = 'UI/signinpage.html';
         } else {
-            const token = inStore.token;
+            const { token } = inStore.data;
             const data = {
                 token: token,
             }
@@ -42,7 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     console.log(err);
                 }  else if (respData.status === 200) {
                         console.log('still on');
-                }  else if (respData.status === 403) {
+                }  else if (respData.status === 401) {
                     toastr.info('session expired');
                     localStorage.clear();
                     window.location.href = "signinpage.html";
@@ -99,11 +99,12 @@ document.addEventListener('DOMContentLoaded', () => {
         const path = '/api/v1/upload/';
 
         httpPostImage(path, formData, (err, respData, xhttp) => {
+            console.log(respData);
             if(err) {
                 console.log(err);
             } else {
                 console.log(respData);
-                document.querySelector('.preview').src = respData.image_url;
+                document.querySelector('.preview').src = respData.data.image_url;
                 // GOOD DATA
                 // toastr.success('respData.message');
             }
@@ -125,7 +126,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // FORM SUBMIT
     document.querySelector('.post').onsubmit = (e) => {
         e.preventDefault();
-        const status = document.querySelector('.status').value;
+        const status = document.querySelector('.select-status').value;
         const state = document.querySelector('.state').value;
         const manufacturer = document.querySelector('.manufacturer').value;
         const model = document.querySelector('.model').value;
@@ -162,12 +163,12 @@ document.addEventListener('DOMContentLoaded', () => {
             } else if (respData.status === 200) {
                 console.log(respData);
                 // GOOD DATA
-                toastr.success(respData.message);
-                // window.location.href = "ads.html";
+                toastr.success(respData.data.message);
+                window.location.href = "myads.html";
             } else {
                 console.log(respData);
                 // BAD DATA
-                toastr.error(respData.message);
+                toastr.error(respData.data.message);
             }
         });
     }
