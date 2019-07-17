@@ -68,6 +68,7 @@ var signUp = function signUp(req, res) {
               if (err) {
                 console.log(err.stack);
                 res.status(500).json({
+                  status: error,
                   error: {
                     message: 'error encountered'
                   }
@@ -187,6 +188,7 @@ var updateUser = function updateUser(req, res) {
   jwt.verify(req.token, process.env.JWT_KEY, function (err, authData) {
     // eslint-disable-next-line prefer-destructuring    
     if (err) {
+      console.log(err);
       res.status(401).json({
         status: 401,
         error: {
@@ -211,7 +213,7 @@ var updateUser = function updateUser(req, res) {
               message: 'error..'
             }
           });
-          console.error(err);
+          console.log(err);
           pg.end();
         } else if (dbres.rowCount === 0) {
           res.status(403).json({
@@ -223,7 +225,7 @@ var updateUser = function updateUser(req, res) {
         } else {
           query = 'SELECT * FROM users WHERE email = $1';
           value = [email];
-          pg.query(query, value, function (err, dbres) {
+          pg.query(query, value, function (err, dbresp) {
             if (err) {
               console.log(err.stack);
               res.status(500).json({
@@ -233,19 +235,22 @@ var updateUser = function updateUser(req, res) {
               });
               pg.end();
             } else {
-              var username = dbres.rows[0].first_name;
+              var username = dbresp.rows[0].first_name;
+              var is_admin = dbresp.rows[0].is_admin;
 
               if (username === null) {
                 username = 'user';
               }
 
               res.status(200).send({
+                status: 200,
                 data: {
                   username: username,
                   state: 'success',
                   status: 200,
                   message: 'Profile updated',
-                  token: token
+                  token: token,
+                  is_admin: is_admin
                 }
               });
               pg.end();
@@ -259,11 +264,12 @@ var updateUser = function updateUser(req, res) {
 
 
 var getAUser = function getAUser(req, res) {
+  console.log(req);
+  console.log(res);
   jwt.verify(req.token, process.env.JWT_KEY, function (err, authData) {
-    var token = req.token.token;
-
     if (err) {
-      res.status(403).json({
+      res.status(401).json({
+        status: 401,
         error: {
           message: 'error..invalid token'
         }
@@ -288,11 +294,12 @@ var getAUser = function getAUser(req, res) {
           console.log(err);
           pg.end();
         } else {
-          var data = dbres.rows[0];
-          var email = data.email,
-              first_name = data.first_name,
-              last_name = data.last_name,
-              address = data.address;
+          var userdata = dbres.rows[0];
+          var email = userdata.email,
+              first_name = userdata.first_name,
+              last_name = userdata.last_name,
+              address = userdata.address,
+              token = userdata.token;
           res.status(200).json({
             status: 200,
             data: {
