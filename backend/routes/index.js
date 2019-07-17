@@ -1,8 +1,11 @@
 "use strict";
 
-var express = require('express');
+var express = require('express'); // import exprress from 'express'
 
-var carControllers = require('../controllers/cars.js');
+
+var carControllers = require('../controllers/cars.js'); // import * as userControllers from ''
+// import { verifyUser } from ''
+
 
 var userControllers = require('../controllers/users.js');
 
@@ -65,12 +68,13 @@ router.post('/auth/signin', verifyUser); // ORDERS API ROUTES
 router.get('/api/v1/order/user', tokenAuth, getMyOrders);
 router.get('/api/v1/order/:orderid', tokenAuth, getAnOrder);
 router.post('/api/v1/order/:id', tokenAuth, postOrder);
-router.post('/order', tokenAuth, postOrder);
+router.post('/order/:id', tokenAuth, postOrder);
 router.patch('/api/v1/order/:id/', tokenAuth, patchOrder);
 router.patch('/order/:id/price', tokenAuth, patchOrder);
 router["delete"]('/api/v1/order/:id/', tokenAuth, deleteOrder); // FLAGS API ROUTES
 
-router.post('/api/v1/flag/:id', tokenAuth, postFlag); // IMG API ROUTES
+router.post('/api/v1/flag/:id', tokenAuth, postFlag);
+router.post('/flag/:id', tokenAuth, postFlag); // IMG API ROUTES
 
 router.post('/api/v1/upload/', tokenAuth, imgUploader);
-module.exports = router;
+module.exports = router; // export default router

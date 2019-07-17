@@ -43,8 +43,7 @@ var postOrder = function postOrder(req, res) {
           var newOrder = req.body;
           var car_id = req.params.id;
           var description = newOrder.description;
-          var amount = newOrder.amount;
-          console.log(amount);
+          var amount = newOrder.price_offered;
           var status = 'pending';
           query = 'SELECT * FROM carads WHERE id = $1';
           value = [car_id];
@@ -250,12 +249,13 @@ var patchOrder = function patchOrder(req, res) {
 
       pg.query(query, value, function (err, dbres) {
         if (err) {
+          console.error(err);
           res.status(500).json({
+            status: 500,
             error: {
               message: 'error..'
             }
           });
-          console.error(err);
           pg.end();
         } else {
           currUser = dbres.rows[0].id;
@@ -273,6 +273,7 @@ var patchOrder = function patchOrder(req, res) {
               pg.end();
             } else if (dbresp.rows.length === 0) {
               res.status(200).json({
+                status: 200,
                 data: {
                   message: 'No order found'
                 }
@@ -281,16 +282,18 @@ var patchOrder = function patchOrder(req, res) {
             } else {
               // eslint-disable-next-line prefer-destructuring
               buyer = dbresp.rows[0].buyer;
+              var priceOffered = order.price_offered;
 
               if (currUser === buyer) {
                 query = 'UPDATE purchaseorder SET amount=$1';
-                value = [order.amount]; // eslint-disable-next-line consistent-return
+                value = [priceOffered]; // eslint-disable-next-line consistent-return
                 // eslint-disable-next-line no-unused-vars
 
                 pg.query(query, value, function (err, dbresponse) {
                   if (err) {
-                    // console.error(err);
+                    console.error(err);
                     res.status(500).json({
+                      status: 500,
                       error: {
                         message: 'An error occured, Please check input!!!'
                       }
@@ -298,6 +301,7 @@ var patchOrder = function patchOrder(req, res) {
                     pg.end();
                   } else {
                     res.status(200).json({
+                      status: 200,
                       data: {
                         status: 200,
                         message: 'Order updated successfully!!',

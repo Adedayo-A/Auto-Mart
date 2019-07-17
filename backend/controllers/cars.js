@@ -106,6 +106,7 @@ var getCars = function getCars(req, res) {
             pg.end();
           } else if (dbres.rows.length === 0) {
             res.status(200).json({
+              status: 200,
               data: {
                 message: 'No car found!!!'
               }
@@ -131,6 +132,7 @@ var getCars = function getCars(req, res) {
           if (err) {
             console.log(err);
             res.status(500).json({
+              status: 500,
               error: {
                 message: 'error encountered'
               }
@@ -512,14 +514,15 @@ var patchCar = function patchCar(req, res) {
               owner = dbres.rows[0].owner;
 
               if (currUser === owner) {
-                query = 'UPDATE carads SET status=$1, price=$2, manufacturer=$3, model=$4, body_type=$5, owner=$6, state=$7, image_url=$8 WHERE id=$9';
-                value = [ad.status, ad.price, ad.manufacturer, ad.model, ad.body_type, owner, ad.state, ad.image_url, adId]; // eslint-disable-next-line consistent-return
+                query = 'UPDATE carads SET status=$1, price=$2 WHERE id=$3';
+                value = [ad.status, ad.price, adId]; // eslint-disable-next-line consistent-return
                 // eslint-disable-next-line no-unused-vars
 
                 pg.query(query, value, function (err, dbresponse) {
                   if (err) {
                     console.error(err);
                     res.status(500).json({
+                      status: 500,
                       error: {
                         message: 'An error occured, Please check input!!!'
                       }
@@ -527,6 +530,7 @@ var patchCar = function patchCar(req, res) {
                     pg.end();
                   } else {
                     res.status(200).json({
+                      status: 200,
                       data: {
                         state: 'success',
                         status: 200,
