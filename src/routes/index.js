@@ -35,7 +35,7 @@ router.get('/car/', tokenAuth, getCars);
 router.get('/api/v1/car/:id', tokenAuth, getCar);
 router.get('/car/:id', tokenAuth, getCar);
 router.post('/api/v1/car/', tokenAuth, postCar);
-router.post('/car', tokenAuth, postCar);
+router.post('/car/', tokenAuth, postCar);
 router.patch('/api/v1/car/:id/', tokenAuth, patchCar);
 router.patch('/car/:id/status', tokenAuth, patchCar);
 router.patch('/car/:id/price', tokenAuth, patchCar);

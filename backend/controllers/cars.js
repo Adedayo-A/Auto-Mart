@@ -415,6 +415,7 @@ var postCar = function postCar(req, res) {
             if (err) {
               console.error(err);
               res.status(500).json({
+                status: 500,
                 error: {
                   message: 'error..'
                 }
