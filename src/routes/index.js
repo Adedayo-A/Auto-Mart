@@ -52,7 +52,7 @@ router.post('/auth/signup', validateInfo, signUp);
 router.post('/api/v1/users/auth/signin', verifyUser);
 router.get('/api/v1/users/auth/getuser', tokenAuth, getAUser);
 router.post('/api/v1/users/auth/tokenverify', tokenVerify);
-router.post('/auth/signin', tokenVerify);
+router.post('/auth/signin', verifyUser);
 
 
 // ORDERS API ROUTES

@@ -60,7 +60,7 @@ router.post('/auth/signup', validateInfo, signUp);
 router.post('/api/v1/users/auth/signin', verifyUser);
 router.get('/api/v1/users/auth/getuser', tokenAuth, getAUser);
 router.post('/api/v1/users/auth/tokenverify', tokenVerify);
-router.post('/auth/signin', tokenVerify); // ORDERS API ROUTES
+router.post('/auth/signin', verifyUser); // ORDERS API ROUTES
 
 router.get('/api/v1/order/user', tokenAuth, getMyOrders);
 router.get('/api/v1/order/:orderid', tokenAuth, getAnOrder);
