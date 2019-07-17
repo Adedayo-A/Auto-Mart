@@ -1,7 +1,10 @@
 document.addEventListener('DOMContentLoaded', () => {
     const lineTwo = document.querySelector('.line-two');
     const line = document.querySelector('.line');
+    const inStore = JSON.parse(localStorage.getItem('loggedInUser'));
 
+    
+    // DISPLAY SIGNIN AND SIGN UP
     document.querySelector('.log-in').onclick = () => {
         line.style.display = 'block';
         lineTwo.style.display = 'none';
@@ -16,6 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
         document.querySelector('.registration-form').style.display = 'block';
     }
 
+    // USER SVG ON CLICK
     const arrowUp = document.querySelector('.arrow-up');
     const dropDown = document.querySelector('.dropdown');
     const body = document.querySelector('.body');
@@ -32,10 +36,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 mainIndex.className = "main-index";
         }
     }
-
-
     
-
+    // CONFIRM PASSWORD VERIFICATION
     const password = document.querySelector('.password-value');
     const searchBoxConfirmPassword = document.querySelector('.search-confirm-password');
     const email = document.querySelector('.email-value');
@@ -53,10 +55,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    const redirection = () => {
-        window.location.href = "../index.html";
-    }
-
+    // FORM VALIDATION EMAIL AND PASSWORD
     const checkform = () => {
       if (email.value === "") {
         toastr.error("Error: Email cannot be blank!");
@@ -105,7 +104,13 @@ document.addEventListener('DOMContentLoaded', () => {
       toastr.success(password.value);
     }
 
+    // REDIRECT TO HOMEPAGE
+    const redirection = () => {
+        window.location.href = "../index.html";
+    }
 
+    // FORMS
+    // SIGN UP FORM
     const signupForm = document.querySelector('.registration-form');    
     document.querySelector('.registration-form').onsubmit = (e) => {
         e.preventDefault();
@@ -118,7 +123,6 @@ document.addEventListener('DOMContentLoaded', () => {
         console.log(email.value);
         const path = '/api/v1/users/auth/signup';
         httpPost(path, data, (err, respData, xhttp) => {
-            console.log(respData);
             if (err) {
                 console.log(err);
             }  else if (respData.status === 200) {
@@ -127,18 +131,19 @@ document.addEventListener('DOMContentLoaded', () => {
                 localStorage.setItem('loggedInUser', JSON.stringify(respData));
                 redirection();
             } else {
-                toastr.error(respData.message);
+                toastr.error(respData.error.message);
                 document.querySelector('.response').style.color = 'red';
             }
         });    
     }
 
-    const response = (element, data) => {
-        element.innerHTML = data.message;
+    // RESPONSE FROM DATABASE
+    const response = (element, resbody) => {
+        element.innerHTML = resbody.data.message;
     }
-
     const notificationPort = document.querySelector('.response')
 
+    // LOGIN FORM
     document.querySelector('.login-form').onsubmit = (e) => {
         e.preventDefault();
         const data = {
@@ -153,18 +158,19 @@ document.addEventListener('DOMContentLoaded', () => {
             if(err) {
                 console.log(err);
             } else if (respData.status === 200) {
-                localStorage.setItem('loggedInUser', JSON.stringify(respData.data));
+                localStorage.setItem('loggedInUser', JSON.stringify(respData));
                 const inStore = JSON.parse(localStorage.getItem('loggedInUser'));
                 console.log(inStore);
                 setTimeout(redirection(), 2000);
                 toastr.success(respData.data.message);
             } else {
                 document.querySelector('.response').style.color = 'red';
-                toastr.error(respData.data.message);
+                toastr.error(respData.error.message);
             }
         })
     }
 
+    // USER SESSION AND LOCAL STORAGE VERIFICATION 
     if (localStorage.getItem("loggedInUser") === null) {
         const needUserLink = document.querySelectorAll('.need-user-link');
         needUserLink.forEach((noUserLink) => {
@@ -176,6 +182,7 @@ document.addEventListener('DOMContentLoaded', () => {
             user.style.display = 'none';
         })
     }
+
     const tokenVerify = () => {
         const path = '/api/v1/users/auth/tokenverify';
         const inStore = JSON.parse(localStorage.getItem('loggedInUser'));
@@ -184,7 +191,7 @@ document.addEventListener('DOMContentLoaded', () => {
             toastr.info('session expired, please login');
             localStorage.clear();
         } else {
-            const { token } = inStore;
+            const { token } = inStore.data;
             console.log(token);
             const data = {
                 token,
@@ -200,37 +207,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     localStorage.clear();
                     window.location.href = "signinpage.html";
                     document.querySelector('.message').innerHTML = 'Session Expired! Login required'
-
                 }
             });
         }
     }
     tokenVerify();
 });
-
-
-    // const currPage = document.querySelectorAll('.in-page');
-    // currPage.forEach((page) => {
-    //     page.style.display = 'none';
-    // });
-    // const needUser = document.querySelectorAll('.need-user');
-    // needUser.forEach((user) => {
-    //     user.style.display = 'none';
-    // });
-
-
-    // document.querySelector('.sign-up-pg').onmouseover = () => {
-    //     lineTwo.style.display = 'block';
-    // }
-    
-    // document.querySelector('.log-in').onmouseout = () => {
-    //     line.style.display = 'none';
-    // }
-
-    // document.querySelector('.sign-up-pg').onmouseout = () => {
-    //     lineTwo.style.display = 'none';
-    // }
-    
-    // document.querySelector('.log-in').onmouseout = () => {
-    //     line.style.display = 'none';
-    // }

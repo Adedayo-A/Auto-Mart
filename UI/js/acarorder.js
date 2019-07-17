@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
     } else if (inStore) {
         const inStore = JSON.parse(localStorage.getItem('loggedInUser'));
         console.log(inStore);
-        let firstname = inStore.username;
+        let firstname = inStore.data.username;
         const neednotUser = document.querySelectorAll('.no-user');
         neednotUser.forEach((neednouser)=> {
             neednouser.style.display = 'none';
@@ -34,17 +34,17 @@ document.addEventListener('DOMContentLoaded', () => {
             localStorage.clear();
             window.location.href = 'signinpage.html';
         } else {
-            const token = inStore.token;
+            const { token } = inStore.data;
             const data = {
-                token: token,
+                token,
             }
             httpPost(path, data, (err, respData, xhttp) => {
                 console.log(respData);
                 if (err) {
                     console.log(err);
-                }  else if (respData.status === 200) {
+                }  else if(respData.status === 200) {
                         console.log('still on');
-                }  else if (respData.status === 403) {
+                }  else if(respData.status === 401) {
                     toastr.info('session expired');
                     localStorage.clear();
                     window.location.href = "signinpage.html";
@@ -104,14 +104,14 @@ document.addEventListener('DOMContentLoaded', () => {
             } else if (response.status === 401) {
                 toastr.info('session expired');
                 window.location.href = "signinpage.html";
-            } else if (response.state === 'success') {
+            } else if (response.data.state === 'success') {
                 console.log(response);
-                toastr.info(response.message);
-                const orderdetails = response.order;
+                // toastr.info(response.data.message);
+                const orderdetails = response.data.order;
                 let output = '';
                 for (var i in orderdetails) {
-                    const accept = '<button class="edit"> Accept </button>'
-                    const reject = '<button class=""> Reject </button>'
+                    const accept = '<button class="accept"> Accept </button>'
+                    const reject = '<button class="reject"> Reject </button>'
                     const image = orderdetails[i].image || 'N/A';
                     const carId = orderdetails[i].car_id || 'N/A';
                     const manufacturer = orderdetails[i].manufacturer || 'N/A';
@@ -133,6 +133,10 @@ document.addEventListener('DOMContentLoaded', () => {
                                     <h3 class="heading-price-card-stories"> Price Offered: ${priceOffered} </h3>
                                 </div>
                             </div>
+                            <p class="para-delete-card-stories">
+                                ${!isaccepted ? accept:''}
+                                ${!isaccepted ? reject:''}
+                                </p>
                         </div>
                     </div>`
                 }
@@ -152,12 +156,13 @@ document.addEventListener('DOMContentLoaded', () => {
                             toastr.error('An error occured');
                             console.log(err);
                         } else {
-                            toastr.success(response.message);
-                            window.location.href = 'mycarorders.html';
+                            // window.location.href = 'mycarorders.html';
+                            toastr.success(response.data.message);
                         }
                     });
                 }
                 const statusReject = () => {
+                    console.log('here');
                     const adId = window.location.search.slice(1).split("&")[0].split("=")[1];
                     const path = `/api/v1/car/:${adId}/carorders`;
                     const reject = document.querySelector('.reject').value;
@@ -170,7 +175,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             toastr.error('An error occured');
                             console.log(err);
                         } else {
-                            toastr.success(response.message);
+                            toastr.success(response.data.message);
                             window.location.href = 'mycarorders.html';
                         }
                     });

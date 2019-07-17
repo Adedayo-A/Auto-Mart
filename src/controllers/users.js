@@ -59,6 +59,7 @@ const signUp = (req, res) => {
               if (err) {
                 console.log(err.stack);
                 res.status(500).json({
+                  status: error,
                   error: {
                     message: 'error encountered',
                   },
@@ -172,6 +173,7 @@ const updateUser = (req, res) => {
   jwt.verify(req.token, process.env.JWT_KEY, (err, authData) => {
     // eslint-disable-next-line prefer-destructuring    
     if (err) {
+      console.log(err);
       res.status(401).json({
         status: 401,
         error: {
@@ -181,7 +183,7 @@ const updateUser = (req, res) => {
     } else {
       // eslint-disable-next-line prefer-destructuring
       const token = req.token;
-      const email = authData.user.email;
+      const { email } = authData.user;
       const pg = new Client({
         connectionString: process.env.db_URL,
       });
@@ -196,7 +198,7 @@ const updateUser = (req, res) => {
               message: 'error..',
             },
           });
-          console.error(err);
+          console.log(err);
           pg.end();
         } else if (dbres.rowCount === 0) {
           res.status(403).json({
@@ -208,7 +210,7 @@ const updateUser = (req, res) => {
         } else {
           query = 'SELECT * FROM users WHERE email = $1';
           value = [email];
-          pg.query(query, value, (err, dbres) => {
+          pg.query(query, value, (err, dbresp) => {
             if (err) {
               console.log(err.stack);
               res.status(500).json({
@@ -218,17 +220,20 @@ const updateUser = (req, res) => {
               });
               pg.end();
             } else {
-              let username = dbres.rows[0].first_name;
+              let username = dbresp.rows[0].first_name;
+              const { is_admin } = dbresp.rows[0];
               if (username === null) {
                 username = 'user';
               }
               res.status(200).send({
+                status: 200,
                 data: {
                   username,
                   state: 'success',
                   status: 200,
                   message: 'Profile updated',
                   token,
+                  is_admin,
                 },
               });
               pg.end();
@@ -242,10 +247,12 @@ const updateUser = (req, res) => {
 
 // GET A USER
 const getAUser = (req, res) => {
+  console.log(req);
+  console.log(res);
   jwt.verify(req.token, process.env.JWT_KEY, (err, authData) => {
-    const { token } = req.token;
     if (err) {
-      res.status(403).json({
+      res.status(401).json({
+        status: 401,
         error: {
           message: 'error..invalid token',
         },
@@ -270,10 +277,10 @@ const getAUser = (req, res) => {
           console.log(err);
           pg.end();
         } else {
-          const data = dbres.rows[0];
+          const userdata = dbres.rows[0];
           const {
-            email, first_name, last_name, address,
-          } = data;
+            email, first_name, last_name, address, token,
+          } = userdata;
           res.status(200).json({
             status: 200,
             data: {

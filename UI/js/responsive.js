@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
     } else if (inStore) {
         const inStore = JSON.parse(localStorage.getItem('loggedInUser'));
         console.log(inStore);
-        let firstname = inStore.username;
+        let firstname = inStore.data.username;
         const neednotUser = document.querySelectorAll('.no-user');
         neednotUser.forEach((neednouser)=> {
             neednouser.style.display = 'none';
@@ -33,9 +33,9 @@ document.addEventListener('DOMContentLoaded', () => {
             localStorage.clear();
             window.location.href = 'UI/signinpage.html';
         } else {
-            const token = inStore.token;
+            const { token } = inStore.data;
             const data = {
-                token: token,
+                token,
             }
             httpPost(path, data, (err, respData, xhttp) => {
                 console.log(respData);
@@ -103,7 +103,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ADMIN VIEW SOLD CARS
-    if (!inStore.admin) {
+    if (!inStore.data.admin) {
         document.querySelector('.sold').style.display = 'none';
     } else {
         document.querySelector('.sold').style.display = 'block';
@@ -134,7 +134,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 document.querySelector('.section-search').style.display = 'none';
                 const result = document.querySelector('.section-result')
                 console.log(response);
-                toastr.info(response.data.message);
                 const cars = response.data.car_ad;
                 let output = '';
                 for (var i in cars) {
@@ -186,6 +185,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 document.querySelector('.section-result').innerHTML = output;
                 document.querySelector('.second-background-image').style.display = 'none';
                 result.scrollIntoView();
+                toastr.info(response.data.message);
             } else {
                 console.log(response);
                 toastr.info(response.message);

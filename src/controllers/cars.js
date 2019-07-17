@@ -709,39 +709,64 @@ const updateCarOrders = (req, res) => {
       pg.connect();
       pg.query(query, value, (err, resdb) => {
         if (err) {
+          console.error(err);
           res.status(500).json({
             error: {
               status: 500,
               message: 'error..',
             },
           });
-          console.error(err);
           pg.end();
         } else {
-          const status = req.body.status;
-          const orderid = req.params.id;
           const curruser = resdb.rows[0].id;
-          query = 'UPDATE purchaseorder SET status=LOWER($1) WHERE id = $2';
-          value = [status, orderid, curruser];
-          pg.query(query, value, (err, dbres) => {
-            // const result = dbres.rows[0];/
+          console.log(curruser);
+          const status = req.body.status;
+          const orderid = req.params.id;        
+          query = 'SELECT car_owner FROM purchaseorder WHERE car_id = $1';
+          value = [curruser];
+          pg.query(query, value, (err, resdbo) => {
             if (err) {
+              console.error(err);
               res.status(500).json({
                 error: {
-                  status: 401,
+                  status: 500,
                   message: 'error..',
                 },
               });
-              console.error(err);
               pg.end();
-            } else {
-              res.status(200).json({
-                data: {
-                  status: 200,
-                  message: 'Order Updated',
+            } else if (resdbo.rows.length === 0) {
+              res.status(401).json({
+                status: 401,
+                error: {
+                  status: 401,
+                  message: 'This is not your order! you cannot update this ad..',
                 },
               });
-              pg.end();
+            } else {
+              query = 'UPDATE purchaseorder SET status=LOWER($1) WHERE id = $2';
+              value = [status, orderid];
+              pg.query(query, value, (err, dbres) => {
+                // const result = dbres.rows[0];/
+                if (err) {
+                  console.error(err);
+                  res.status(500).json({
+                    status: 500,
+                    error: {
+                      status: 500,
+                      message: 'error..',
+                    },
+                  });
+                  pg.end();
+                } else {
+                  res.status(200).json({
+                    data: {
+                      status: 200,
+                      message: 'Order Updated',
+                    },
+                  });
+                  pg.end();
+                }
+              });
             }
           });
         }
@@ -749,7 +774,7 @@ const updateCarOrders = (req, res) => {
     }
   });
 };
-
+  
 module.exports = {
   getCars,
   getCar,

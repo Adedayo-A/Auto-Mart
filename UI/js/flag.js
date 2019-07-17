@@ -31,12 +31,11 @@ document.addEventListener('DOMContentLoaded', () => {
             localStorage.clear();
             window.location.href = 'signinpage.html';
         } else {
-            const token = inStore.token;
+            const { token } = inStore.data;
             const data = {
-                token: token,
+                token,
             }
             httpPost(path, data, (err, respData, xhttp) => {
-                console.log(respData);
                 if (err) {
                     console.log(err);
                 }  else if (respData.status === 200) {
@@ -73,6 +72,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    // FLAG SUBMIT
     document.querySelector('.report').onsubmit = (e) => {
         e.preventDefault();
         const info = document.querySelector('.info').value;
@@ -92,12 +92,12 @@ document.addEventListener('DOMContentLoaded', () => {
             } else if (response.status === 200) {
                 console.log(response);
                 // GOOD DATA
-                toastr.success(response.message);
+                toastr.success(response.data.message);
                 window.location.href = "../index.html";
             } else {
                 console.log(response);
                 // BAD DATA
-                toastr.error(response.message);
+                toastr.error(response.error.message);
             }
         });
     }

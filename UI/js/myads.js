@@ -27,16 +27,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const tokenVerify = () => {
         const path = '/api/v1/users/auth/tokenverify';
         const inStore = JSON.parse(localStorage.getItem('loggedInUser'));
-        console.log(inStore);
         if (inStore === null) {
             console.log('token expired');
             toastr.info('session expired, please login');
             localStorage.clear();
             window.location.href = 'signinpage.html';
         } else {
-            const token = inStore.token;
+            const { token } = inStore.data;
             const data = {
-                token: token,
+                token,
             }
             httpPost(path, data, (err, respData, xhttp) => {
                 console.log(respData);
@@ -98,10 +97,10 @@ document.addEventListener('DOMContentLoaded', () => {
             if (err) {
                 toastr.error('An error occured');
                 console.log(err);
-            } else if (response.state === 'success') {
+            } else if (response.data.state === 'success') {
                 console.log(response);
-                toastr.info(response.message);
-                const cars = response.carad;
+                toastr.info(response.data.message);
+                const cars = response.data.car_ad;
                 let output = '';
                  for (var i in cars) {
                     const int_color = cars[i].int_color || 'N/A';
@@ -146,7 +145,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 document.querySelector('.section-result').innerHTML = output;
             } else {
                 console.log(response);
-                toastr.info(response.message);
+                toastr.info(response.error.message);
             }
         })
     }

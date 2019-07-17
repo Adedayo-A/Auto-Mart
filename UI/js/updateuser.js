@@ -1,8 +1,8 @@
 document.addEventListener('DOMContentLoaded', () => {
-
     const inStore = JSON.parse(localStorage.getItem('loggedInUser'));
+    console.log(inStore);
 
-    // VERIFY LOCAL STORAGE
+    // NAV BAR SET
     if (!inStore) {
         const needUser = document.querySelector('.need-user');
             needUser.style.display = 'none';
@@ -13,51 +13,13 @@ document.addEventListener('DOMContentLoaded', () => {
     } else if (inStore) {
         const inStore = JSON.parse(localStorage.getItem('loggedInUser'));
         console.log(inStore);
-        let firstname = inStore.username;
+        let firstname = inStore.data.username;
         const neednotUser = document.querySelectorAll('.no-user');
         neednotUser.forEach((neednouser)=> {
             neednouser.style.display = 'none';
         })
         document.querySelector('.dashboard-dropdown').innerHTML = `Welcome ${firstname}`
     }
-
-    // VERIFY TOKEN 
-    const tokenVerify = () => {
-        const path = '/api/v1/users/auth/tokenverify';
-        const inStore = JSON.parse(localStorage.getItem('loggedInUser'));
-        console.log(inStore);
-        if (inStore === null) {
-            console.log('token expired');
-            toastr.info('session expired, please login');
-            localStorage.clear();
-            window.location.href = 'signinpage.html';
-        } else {
-            const token = inStore.token;
-            const data = {
-                token: token,
-            }
-            httpPost(path, data, (err, respData, xhttp) => {
-                console.log(respData);
-                if (err) {
-                    console.log(err);
-                }  else if (respData.status === 200) {
-                        console.log('still on');
-                }  else if (respData.status === 403) {
-                    toastr.info('session expired');
-                    localStorage.clear();
-                    window.location.href = "signinpage.html";
-                }
-            });
-        }
-    }
-    tokenVerify();
-
-    // SIGN OUT
-    document.querySelector('.sign-out').onclick = () => {
-        localStorage.clear();
-        window.location.href = 'signinpage.html';
-    }
-
 
     // USER SVG CLICK
     const arrowUp = document.querySelector('.arrow-up');
@@ -72,23 +34,22 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // REDIRECT TO HOMEPAGE
-    const redirection = () => {
-        window.location.href = "../index.html";
-    }
-
     // GET USER PROFILE
     const getuser = () => {
         const path = '/api/v1/users/auth/getuser';
         httpGet(path, (err, respData, xhttp) => {
             if (err) {
                 console.log(err);
+            } else if (respData.status === 403) {
+                toastr.info('session expired');
+                localStorage.clear();
+                window.location.href = "signinpage.html";
             } else {
                 console.log(respData);
-                document.querySelector('.status').value = respData.status;
-                document.querySelector('.update-lastname').value = respData.last_name;
-                document.querySelector('.update-address').value = respData.address;
-                if (respData.first_name !== null && respData.last_name !== null && respData.address != null) {
+                document.querySelector('.update-firstname').value = respData.data.first_name;
+                document.querySelector('.update-lastname').value = respData.data.last_name;
+                document.querySelector('.update-address').value = respData.data.address;
+                if (respData.data.first_name !== null && respData.data.last_name !== null && respData.data.address != null) {
                     toastr.info('Your profile is up to date');
                 } else {
                     toastr.info('Complete your profile!!');
@@ -98,6 +59,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     getuser();
 
+    // REDIRECT TO HOMEPAGE
+    const redirection = () => {
+        window.location.href = "../index.html";
+    }
     // UPDATED USER RESUBMITTED
     document.querySelector('.update-profile').onsubmit = (e) => {
         e.preventDefault();
@@ -118,12 +83,50 @@ document.addEventListener('DOMContentLoaded', () => {
                 console.log(err);
             } else if (respData.status === 200) {
                 localStorage.setItem('loggedInUser', JSON.stringify(respData));
-                toastr.success(respData.message);
+                toastr.success(respData.data.message);
                 redirection();
             } else {
-                toastr.error(respData.message);
+                toastr.error(respData.data.message);
                 document.querySelector('.response').style.color = 'red';
             }
         });
     }
+    // VERIFY TOKEN 
+    const tokenVerify = () => {
+        const path = '/api/v1/users/auth/tokenverify';
+        const inStore = JSON.parse(localStorage.getItem('loggedInUser'));
+        console.log(inStore);
+        // if (inStore === null) {
+        //     console.log('token expired');
+        //     toastr.info('session expired, please login');
+        //     localStorage.clear();
+        //     window.location.href = 'signinpage.html';
+        // } else {
+            const { token } = inStore.data;
+            console.log(token);
+            const data = {
+                token,
+            }
+            httpPost(path, data, (err, respData, xhttp) => {
+                console.log(respData);
+                if (err) {
+                    console.log(err);
+                }  else if (respData.status === 200) {
+                        console.log('still on');
+                }  else {
+                    toastr.info('session expired');
+                    localStorage.clear();
+                    // window.location.href = "signinpage.html";
+                }
+            });
+        // }
+    }
+    tokenVerify();
+
+    // SIGN OUT
+    document.querySelector('.sign-out').onclick = () => {
+        localStorage.clear();
+        window.location.href = 'signinpage.html';
+    }
+
 });
