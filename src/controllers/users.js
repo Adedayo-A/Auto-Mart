@@ -34,6 +34,7 @@ const signUp = (req, res) => {
           if (err.constraint === 'users_email_key') {
             console.log(err);
             res.status(500).json({
+              status: 500,
               error: {
                 message: 'email already exist, please choose another email',
               },
@@ -42,6 +43,7 @@ const signUp = (req, res) => {
           } else if (err) {
             console.log(err);
             res.status(500).json({
+              status: 500,
               error: {
                 message: 'error encountered',
               },
@@ -67,6 +69,7 @@ const signUp = (req, res) => {
                   username = 'user';
                 }
                 res.status(200).send({
+                  status: 200,
                   data: {
                     username,
                     state: 'success',
@@ -104,6 +107,7 @@ const verifyUser = (req, res) => {
     if (err) {
       console.log(err.stack);
       res.status(500).json({
+        status: 500,
         error: {
           message: 'error encountered',
         },
@@ -111,6 +115,7 @@ const verifyUser = (req, res) => {
       pg.end();
     } else if (dbres.rows.length === 0) {
       res.status(403).json({
+        status: 403,
         error: {
           message: 'error encountered, Invalid Email',
         },
@@ -134,6 +139,7 @@ const verifyUser = (req, res) => {
           pg.end();
         } else if (!match) {
           res.status(403).json({
+            status: 403,
             error: {
               message: 'error encountered, Invalid password',
             },
@@ -142,10 +148,10 @@ const verifyUser = (req, res) => {
         } else {
           jwt.sign({ user }, process.env.JWT_KEY, { expiresIn: '20m' }, (err, token) => {
             res.status(200).json({
+              status: 200,
               data: {
                 username,
                 admin,
-                status: 200,
                 message: `Success..Welcome Back ${username}`,
                 token,
               },

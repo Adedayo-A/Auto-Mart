@@ -39,6 +39,7 @@ var signUp = function signUp(req, res) {
           if (err.constraint === 'users_email_key') {
             console.log(err);
             res.status(500).json({
+              status: 500,
               error: {
                 message: 'email already exist, please choose another email'
               }
@@ -47,6 +48,7 @@ var signUp = function signUp(req, res) {
           } else if (err) {
             console.log(err);
             res.status(500).json({
+              status: 500,
               error: {
                 message: 'error encountered'
               }
@@ -78,6 +80,7 @@ var signUp = function signUp(req, res) {
                 }
 
                 res.status(200).send({
+                  status: 200,
                   data: {
                     username: username,
                     state: 'success',
@@ -113,6 +116,7 @@ var verifyUser = function verifyUser(req, res) {
     if (err) {
       console.log(err.stack);
       res.status(500).json({
+        status: 500,
         error: {
           message: 'error encountered'
         }
@@ -120,6 +124,7 @@ var verifyUser = function verifyUser(req, res) {
       pg.end();
     } else if (dbres.rows.length === 0) {
       res.status(403).json({
+        status: 403,
         error: {
           message: 'error encountered, Invalid Email'
         }
@@ -145,6 +150,7 @@ var verifyUser = function verifyUser(req, res) {
           pg.end();
         } else if (!match) {
           res.status(403).json({
+            status: 403,
             error: {
               message: 'error encountered, Invalid password'
             }
@@ -157,10 +163,10 @@ var verifyUser = function verifyUser(req, res) {
             expiresIn: '20m'
           }, function (err, token) {
             res.status(200).json({
+              status: 200,
               data: {
                 username: username,
                 admin: admin,
-                status: 200,
                 message: "Success..Welcome Back ".concat(username),
                 token: token
               }
