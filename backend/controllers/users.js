@@ -14,6 +14,7 @@ var jwt = require('jsonwebtoken'); // eslint-disable-next-line import/no-extrane
 
 var bcrypt = require('bcrypt'); // const users = require('../db/Users.js');
 // class userControllers { 
+// export
 
 
 var signUp = function signUp(req, res) {
@@ -39,13 +40,19 @@ var signUp = function signUp(req, res) {
           if (err.constraint === 'users_email_key') {
             console.log(err);
             res.status(500).json({
-              message: 'email already exist, please choose another email'
+              status: 500,
+              error: {
+                message: 'email already exist, please choose another email'
+              }
             });
             pg.end();
           } else if (err) {
             console.log(err);
             res.status(500).json({
-              message: 'error encountered'
+              status: 500,
+              error: {
+                message: 'error encountered'
+              }
             });
             pg.end();
           }
@@ -57,12 +64,13 @@ var signUp = function signUp(req, res) {
           }, function (err, token) {
             query = 'SELECT * FROM users WHERE email = $1';
             value = [user.email];
-            console.log('this is ' + value);
             pg.query(query, value, function (err, dbres) {
               if (err) {
                 console.log(err.stack);
                 res.status(500).json({
-                  message: 'error encountered'
+                  error: {
+                    message: 'error encountered'
+                  }
                 });
                 pg.end();
               } else {
@@ -73,11 +81,14 @@ var signUp = function signUp(req, res) {
                 }
 
                 res.status(200).send({
-                  username: username,
-                  state: 'success',
                   status: 200,
-                  message: 'Sign up successful',
-                  token: token
+                  data: {
+                    username: username,
+                    state: 'success',
+                    status: 200,
+                    message: 'Sign up successful',
+                    token: token
+                  }
                 });
                 pg.end();
               }
@@ -106,12 +117,18 @@ var verifyUser = function verifyUser(req, res) {
     if (err) {
       console.log(err.stack);
       res.status(500).json({
-        message: 'error encountered'
+        status: 500,
+        error: {
+          message: 'error encountered'
+        }
       });
       pg.end();
     } else if (dbres.rows.length === 0) {
       res.status(403).json({
-        message: 'error encountered, Invalid Email'
+        status: 403,
+        error: {
+          message: 'error encountered, Invalid Email'
+        }
       });
       pg.end();
     } else {
@@ -126,10 +143,19 @@ var verifyUser = function verifyUser(req, res) {
       bcrypt.compare(myPassword, dbPsw, function (err, match) {
         if (err) {
           console.log(err.stack);
+          res.status(503).json({
+            status: 403,
+            error: {
+              message: 'error encountered'
+            }
+          });
           pg.end();
         } else if (!match) {
           res.status(403).json({
-            message: 'error encountered, Invalid password'
+            status: 403,
+            error: {
+              message: 'error encountered, Invalid password'
+            }
           });
           pg.end();
         } else {
@@ -139,11 +165,13 @@ var verifyUser = function verifyUser(req, res) {
             expiresIn: '20m'
           }, function (err, token) {
             res.status(200).json({
-              username: username,
-              admin: admin,
               status: 200,
-              message: "Success..Welcome Back ".concat(username),
-              token: token
+              data: {
+                username: username,
+                admin: admin,
+                message: "Success..Welcome Back ".concat(username),
+                token: token
+              }
             });
           });
           pg.end();
@@ -159,8 +187,11 @@ var updateUser = function updateUser(req, res) {
   jwt.verify(req.token, process.env.JWT_KEY, function (err, authData) {
     // eslint-disable-next-line prefer-destructuring    
     if (err) {
-      res.status(403).json({
-        message: 'error..invalid token'
+      res.status(401).json({
+        status: 401,
+        error: {
+          message: 'error..invalid token'
+        }
       });
     } else {
       // eslint-disable-next-line prefer-destructuring
@@ -175,23 +206,30 @@ var updateUser = function updateUser(req, res) {
 
       pg.query(query, value, function (err, dbres) {
         if (err) {
+          res.status(403).json({
+            error: {
+              message: 'error..'
+            }
+          });
           console.error(err);
           pg.end();
         } else if (dbres.rowCount === 0) {
-          console.log('An error occured, please check input');
           res.status(403).json({
-            message: 'An error occured, please check input'
+            error: {
+              message: 'An error occured, please check input'
+            }
           });
           pg.end();
         } else {
           query = 'SELECT * FROM users WHERE email = $1';
           value = [email];
-          console.log('this is ' + value);
           pg.query(query, value, function (err, dbres) {
             if (err) {
               console.log(err.stack);
               res.status(500).json({
-                message: 'error encountered'
+                error: {
+                  message: 'error encountered'
+                }
               });
               pg.end();
             } else {
@@ -202,11 +240,13 @@ var updateUser = function updateUser(req, res) {
               }
 
               res.status(200).send({
-                username: username,
-                state: 'success',
-                status: 200,
-                message: 'Profile updated',
-                token: token
+                data: {
+                  username: username,
+                  state: 'success',
+                  status: 200,
+                  message: 'Profile updated',
+                  token: token
+                }
               });
               pg.end();
             }
@@ -220,11 +260,13 @@ var updateUser = function updateUser(req, res) {
 
 var getAUser = function getAUser(req, res) {
   jwt.verify(req.token, process.env.JWT_KEY, function (err, authData) {
-    var token = req.token;
+    var token = req.token.token;
 
     if (err) {
       res.status(403).json({
-        message: 'error..invalid token'
+        error: {
+          message: 'error..invalid token'
+        }
       });
     } else {
       var useremail = authData.user.email;
@@ -237,7 +279,13 @@ var getAUser = function getAUser(req, res) {
 
       pg.query(query, value, function (err, dbres) {
         if (err) {
-          console.error(err);
+          res.status(403).json({
+            status: 403,
+            error: {
+              message: 'error..'
+            }
+          });
+          console.log(err);
           pg.end();
         } else {
           var data = dbres.rows[0];
@@ -246,11 +294,14 @@ var getAUser = function getAUser(req, res) {
               last_name = data.last_name,
               address = data.address;
           res.status(200).json({
-            email: email,
-            first_name: first_name,
-            last_name: last_name,
-            address: address,
-            token: token
+            status: 200,
+            data: {
+              email: email,
+              first_name: first_name,
+              last_name: last_name,
+              address: address,
+              token: token
+            }
           });
           pg.end();
         }
@@ -264,8 +315,10 @@ var tokenVerify = function tokenVerify(req, res) {
   jwt.verify(req.body.token, process.env.JWT_KEY, function (err) {
     if (err) {
       res.json({
-        status: 403,
-        message: 'Session Expired'
+        status: 401,
+        error: {
+          message: 'Session Expired'
+        }
       });
     } else {
       res.json({

@@ -15,8 +15,10 @@ var getCars = function getCars(req, res) {
   jwt.verify(req.token, process.env.JWT_KEY, function (err, authData) {
     if (err) {
       res.status(401).json({
-        status: 401,
-        message: 'invalid token!!!'
+        data: {
+          status: 401,
+          message: 'invalid token!!!'
+        }
       });
     } else {
       // PG Connect
@@ -33,20 +35,26 @@ var getCars = function getCars(req, res) {
           if (err) {
             console.log(err);
             res.status(500).json({
-              message: 'error encountered'
+              error: {
+                message: 'error encountered'
+              }
             });
             pg.end();
           } else if (dbres.rows.length === 0) {
             res.status(200).json({
-              message: 'No car found!!'
+              data: {
+                message: 'No car found!!'
+              }
             });
             pg.end();
           } else {
-            var carad = dbres.rows;
+            var car_ad = dbres.rows;
             res.status(200).json({
-              state: 'success',
-              message: 'result completed',
-              carad: carad
+              data: {
+                state: 'success',
+                message: 'result completed',
+                car_ad: car_ad
+              }
             });
             pg.end();
           }
@@ -59,20 +67,26 @@ var getCars = function getCars(req, res) {
           if (err) {
             console.log(err);
             res.status(500).json({
-              message: 'error encountered'
+              error: {
+                message: 'error encountered'
+              }
             });
             pg.end();
           } else if (dbres.rows.length === 0) {
             res.status(200).json({
-              message: 'No car found!!!'
+              data: {
+                message: 'No car found!!!'
+              }
             });
             pg.end();
           } else {
-            var carad = dbres.rows;
+            var car_ad = dbres.rows;
             res.status(200).json({
-              state: 'success',
-              message: 'result completed',
-              carad: carad
+              data: {
+                state: 'success',
+                message: 'result completed',
+                car_ad: car_ad
+              }
             });
             pg.end();
           }
@@ -85,20 +99,27 @@ var getCars = function getCars(req, res) {
           if (err) {
             console.log(err);
             res.status(500).json({
-              message: 'error encountered'
+              error: {
+                message: 'error encountered'
+              }
             });
             pg.end();
           } else if (dbres.rows.length === 0) {
             res.status(200).json({
-              message: 'No car found!!!'
+              status: 200,
+              data: {
+                message: 'No car found!!!'
+              }
             });
             pg.end();
           } else {
-            var carad = dbres.rows;
+            var car_ad = dbres.rows;
             res.status(200).json({
-              state: 'success',
-              message: 'result completed',
-              carad: carad
+              data: {
+                state: 'success',
+                message: 'result completed',
+                car_ad: car_ad
+              }
             });
             pg.end();
           }
@@ -111,21 +132,29 @@ var getCars = function getCars(req, res) {
           if (err) {
             console.log(err);
             res.status(500).json({
-              message: 'error encountered'
+              status: 500,
+              error: {
+                message: 'error encountered'
+              }
             });
             pg.end();
           } else if (dbres.rows.length === 0) {
             res.status(200).json({
-              status: 200,
-              message: 'No car found!!!'
+              data: {
+                status: 200,
+                message: 'No car found!!!'
+              }
             });
             pg.end();
           } else {
-            var carad = dbres.rows;
+            var car_ad = dbres.rows;
             res.status(200).json({
-              state: 'success',
-              message: 'result completed',
-              carad: carad
+              data: {
+                status: 200,
+                state: 'success',
+                message: 'result completed',
+                car_ad: car_ad
+              }
             });
             pg.end();
           }
@@ -138,20 +167,26 @@ var getCars = function getCars(req, res) {
           if (err) {
             console.log(err);
             res.status(500).json({
-              message: 'error encountered'
+              error: {
+                message: 'error encountered'
+              }
             });
             pg.end();
           } else if (dbres.rows.length === 0) {
             res.status(200).json({
-              message: 'No car found!!!'
+              data: {
+                message: 'No car found!!!'
+              }
             });
             pg.end();
           } else {
-            var carad = dbres.rows;
+            var car_ad = dbres.rows;
             res.status(200).json({
-              state: 'success',
-              message: 'result completed',
-              carad: carad
+              data: {
+                state: 'success',
+                message: 'result completed',
+                car_ad: car_ad
+              }
             });
             pg.end();
           }
@@ -163,28 +198,44 @@ var getCars = function getCars(req, res) {
 
         pg.query(_query5, _value5, function (err, dbres) {
           if (err) {
+            res.status(500).json({
+              error: {
+                message: 'error..'
+              }
+            });
             console.error(err);
           } else if (dbres.rows[0].is_admin === false) {
             res.status(403).json({
-              message: 'Access Denied!!!'
+              error: {
+                message: 'Access Denied!!!'
+              }
             });
             pg.end();
           } else {
             _query5 = 'SELECT * FROM LOWER(carads)';
             pg.query(_query5, function (err, resdb) {
               if (err) {
+                res.status(500).json({
+                  error: {
+                    message: 'error..'
+                  }
+                });
                 console.error(err);
               } else if (resdb.rows.length === 0) {
-                res.status(404).json({
-                  message: 'No ads present!'
+                res.status(200).json({
+                  data: {
+                    message: 'No ads found!'
+                  }
                 });
                 pg.end();
               } else {
-                var carad = resdb.rows;
+                var car_ad = resdb.rows;
                 res.status(200).json({
-                  state: 'success',
-                  message: 'result completed',
-                  carad: carad
+                  data: {
+                    state: 'success',
+                    message: 'result completed',
+                    car_ad: car_ad
+                  }
                 });
                 pg.end();
               }
@@ -202,8 +253,10 @@ var getCar = function getCar(req, res) {
   jwt.verify(req.token, process.env.JWT_KEY, function (err) {
     if (err) {
       res.status(401).json({
-        status: 401,
-        message: 'error..invalid Token'
+        error: {
+          status: 401,
+          message: 'error..invalid Token'
+        }
       });
     } else {
       var pg = new Client({
@@ -219,21 +272,27 @@ var getCar = function getCar(req, res) {
         if (err) {
           // console.log(err);
           res.status(500).json({
-            message: 'error encountered'
+            error: {
+              message: 'error encountered'
+            }
           });
           pg.end();
         } else if (dbres.rows === 0) {
           res.status(200).json({
-            status: 200,
-            message: 'No car found!!'
+            data: {
+              status: 200,
+              message: 'No car found!!'
+            }
           });
           pg.end();
         } else {
-          var carad = dbres.rows;
+          var car_ad = dbres.rows;
           res.status(200).json({
-            state: 'success',
-            message: 'Success, result completed',
-            carad: carad
+            data: {
+              state: 'success',
+              message: 'Success, result completed',
+              car_ad: car_ad
+            }
           });
           pg.end();
         }
@@ -247,7 +306,9 @@ var getadsByOwner = function getadsByOwner(req, res) {
   jwt.verify(req.token, process.env.JWT_KEY, function (err, authData) {
     if (err) {
       res.status(403).json({
-        message: 'error..invalid Token'
+        error: {
+          message: 'error..invalid Token'
+        }
       });
     } else {
       var email = authData.user.email;
@@ -260,6 +321,11 @@ var getadsByOwner = function getadsByOwner(req, res) {
 
       pg.query(query, value, function (err, dbres) {
         if (err) {
+          res.status(403).json({
+            error: {
+              message: 'error..'
+            }
+          });
           console.error(err);
           pg.end();
         } else {
@@ -270,20 +336,26 @@ var getadsByOwner = function getadsByOwner(req, res) {
             if (err) {
               // console.log(err);
               res.status(500).json({
-                message: 'error encountered'
+                data: {
+                  message: 'error encountered'
+                }
               });
               pg.end();
             } else if (dbres.rows.length === 0) {
               res.status(200).json({
-                message: 'No car found!!'
+                data: {
+                  message: 'No car found!!'
+                }
               });
               pg.end();
             } else {
-              var carad = dbres.rows;
+              var car_ad = dbres.rows;
               res.status(200).json({
-                state: 'success',
-                message: 'Success, result completed',
-                carad: carad
+                data: {
+                  state: 'success',
+                  message: 'Success, result completed',
+                  car_ad: car_ad
+                }
               });
               pg.end();
             }
@@ -297,14 +369,20 @@ var getadsByOwner = function getadsByOwner(req, res) {
 
 var postCar = function postCar(req, res) {
   var newAd = req.body;
+  var created_on = Date.now();
   var price = newAd.price;
   var door = newAd.door;
   door = door || null;
+  var image_url = newAd.image_url;
+  image_url = image_url || '';
   var owner;
   jwt.verify(req.token, process.env.JWT_KEY, function (err, authData) {
     if (err) {
       res.status(403).json({
-        message: 'error..invalid token'
+        status: 403,
+        error: {
+          message: 'error..invalid token'
+        }
       });
     } else {
       var email = authData.user.email;
@@ -317,34 +395,55 @@ var postCar = function postCar(req, res) {
 
       pg.query(query, value, function (err, dbres) {
         if (err) {
+          res.status(403).json({
+            status: 403,
+            error: {
+              message: 'error..'
+            }
+          });
           console.error(err);
           pg.end();
         } else if (dbres.rows[0].first_name === null) {
-          res.status(200).json({
-            message: 'Please complete your registration inorder to post a car!!'
+          res.status(403).json({
+            status: 403,
+            error: {
+              message: 'Please complete your registration inorder to post a car!!'
+            }
           });
           pg.end();
         } else {
           owner = dbres.rows[0].id;
+          console.log(owner);
           query = 'INSERT INTO carads(status, price, manufacturer, model, body_type, owner, state, ext_col, int_col, transmission, mileage, door, description, image_url) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)';
-          value = [newAd.status, price, newAd.manufacturer, newAd.model, newAd.body_type, owner, newAd.state, newAd.ext_col, newAd.int_col, newAd.transmission, newAd.mileage, door, newAd.description, newAd.image_url]; // eslint-disable-next-line consistent-return
+          value = [newAd.status, price, newAd.manufacturer, newAd.model, newAd.body_type, owner, newAd.state, newAd.ext_col, newAd.int_col, newAd.transmission, newAd.mileage, door, newAd.description, image_url]; // eslint-disable-next-line consistent-return
           // PG Query
           // eslint-disable-next-line no-unused-vars
 
           pg.query(query, value, function (err, dbRes) {
             if (err) {
               console.error(err);
-              res.status(403).json({
-                message: 'Input error, Please check input!!!',
-                newAd: newAd
+              res.status(500).json({
+                status: 500,
+                error: {
+                  message: 'error..'
+                }
               });
               pg.end();
             } else {
+              var id = owner;
+              var manufacturer = newAd.manufacturer;
+              var model = newAd.model;
               res.json({
-                state: 'success',
                 status: 200,
-                message: 'Posted successfully',
-                newAd: newAd
+                data: {
+                  state: 'success',
+                  message: 'Posted successfully',
+                  id: id,
+                  email: email,
+                  created_on: created_on,
+                  manufacturer: manufacturer,
+                  model: model
+                }
               });
               pg.end();
             }
@@ -361,7 +460,9 @@ var patchCar = function patchCar(req, res) {
   jwt.verify(req.token, process.env.JWT_KEY, function (err, authData) {
     if (err) {
       res.status(403).json({
-        message: 'error..invalid token'
+        error: {
+          message: 'error..invalid token'
+        }
       });
     } else {
       var email = authData.user.email;
@@ -380,6 +481,11 @@ var patchCar = function patchCar(req, res) {
 
       pg.query(query, value, function (err, dbres) {
         if (err) {
+          res.status(403).json({
+            error: {
+              message: 'error..'
+            }
+          });
           console.error(err);
           pg.end();
         } else {
@@ -390,47 +496,60 @@ var patchCar = function patchCar(req, res) {
 
           pg.query(query, value, function (err, dbres) {
             if (err) {
+              res.status(403).json({
+                error: {
+                  message: 'error..'
+                }
+              });
               console.error(err);
               pg.end();
             } else if (dbres.rows.length === 0) {
               res.status(200).json({
-                message: 'No ad found'
+                data: {
+                  message: 'No ad found'
+                }
               });
               pg.end();
             } else {
               owner = dbres.rows[0].owner;
 
               if (currUser === owner) {
-                query = 'UPDATE carads SET status=$1, price=$2, manufacturer=$3, model=$4, body_type=$5, owner=$6, state=$7, image_url=$8 WHERE id=$9';
-                value = [ad.status, ad.price, ad.manufacturer, ad.model, ad.body_type, owner, ad.state, ad.image_url, adId]; // eslint-disable-next-line consistent-return
+                query = 'UPDATE carads SET status=$1, price=$2 WHERE id=$3';
+                value = [ad.status, ad.price, adId]; // eslint-disable-next-line consistent-return
                 // eslint-disable-next-line no-unused-vars
 
                 pg.query(query, value, function (err, dbresponse) {
                   if (err) {
                     console.error(err);
-                    res.status(403).json({
-                      message: 'An error occured, Please check input!!!'
+                    res.status(500).json({
+                      status: 500,
+                      error: {
+                        message: 'An error occured, Please check input!!!'
+                      }
                     });
                     pg.end();
                   } else {
                     res.status(200).json({
-                      state: 'success',
                       status: 200,
-                      message: 'AD updated successfully!!',
-                      ad: ad
+                      data: {
+                        state: 'success',
+                        status: 200,
+                        message: 'AD updated successfully!!',
+                        ad: ad
+                      }
                     });
                     pg.end();
                   }
                 });
               } else {
                 res.status(403).json({
-                  message: 'You are not permiited to update this ad!!!'
+                  error: {
+                    message: 'You are not permiited to update this ad!!!'
+                  }
                 });
                 pg.end();
               }
             }
-
-            ;
           });
         }
       });
@@ -445,7 +564,9 @@ var deleteCar = function deleteCar(req, res) {
 
     if (err) {
       res.status(403).json({
-        message: 'error..invalid token'
+        error: {
+          message: 'error..invalid token'
+        }
       });
     } else {
       var pg = new Client({
@@ -457,11 +578,18 @@ var deleteCar = function deleteCar(req, res) {
 
       pg.query(query, value, function (err, dbres) {
         if (err) {
+          res.status(500).json({
+            error: {
+              message: 'error..'
+            }
+          });
           console.error(err);
           pg.end();
         } else if (dbres.rows[0].is_admin === false) {
           res.status(403).json({
-            message: 'You are not permitted to delete this Ad!!!'
+            error: {
+              message: 'You are not permitted to delete this Ad!!!'
+            }
           });
           pg.end();
         } else {
@@ -471,16 +599,25 @@ var deleteCar = function deleteCar(req, res) {
 
           pg.query(query, value, function (err, resdb) {
             if (err) {
+              res.status(500).json({
+                error: {
+                  message: 'error..'
+                }
+              });
               console.error(err);
               pg.end();
             } else if (resdb.rowCount === 0) {
               res.status(200).json({
-                message: 'Ad not found!!'
+                data: {
+                  message: 'Ad not found!!'
+                }
               });
               pg.end();
             } else {
               res.status(200).json({
-                message: 'AD successfully deleted'
+                data: {
+                  message: 'AD successfully deleted'
+                }
               });
               pg.end();
             }
@@ -496,8 +633,10 @@ var getCarOrders = function getCarOrders(req, res) {
   jwt.verify(req.token, process.env.JWT_KEY, function (err, authData) {
     if (err) {
       res.status(401).json({
-        status: 401,
-        message: 'error..invalid token'
+        error: {
+          status: 401,
+          message: 'error..invalid token'
+        }
       });
     } else {
       var email = authData.user.email;
@@ -510,6 +649,12 @@ var getCarOrders = function getCarOrders(req, res) {
       pg.connect();
       pg.query(query, value, function (err, resdb) {
         if (err) {
+          res.status(401).json({
+            error: {
+              status: 401,
+              message: 'error..'
+            }
+          });
           console.error(err);
           pg.end();
         } else {
@@ -518,15 +663,23 @@ var getCarOrders = function getCarOrders(req, res) {
           value = [curruser];
           pg.query(query, value, function (err, respo) {
             if (err) {
+              res.status(500).json({
+                error: {
+                  status: 500,
+                  message: 'error..'
+                }
+              });
               console.error(err);
               pg.end();
             } else {
-              var mycarorders = respo.rows;
+              var my_car_orders = respo.rows;
               res.status(403).json({
-                state: 'success',
-                status: 200,
-                message: 'orders retrieved',
-                mycarorders: mycarorders
+                data: {
+                  state: 'success',
+                  status: 200,
+                  message: 'orders retrieved',
+                  my_car_orders: my_car_orders
+                }
               });
             }
           });
@@ -541,8 +694,10 @@ var updateCarOrders = function updateCarOrders(req, res) {
   jwt.verify(req.token, process.env.JWT_KEY, function (err, authData) {
     if (err) {
       res.status(401).json({
-        status: 401,
-        message: 'error..invalid token'
+        error: {
+          status: 401,
+          message: 'error..invalid token'
+        }
       });
     } else {
       var email = authData.user.email;
@@ -554,25 +709,37 @@ var updateCarOrders = function updateCarOrders(req, res) {
       pg.connect();
       pg.query(query, value, function (err, resdb) {
         if (err) {
+          res.status(500).json({
+            error: {
+              status: 500,
+              message: 'error..'
+            }
+          });
           console.error(err);
           pg.end();
         } else {
           var status = req.body.status;
-          console.log(status);
           var orderid = req.params.id;
           var curruser = resdb.rows[0].id;
           query = 'UPDATE purchaseorder SET status=LOWER($1) WHERE id = $2';
           value = [status, orderid, curruser];
-          console.log(value);
           pg.query(query, value, function (err, dbres) {
             // const result = dbres.rows[0];/
             if (err) {
+              res.status(500).json({
+                error: {
+                  status: 401,
+                  message: 'error..'
+                }
+              });
               console.error(err);
               pg.end();
             } else {
               res.status(200).json({
-                status: 200,
-                message: 'Order Updated'
+                data: {
+                  status: 200,
+                  message: 'Order Updated'
+                }
               });
               pg.end();
             }

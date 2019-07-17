@@ -13,11 +13,12 @@ var postFlag = function postFlag(req, res) {
   jwt.verify(req.token, process.env.JWT_KEY, function (err) {
     if (err) {
       res.status(401).json({
-        status: 401,
-        message: 'error..invalid token'
+        error: {
+          status: 401,
+          message: 'error..invalid token'
+        }
       });
     } else {
-      console.log(req.params);
       var info = req.body.info;
       var car_id = req.params.id;
       var pg = new Client({
@@ -34,13 +35,18 @@ var postFlag = function postFlag(req, res) {
         if (err) {
           console.error(err);
           res.status(403).json({
-            message: 'error encountered, please check input!!!'
+            error: {
+              message: 'error encountered, please check input!!!'
+            }
           });
           pg.end();
         } else {
           res.status(200).json({
             status: 200,
-            message: 'Thank you for reporting this problem'
+            data: {
+              status: 200,
+              message: 'Thank you for reporting this problem'
+            }
           });
           pg.end();
         }

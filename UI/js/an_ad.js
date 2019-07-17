@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // VERIFY TOKEN 
-    const tokenVerify = () => {
+    const token_verify = () => {
         const path = '/api/v1/users/auth/tokenverify';
         const inStore = JSON.parse(localStorage.getItem('loggedInUser'));
         console.log(inStore);
@@ -44,7 +44,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     console.log(err);
                 }  else if (respData.status === 200) {
                         console.log('still on');
-                }  else if (respData.status === 403) {
+                }  else if (respData.status === 401) {
                     toastr.info('session expired');
                     localStorage.clear();
                     window.location.href = "signinpage.html";
@@ -52,7 +52,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
     }
-    tokenVerify();
+    token_verify();
 
     // SIGN OUT
     document.querySelector('.sign-out').onclick = () => {
@@ -93,7 +93,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // GET SPECIFIC AD
-    const getanAd = () => {
+    const get_an_ad = () => {
         const postId = window.location.search.slice(1).split("&")[0].split("=")[1];
         console.log(postId);
         path = `/api/v1/car/${postId}`;
@@ -104,10 +104,10 @@ document.addEventListener('DOMContentLoaded', () => {
             } else if (response.status === 401) {
                 toastr.info('session expired');
                 window.location.href = "signinpage.html";
-            } else if (response.state === 'success') {
+            } else if (response.data.state === 'success') {
                 console.log(response);
-                toastr.info(response.message);
-                const cars = response.carad;
+                toastr.info(response.data.message);
+                const cars = response.data.car_ad;
                 let output = '';
                 for (var i in cars) {
                     const adId = cars[i].id || 'N/A';
@@ -125,8 +125,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     const door = cars[i].door || 'N/A';
                     const description = cars[i].description || 'N/A';
                     const status = cars[i].status || 'N/A';
-
-
                     output += 
                      `<div class="div-result-wrap wrap-all">
                             <div class="wrapper-result one">
@@ -148,7 +146,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                             <span> Availability: ${status} </span>
                                         </p>
                                         <p>
-                                            <button class="viewone"><a href="editad.html?adId=${adId}">Make a purchase order</a></button>
+                                            <button class="viewone"><a href="purchase-order.html?adId=${adId}">Make a purchase order</a></button>
                                         </p>
                                         <p>
                                             <button class="editone">Flag</button>
@@ -159,7 +157,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             </div>
                         </div>`
                 }
-                const deleteAd = (e) => {
+                const delete_ad = (e) => {
                     console.log('targ');
                     const targ = e.target.value;
                     console.log(targ);
@@ -170,7 +168,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             console.log(err);
                         } else {
                             console.log(response);
-                            toastr.success(response.message);
+                            toastr.success(response.data.message);
                             window.location.href = '../index.html';
                         }
                     })
@@ -178,7 +176,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 
                 document.querySelector('.section-result').innerHTML = output;
                 if (inStore.admin) {
-                    document.querySelector('.deleteone').onclick = deleteAd;
+                    document.querySelector('.deleteone').onclick = delete_ad;
                 }
             } else {
                 console.log(response);
@@ -186,5 +184,5 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         })
     }
-    getanAd();
+    get_an_ad();
 });
