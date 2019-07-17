@@ -372,6 +372,7 @@ const postCar = (req, res) => {
   jwt.verify(req.token, process.env.JWT_KEY, (err, authData) => {
     if (err) {
       res.status(403).json({
+        status: 403,
         error: {
           message: 'error..invalid token',
         },
@@ -388,6 +389,7 @@ const postCar = (req, res) => {
       pg.query(query, value, (err, dbres) => {
         if (err) {
           res.status(403).json({
+            status: 403,
             error: {
               message: 'error..',
             },
@@ -396,6 +398,7 @@ const postCar = (req, res) => {
           pg.end();
         } else if (dbres.rows[0].first_name === null) {
           res.status(403).json({
+            status: 403,
             error: {
               message: 'Please complete your registration inorder to post a car!!',
             },
@@ -425,8 +428,6 @@ const postCar = (req, res) => {
               });
               pg.end();
             } else {
-              console.log(dbRes);
-
               const id = owner;
               const manufacturer = newAd.manufacturer;
               const model = newAd.model;
