@@ -184,7 +184,7 @@
       color: white;
     }
 
-    select {
+    select, .datalist {
       background: lemonchiffon;
       padding: 4px;
     }
@@ -210,6 +210,10 @@
       border-color: #fff;
       margin-bottom: 15px;
       background-color: lemonchiffon;
+    }
+
+    .search-price-min, .search-price-max {
+      padding: 5px;
     }
 
     .search-price:not(:last-child) {
