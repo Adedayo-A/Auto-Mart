@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
     } else if (inStore) {
         const inStore = JSON.parse(localStorage.getItem('loggedInUser'));
         console.log(inStore);
-        let firstname = inStore.username;
+        let firstname = inStore.data.username;
         const neednotUser = document.querySelectorAll('.no-user');
         neednotUser.forEach((neednouser)=> {
             neednouser.style.display = 'none';
@@ -34,9 +34,10 @@ document.addEventListener('DOMContentLoaded', () => {
             localStorage.clear();
             window.location.href = 'signinpage.html';
         } else {
-            const token = inStore.token;
+            const { token } = inStore.data;
+            console.log(token);
             const data = {
-                token: token,
+                token,
             }
             httpPost(path, data, (err, respData, xhttp) => {
                 console.log(respData);
@@ -44,7 +45,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     console.log(err);
                 }  else if (respData.status === 200) {
                         console.log('still on');
-                }  else if (respData.status === 403) {
+                }  else if (respData.status === 401) {
                     toastr.info('session expired');
                     localStorage.clear();
                     window.location.href = "signinpage.html";
@@ -92,10 +93,10 @@ document.addEventListener('DOMContentLoaded', () => {
             } else if (response.status === 401) {
                 toastr.info('Session expired');
                 window.location.href = 'signinpage.html';
-            } else if (response.state === 'success') {
+            } else if (response.data.state === 'success') {
                 console.log(response);
-                toastr.info(response.message);
-                const orderdetails = response.orders
+                toastr.info(response.data.message);
+                const orderdetails = response.data.orders
                 let output = '';
                 for (let i in orderdetails) {
                     const orderId = orderdetails[i].id;
@@ -139,7 +140,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             toastr.error('An error occured');
                             console.log(err);
                         } else {
-                            toastr.success(response.message)
+                            toastr.success(response.data.message)
                         }
                     })
                 }

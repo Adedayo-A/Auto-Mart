@@ -109,7 +109,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 console.log(response);
                 // GOOD DATA
                 toastr.success(response.data.message);
-                window.location.href = "ads.html";
+                window.location.href = "myorders.html";
             } else {
                 console.log(response);
                 // BAD DATA

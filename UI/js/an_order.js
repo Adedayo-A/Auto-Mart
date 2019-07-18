@@ -34,17 +34,18 @@ document.addEventListener('DOMContentLoaded', () => {
             localStorage.clear();
             window.location.href = 'signinpage.html';
         } else {
-            const token = inStore.token;
+            const { token } = inStore.data;
+            console.log(token);
             const data = {
-                token: token,
+                token,
             }
             httpPost(path, data, (err, respData, xhttp) => {
                 console.log(respData);
                 if (err) {
                     console.log(err);
                 }  else if (respData.status === 200) {
-                        console.log('still on');
-                }  else if (respData.status === 403) {
+                    console.log('still on');
+                }  else if (respData.status === 401) {
                     toastr.info('session expired');
                     localStorage.clear();
                     window.location.href = "signinpage.html";
@@ -105,7 +106,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 window.location.href = "signinpage.html";
             } else if (response.data.state === 'success') {
                 console.log(response);
-                toastr.info(response.data.message);
                 const orderdetails = response.data.order;
                 let output = '';
                 for (var i in orderdetails) {
@@ -155,6 +155,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     })
                 }
                 document.querySelector('.delete').onclick = delete_order;
+                toastr.info(response.data.message);
                 
             } else {
                 console.log(response);

@@ -167,7 +167,7 @@ const getMyOrders = (req, res) => {
                 },
               });
               pg.end();
-            }           
+            }        
           });
         }
       });

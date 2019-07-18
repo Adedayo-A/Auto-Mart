@@ -72,18 +72,18 @@ var imgUploader = function imgUploader(req, res) {
             }
           });
         } else {
-          var file = "public/uploads/".concat(req.file.filename);
-          cloudinary.uploader.upload(file, {
+          var filepath = "public/uploads/".concat(req.file.filename);
+          cloudinary.uploader.upload(filepath, {
             tags: 'gotemps',
             resource_type: 'auto'
           }).then(function (file) {
             console.log("Public id of the file is ".concat(file.public_id));
             console.log("Url of the file is  ".concat(file.url));
-            var image_url = file.url;
-            res.status.json({
+            var imageUrl = file.url;
+            res.status(200).json({
               data: {
                 msg: 'File Uploaded!',
-                image_url: image_url
+                image_url: imageUrl
               }
             });
           })["catch"](function (err) {

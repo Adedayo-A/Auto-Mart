@@ -1,6 +1,6 @@
 function httpGet (path, callback) {
     const inStore = JSON.parse(localStorage.getItem('loggedInUser'));
-    const token = inStore.token;
+    const { token } = inStore.data;
     let xhttp = new XMLHttpRequest();
     xhttp.open("GET", window.api_url+path, true);
     xhttp.setRequestHeader('Content-type','application/json');
@@ -20,11 +20,11 @@ function httpPost (path, data, callback) {
         callback(null, JSON.parse(xhttp.responseText || '{}'), xhttp);
     }
     xhttp.send(JSON.stringify(data));
-}
+};
 
 function httpPostCar (path, data, callback) {
     const inStore = JSON.parse(localStorage.getItem('loggedInUser'));
-    const token = inStore.token;
+    const { token } = inStore.data;
     let xhttp = new XMLHttpRequest();
     xhttp.open("POST", window.api_url+path, true);
     xhttp.setRequestHeader('Content-type','application/json');
@@ -37,7 +37,7 @@ function httpPostCar (path, data, callback) {
 
 function httpPostImage (path, data, callback) {
     const inStore = JSON.parse(localStorage.getItem('loggedInUser'));
-    const token = inStore.token;
+    const token = inStore.data.token;
     let xhttp = new XMLHttpRequest();
     xhttp.open("POST", window.api_url+path, true);
     // xhttp.setRequestHeader('Content-type','multipart/form-data');
@@ -50,7 +50,7 @@ function httpPostImage (path, data, callback) {
 
 function httpPatch (path, data, callback) {
     const inStore = JSON.parse(localStorage.getItem('loggedInUser'));
-    const token = inStore.token;
+    const token = inStore.data.token;
     let xhttp = new XMLHttpRequest();
     xhttp.open("PATCH", window.api_url+path, true);
     xhttp.setRequestHeader('Content-type','application/json');

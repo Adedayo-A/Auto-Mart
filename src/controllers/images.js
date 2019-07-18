@@ -20,7 +20,7 @@ const storage = multer.diskStorage({
 // Init Upload
 const upload = multer({
   storage,
-  limits: { fileSize: 1000000 },
+  limits: {fileSize: 1000000 },
   fileFilter: function(req, file, cb) {
     checkFileType(file, cb);
   }
@@ -65,17 +65,17 @@ const imgUploader = (req, res) => {
             },
           });
         } else {
-          const file = `public/uploads/${req.file.filename}`;
-          cloudinary.uploader.upload(file, { tags: 'gotemps', resource_type: 'auto' })
+          const filepath = `public/uploads/${req.file.filename}`;
+          cloudinary.uploader.upload(filepath, { tags: 'gotemps', resource_type: 'auto' })
             .then((file) => {
               console.log(`Public id of the file is ${file.public_id}`);
               console.log(`Url of the file is  ${file.url}`);
-              const image_url = file.url;
-              res.status.json({
+              const imageUrl = file.url;
+              res.status(200).json({
                 data: {
                   msg: 'File Uploaded!',
-                  image_url,  
-                },              
+                  image_url: imageUrl,
+                },
               });
             }).catch((err) => {
               if (err) {
@@ -83,7 +83,7 @@ const imgUploader = (req, res) => {
                   error: {
                     msg: err,
                   },
-                }); 
+                });
               }
             });
         }

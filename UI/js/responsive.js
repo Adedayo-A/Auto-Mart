@@ -3,25 +3,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const mainIndex = document.querySelector('.main-index');
     const inStore = JSON.parse(localStorage.getItem('loggedInUser'));
 
-    // VERIFY LOCAL STORAGE
-    if (!inStore) {
-        const needUser = document.querySelector('.need-user');
-            needUser.style.display = 'none';
-        const needUserLink = document.querySelectorAll('.need-user-link');
-        needUserLink.forEach((noUserLink) => {
-            noUserLink.href = 'UI/signinpage.html';
-        });
-    } else if (inStore) {
-        const inStore = JSON.parse(localStorage.getItem('loggedInUser'));
-        console.log(inStore);
-        let firstname = inStore.username;
-        const neednotUser = document.querySelectorAll('.no-user');
-        neednotUser.forEach((neednouser)=> {
-            neednouser.style.display = 'none';
-        })
-        document.querySelector('.dashboard-dropdown').innerHTML = `Welcome ${firstname}`
-    }
-
     // VERIFY TOKEN 
     const tokenVerify = () => {
         const path = '/api/v1/users/auth/tokenverify';
@@ -33,9 +14,9 @@ document.addEventListener('DOMContentLoaded', () => {
             localStorage.clear();
             window.location.href = 'UI/signinpage.html';
         } else {
-            const token = inStore.token;
+            const { token } = inStore.data;
             const data = {
-                token: token,
+                token,
             }
             httpPost(path, data, (err, respData, xhttp) => {
                 console.log(respData);
@@ -52,6 +33,25 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
     tokenVerify();
+
+    // VERIFY LOCAL STORAGE
+    if (!inStore) {
+    const needUser = document.querySelector('.need-user');
+        needUser.style.display = 'none';
+    const needUserLink = document.querySelectorAll('.need-user-link');
+    needUserLink.forEach((noUserLink) => {
+        noUserLink.href = 'UI/signinpage.html';
+    });
+} else if (inStore) {
+    const inStore = JSON.parse(localStorage.getItem('loggedInUser'));
+    console.log(inStore);
+    let firstname = inStore.data.username;
+    const neednotUser = document.querySelectorAll('.no-user');
+    neednotUser.forEach((neednouser)=> {
+        neednouser.style.display = 'none';
+    })
+    document.querySelector('.dashboard-dropdown').innerHTML = `Welcome ${firstname}`
+}
 
     // SIGN OUT
     document.querySelector('.sign-out').onclick = () => {
@@ -92,6 +92,9 @@ document.addEventListener('DOMContentLoaded', () => {
         httpGet(path, (err, respData, xhttp) => {
             if (err) {
                 console.log(err);
+            } else if (respData.status == 401) {
+                toastr.error(respData.error.message);
+                window.location.href = signinpage.html;
             } else if (respData.data.first_name === null || respData.data.last_name === null || respData.data.address === null) {
                 console.log(respData);
                 toastr.info('Please complete your profile in order to post your car!!');
@@ -103,7 +106,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ADMIN VIEW SOLD CARS
-    if (!inStore.admin) {
+    if (!inStore.data.admin) {
         document.querySelector('.sold').style.display = 'none';
     } else {
         document.querySelector('.sold').style.display = 'block';
@@ -134,7 +137,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 document.querySelector('.section-search').style.display = 'none';
                 const result = document.querySelector('.section-result')
                 console.log(response);
-                toastr.info(response.data.message);
                 const cars = response.data.car_ad;
                 let output = '';
                 for (var i in cars) {
@@ -186,6 +188,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 document.querySelector('.section-result').innerHTML = output;
                 document.querySelector('.second-background-image').style.display = 'none';
                 result.scrollIntoView();
+                toastr.info(response.data.message);
             } else {
                 console.log(response);
                 toastr.info(response.message);

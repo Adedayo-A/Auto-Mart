@@ -34,7 +34,7 @@ document.addEventListener('DOMContentLoaded', () => {
             localStorage.clear();
             window.location.href = 'signinpage.html';
         } else {
-            const token = inStore.token;
+            const { token } = inStore.data;
             const data = {
                 token: token,
             }
@@ -85,7 +85,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // GET MY ORDER
     const getUserAds = () => {
-        const path = '/api/v1/order/user';
+        const path = '/api/v1/cars/carorders/';
         httpGet(path, (err, response, xhttp) => {
             if (err) {
                 toastr.error('An error occured');
@@ -93,10 +93,10 @@ document.addEventListener('DOMContentLoaded', () => {
             } else if (response.status === 401) {
                 toastr.info('Session expired');
                 window.location.href = 'signinpage.html';
-            } else if (response.state === 'success') {
+            } else if (response.data.state === 'success') {
                 console.log(response);
-                toastr.info(response.message);
-                const orderdetails = response.orders
+                toastr.info(response.data.message);
+                const orderdetails = response.data.mycar_orders;
                 let output = '';
                 for (var i in orderdetails) {
                     const accept = '<button class="edit"> Accept </button>'
@@ -111,7 +111,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     output += `<div class="div-result-wrap wrap-all">
                         <div class="wrapper-result one">
                             <div class="card-pictures">
-                                <a href="an_order.html?orderid=${orderId}">
+                                <a href="acarorder.html?orderid=${orderId}">
                                     <img src= ${image} />
                                 </a>
                             </div>
@@ -124,10 +124,6 @@ document.addEventListener('DOMContentLoaded', () => {
                                     <h3 class="heading-price-card-stories"> Price Offered: ${priceOffered} </h3>
                                     <button class="view"> <a href="acarorder.html?orderid=${orderId}"> View Order</a></button>
                                 </div>
-                                <p class="para-delete-card-stories">
-                                ${!isaccepted ? accept:''}
-                                ${!isaccepted ? reject:''}
-                                </p>
                             </div>
                         </div>
                     </div>`
@@ -135,7 +131,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 document.querySelector('.section-result').innerHTML = output;
             } else {
                 console.log(response);
-                toastr.info(response.message);
+                toastr.info(response.error.message);
             }
         });
     }
