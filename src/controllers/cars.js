@@ -227,7 +227,7 @@ const getCars = (req, res) => {
                 console.error(err);
               } else if (resdb.rows.length === 0) {
                 res.status(200).json({
-                status: 200,
+                  status: 200,
                   data: {
                     message: 'No ads found!',
                   },
