@@ -117,13 +117,14 @@ document.addEventListener('DOMContentLoaded', () => {
         e.preventDefault();
         console.log('I was hit');
         const description = document.querySelector('.input-section-search');
-        const manufacturer = document.querySelector('.select-sub-search-make');
+        const manufacturer = document.querySelector('.sub-search-make');
         const status = document.querySelector('.select-sub-search-availability');
         const state = document.querySelector('.select-sub-search-usage');
+        const body_type = document.querySelector('.select-sub-search-body_type');
         const min_price = document.querySelector('.search-price-min');
         const max_price = document.querySelector('.search-price-max');
 
-        const query = `?description=${description.value}&manufacturer=${manufacturer.value}&status=${status.value}&state=${state.value}&min_price=${min_price.value}&max_price=${max_price.value}`;
+    const query = `?description=${description.value}&manufacturer=${manufacturer.value}&status=${status.value}&state=${state.value}&min_price=${min_price.value}&max_price=${max_price.value}&body_type=${body_type.value}`;
         const path = `/api/v1/car/${query}`;
         console.log(path);
         httpGet(path, (err, response, xhttp) => {

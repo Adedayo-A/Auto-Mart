@@ -46,8 +46,8 @@ var getCars = function getCars(req, res) {
   jwt.verify(req.token, process.env.JWT_KEY, function (err, authData) {
     if (err) {
       res.status(401).json({
+        status: 401,
         data: {
-          status: 401,
           message: 'invalid token!!!'
         }
       });
@@ -90,10 +90,10 @@ var getCars = function getCars(req, res) {
             pg.end();
           }
         });
-      } else if (req.query.status) {
+      } else if (req.query.manufacturer && req.query.state) {
         // eslint-disable-next-line consistent-return
-        var _query2 = 'SELECT * FROM carads WHERE LOWER(status) = LOWER($1)';
-        var _value2 = ['available'];
+        var _query2 = 'SELECT * FROM carads WHERE LOWER(manufacturer)=LOWER($1) AND LOWER(state)=LOWER($2)';
+        var _value2 = [req.query.manufacturer, req.query.state];
         pg.query(_query2, _value2, function (err, dbres) {
           if (err) {
             respondErr(err, res);
@@ -106,11 +106,65 @@ var getCars = function getCars(req, res) {
             pg.end();
           }
         });
+      } else if (req.query.status) {
+        // eslint-disable-next-line consistent-return
+        if (req.query.status === 'sold') {
+          var email = authData.user.email;
+          var _query3 = 'SELECT is_admin FROM users WHERE LOWER(email) = LOWER($1)';
+          var _value3 = [email]; // eslint-disable-next-line consistent-return
+
+          pg.query(_query3, _value3, function (err, dbres) {
+            if (err) {
+              respondErr(err, res);
+              pg.end();
+            } else if (!dbres.rows[0].is_admin) {
+              var car_ad = [];
+              res.status(200).json({
+                status: 200,
+                data: {
+                  state: 'success',
+                  message: 'result completed!!',
+                  car_ad: car_ad
+                }
+              });
+              pg.end();
+            } else {
+              _query3 = 'SELECT * FROM carads WHERE LOWER(status) = LOWER($1)';
+              _value3 = [req.query.status];
+              pg.query(_query3, _value3, function (err, resdb) {
+                if (err) {
+                  respondErr(err, res);
+                } else if (resdb.rows.length === 0) {
+                  nocarfound(res);
+                  pg.end();
+                } else {
+                  responseSuccess(res, resdb.rows);
+                  pg.end();
+                }
+              });
+            }
+          });
+        } else {
+          var _query4 = 'SELECT * FROM carads WHERE LOWER(status) = LOWER($1)';
+          var _value4 = [req.query.status];
+          pg.query(_query4, _value4, function (err, dbres) {
+            if (err) {
+              respondErr(err, res);
+              pg.end();
+            } else if (dbres.rows.length === 0) {
+              nocarfound(res);
+              pg.end();
+            } else {
+              responseSuccess(res, dbres.rows);
+              pg.end();
+            }
+          });
+        }
       } else if (req.query.body_type) {
         // eslint-disable-next-line consistent-return
-        var _query3 = 'SELECT * FROM carads WHERE LOWER(body_type) = LOWER($1)';
-        var _value3 = [req.query.body_type];
-        pg.query(_query3, _value3, function (err, dbres) {
+        var _query5 = 'SELECT * FROM carads WHERE LOWER(body_type) = LOWER($1) AND LOWER(status)=LOWER($2)';
+        var _value5 = [req.query.body_type, 'available'];
+        pg.query(_query5, _value5, function (err, dbres) {
           if (err) {
             respondErr(err, res);
             pg.end();
@@ -124,9 +178,9 @@ var getCars = function getCars(req, res) {
         });
       } else if (req.query.manufacturer) {
         // eslint-disable-next-line consistent-return
-        var _query4 = 'SELECT * FROM carads WHERE LOWER(manufacturer) = LOWER($1) AND LOWER(status)=LOWER($2)';
-        var _value4 = [req.query.manufacturer, req.query.status];
-        pg.query(_query4, _value4, function (err, dbres) {
+        var _query6 = 'SELECT * FROM carads WHERE LOWER(manufacturer) = LOWER($1) AND LOWER(status)=LOWER($2)';
+        var _value6 = [req.query.manufacturer, 'available'];
+        pg.query(_query6, _value6, function (err, dbres) {
           if (err) {
             respondErr(err, res);
             pg.end();
@@ -139,11 +193,11 @@ var getCars = function getCars(req, res) {
           }
         });
       } else {
-        var email = authData.user.email;
-        var _query5 = 'SELECT * FROM users WHERE LOWER(email) = LOWER($1)';
-        var _value5 = [email]; // eslint-disable-next-line consistent-return
+        var _email = authData.user.email;
+        var _query7 = 'SELECT * FROM users WHERE LOWER(email) = LOWER($1)';
+        var _value7 = [_email]; // eslint-disable-next-line consistent-return
 
-        pg.query(_query5, _value5, function (err, dbres) {
+        pg.query(_query7, _value7, function (err, dbres) {
           if (err) {
             respondErr(err, res);
             pg.end();
@@ -155,8 +209,8 @@ var getCars = function getCars(req, res) {
             });
             pg.end();
           } else {
-            _query5 = 'SELECT * FROM carads';
-            pg.query(_query5, function (err, resdb) {
+            _query7 = 'SELECT * FROM carads';
+            pg.query(_query7, function (err, resdb) {
               if (err) {
                 respondErr(err, res);
               } else if (resdb.rows.length === 0) {

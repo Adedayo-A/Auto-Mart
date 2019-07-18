@@ -53,7 +53,17 @@
                         </div>
                         <div class="wrapper-search">
                             <div class="div-sub-search-make">
-                                <select name="select-make" class="select-sub-search-make">
+                                    <input type="text" name="select-make" list="make" placeholder="Search by Make" class="sub-search-make datalist">
+                                    <datalist id="make">
+                                        <option value="Search by Make">
+                                        <option value="Acura">
+                                        <option value="Audi">
+                                        <option value="Bentely">
+                                        <option value="BMW">
+                                        <option value="Chevrolet">
+                                        <option value="Toyota">
+                                    </datalist>
+                                <!-- <select name="select-make" class="select-sub-search-make">
                                     <option value="">Search by Make</option>
                                     <option value="All">All Makes</option>
                                     <option value="Acura">Acura</option>
@@ -62,13 +72,21 @@
                                     <option value="BMW">BMW</option>
                                     <option value="Chevrolet">Chevrolet</option>
                                     <option value="Toyota">Toyota</option>
-                                </select>
+                                </select> -->
                             </div>
-                            <div class="div-sub-search-availability">
-                                    <select name="select-availability" class="select-sub-search-availability we">
+                            <div class="div-sub-search-availability"> 
+                                    <select name="select-availability" class="select-sub-search-availability">
                                         <option value="">Select by Status</option>
-                                        <option value="Sold" class="sold">Sold</option>
-                                        <option value="Available">Available</option>
+                                        <option value="sold" class="sold">Sold</option>
+                                        <option value="available">Available</option>
+                                    </select>
+                            </div>
+                            <div class="div-sub-search-availability"> 
+                                    <select name="select-availability" class="select-sub-search-body_type">
+                                        <option value="">Select by Body Type</option>
+                                        <option value="Car" class="car">Car</option>
+                                        <option value="Truck">Truck</option>
+                                        <option value="Van">Van</option>
                                     </select>
                             </div>
                             <div class="div-sub-search-usage">

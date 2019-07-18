@@ -42,8 +42,8 @@ const getCars = (req, res) => {
   jwt.verify(req.token, process.env.JWT_KEY, (err, authData) => {
     if (err) {
       res.status(401).json({
+        status: 401,
         data: {
-          status: 401,
           message: 'invalid token!!!',
         },
       });
@@ -85,10 +85,10 @@ const getCars = (req, res) => {
             pg.end();
           }
         });
-      } else if (req.query.status) {
+      } else if (req.query.manufacturer && req.query.state) {
         // eslint-disable-next-line consistent-return
-        const query = 'SELECT * FROM carads WHERE LOWER(status) = LOWER($1)';
-        const value = ['available'];
+        const query = 'SELECT * FROM carads WHERE LOWER(manufacturer)=LOWER($1) AND LOWER(state)=LOWER($2)';
+        const value = [req.query.manufacturer, req.query.state];
         pg.query(query, value, (err, dbres) => {
           if (err) {
             respondErr(err, res);
@@ -101,10 +101,64 @@ const getCars = (req, res) => {
             pg.end();
           }
         });
+      } else if (req.query.status) {
+        // eslint-disable-next-line consistent-return
+        if (req.query.status === 'sold') {
+          const email = authData.user.email;
+          let query = 'SELECT is_admin FROM users WHERE LOWER(email) = LOWER($1)';
+          let value = [email];
+          // eslint-disable-next-line consistent-return
+          pg.query(query, value, (err, dbres) => {
+            if (err) {
+              respondErr(err, res);
+              pg.end();
+            } else if (!dbres.rows[0].is_admin) {
+              const car_ad = [];
+              res.status(200).json({
+                status: 200,
+                data: {
+                  state: 'success',
+                  message: 'result completed!!',
+                  car_ad,
+                },
+              });
+              pg.end();
+            } else {
+              query = 'SELECT * FROM carads WHERE LOWER(status) = LOWER($1)';
+              value = [req.query.status];
+              pg.query(query, value, (err, resdb) => {
+                if (err) {
+                  respondErr(err, res);
+                } else if (resdb.rows.length === 0) {
+                  nocarfound(res);
+                  pg.end();
+                } else {
+                  responseSuccess(res, resdb.rows);
+                  pg.end();
+                }
+              });
+            }
+          });
+        } else {
+          const query = 'SELECT * FROM carads WHERE LOWER(status) = LOWER($1)';
+          const value = [req.query.status];
+          pg.query(query, value, (err, dbres) => {
+            if (err) {
+              respondErr(err, res);
+              pg.end();
+            } else if (dbres.rows.length === 0) {
+              nocarfound(res);
+              pg.end();
+            } else {
+              responseSuccess(res, dbres.rows);
+              pg.end();
+            }
+          });
+        }
       } else if (req.query.body_type) {
       // eslint-disable-next-line consistent-return
-        const query = 'SELECT * FROM carads WHERE LOWER(body_type) = LOWER($1)';
-        const value = [req.query.body_type];
+        const query = 'SELECT * FROM carads WHERE LOWER(body_type) = LOWER($1) AND LOWER(status)=LOWER($2)';
+        const value = [req.query.body_type, 'available'];
         pg.query(query, value, (err, dbres) => {
           if (err) {
             respondErr(err, res);
@@ -120,7 +174,7 @@ const getCars = (req, res) => {
       } else if (req.query.manufacturer) {
         // eslint-disable-next-line consistent-return
         const query = 'SELECT * FROM carads WHERE LOWER(manufacturer) = LOWER($1) AND LOWER(status)=LOWER($2)';
-        const value = [req.query.manufacturer, req.query.status];
+        const value = [req.query.manufacturer, 'available'];
         pg.query(query, value, (err, dbres) => {
           if (err) {
             respondErr(err, res);
