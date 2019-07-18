@@ -133,7 +133,7 @@ document.addEventListener('DOMContentLoaded', () => {
             } else if (response.status === 401) {
                 window.location.href = 'UI/signinpage.html';
                 toastr.info('session expired');
-            } else if (response.data.state === 'success') {
+            } else if (response.status === 200) {
                 document.querySelector('.section-search').style.display = 'none';
                 const result = document.querySelector('.section-result')
                 console.log(response);
@@ -191,7 +191,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 toastr.info(response.data.message);
             } else {
                 console.log(response);
-                toastr.info(response.message);
+                toastr.info(response.error.message);
             }
         })
     }
