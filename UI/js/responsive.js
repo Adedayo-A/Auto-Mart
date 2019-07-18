@@ -154,6 +154,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                     <h4 class="first-heading-card-stories"> ${cars[i].state} </h4>
                                     <h3 class="heading-price-card-stories"> ${cars[i].price} </h3>
                                     <h4 class="heading-make-card-stories"> ${cars[i].manufacturer} </h4>
+                                    <h4 class="heading-make-card-stories"> ${cars[i].body_type} </h4>
                                     <p class="para-status-card-stories">
                                         <span>${cars[i].status}</span>
                                     </p>
