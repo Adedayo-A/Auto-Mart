@@ -117,13 +117,14 @@ document.addEventListener('DOMContentLoaded', () => {
         e.preventDefault();
         console.log('I was hit');
         const description = document.querySelector('.input-section-search');
-        const manufacturer = document.querySelector('.select-sub-search-make');
+        const manufacturer = document.querySelector('.sub-search-make');
         const status = document.querySelector('.select-sub-search-availability');
         const state = document.querySelector('.select-sub-search-usage');
+        const body_type = document.querySelector('.select-sub-search-body_type');
         const min_price = document.querySelector('.search-price-min');
         const max_price = document.querySelector('.search-price-max');
 
-        const query = `?description=${description.value}&manufacturer=${manufacturer.value}&status=${status.value}&state=${state.value}&min_price=${min_price.value}&max_price=${max_price.value}`;
+    const query = `?description=${description.value}&manufacturer=${manufacturer.value}&status=${status.value}&state=${state.value}&min_price=${min_price.value}&max_price=${max_price.value}&body_type=${body_type.value}`;
         const path = `/api/v1/car/${query}`;
         console.log(path);
         httpGet(path, (err, response, xhttp) => {
@@ -133,8 +134,7 @@ document.addEventListener('DOMContentLoaded', () => {
             } else if (response.status === 401) {
                 window.location.href = 'UI/signinpage.html';
                 toastr.info('session expired');
-            } else if (response.data.state === 'success') {
-                document.querySelector('.section-search').style.display = 'none';
+            } else if (response.status === 200) {
                 const result = document.querySelector('.section-result')
                 console.log(response);
                 const cars = response.data.car_ad;
@@ -154,6 +154,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                     <h4 class="first-heading-card-stories"> ${cars[i].state} </h4>
                                     <h3 class="heading-price-card-stories"> ${cars[i].price} </h3>
                                     <h4 class="heading-make-card-stories"> ${cars[i].manufacturer} </h4>
+                                    <h4 class="heading-make-card-stories"> ${cars[i].body_type} </h4>
                                     <p class="para-status-card-stories">
                                         <span>${cars[i].status}</span>
                                     </p>
@@ -191,7 +192,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 toastr.info(response.data.message);
             } else {
                 console.log(response);
-                toastr.info(response.message);
+                toastr.info(response.error.message);
             }
         })
     }

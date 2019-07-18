@@ -22,6 +22,10 @@
     height: 45px;
   }
 
+  ul.nav-links {
+    margin-right: 30px;
+  }
+
   .nav a.logo {
     margin-left: 3%;
     margin-right: auto;
@@ -43,7 +47,7 @@
   }
 
   .nav ul.svg {
-    margin-right: 20px;
+    margin-right: 40px;
   }
 
   .nav .svg .img-svg {
@@ -74,7 +78,7 @@
 
   div.arrow-up {
     position: absolute;
-    right: 187px;
+    right: 100px;
     top: 36px;
     width: 0;
     height: 0;
