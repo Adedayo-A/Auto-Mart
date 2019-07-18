@@ -134,7 +134,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 window.location.href = 'UI/signinpage.html';
                 toastr.info('session expired');
             } else if (response.status === 200) {
-                document.querySelector('.section-search').style.display = 'none';
                 const result = document.querySelector('.section-result')
                 console.log(response);
                 const cars = response.data.car_ad;
