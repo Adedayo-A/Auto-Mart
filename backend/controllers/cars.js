@@ -42,6 +42,7 @@ var getCars = function getCars(req, res) {
             pg.end();
           } else if (dbres.rows.length === 0) {
             res.status(200).json({
+              status: 200,
               data: {
                 message: 'No car found!!'
               }
@@ -50,6 +51,7 @@ var getCars = function getCars(req, res) {
           } else {
             var car_ad = dbres.rows;
             res.status(200).json({
+              status: 200,
               data: {
                 state: 'success',
                 message: 'result completed',
@@ -74,6 +76,7 @@ var getCars = function getCars(req, res) {
             pg.end();
           } else if (dbres.rows.length === 0) {
             res.status(200).json({
+              status: 200,
               data: {
                 message: 'No car found!!!'
               }
@@ -82,6 +85,7 @@ var getCars = function getCars(req, res) {
           } else {
             var car_ad = dbres.rows;
             res.status(200).json({
+              status: 200,
               data: {
                 state: 'success',
                 message: 'result completed',
@@ -115,6 +119,7 @@ var getCars = function getCars(req, res) {
           } else {
             var car_ad = dbres.rows;
             res.status(200).json({
+              status: 200,
               data: {
                 state: 'success',
                 message: 'result completed',
@@ -140,6 +145,7 @@ var getCars = function getCars(req, res) {
             pg.end();
           } else if (dbres.rows.length === 0) {
             res.status(200).json({
+              status: 200,
               data: {
                 status: 200,
                 message: 'No car found!!!'
@@ -149,6 +155,7 @@ var getCars = function getCars(req, res) {
           } else {
             var car_ad = dbres.rows;
             res.status(200).json({
+              status: 200,
               data: {
                 status: 200,
                 state: 'success',
@@ -174,6 +181,7 @@ var getCars = function getCars(req, res) {
             pg.end();
           } else if (dbres.rows.length === 0) {
             res.status(200).json({
+              status: 200,
               data: {
                 message: 'No car found!!!'
               }
@@ -182,6 +190,7 @@ var getCars = function getCars(req, res) {
           } else {
             var car_ad = dbres.rows;
             res.status(200).json({
+              status: 200,
               data: {
                 state: 'success',
                 message: 'result completed',
@@ -223,6 +232,7 @@ var getCars = function getCars(req, res) {
                 console.error(err);
               } else if (resdb.rows.length === 0) {
                 res.status(200).json({
+                  status: 200,
                   data: {
                     message: 'No ads found!'
                   }
@@ -231,6 +241,7 @@ var getCars = function getCars(req, res) {
               } else {
                 var car_ad = resdb.rows;
                 res.status(200).json({
+                  status: 200,
                   data: {
                     state: 'success',
                     message: 'result completed',
@@ -279,6 +290,7 @@ var getCar = function getCar(req, res) {
           pg.end();
         } else if (dbres.rows === 0) {
           res.status(200).json({
+            status: 200,
             data: {
               status: 200,
               message: 'No car found!!'
@@ -288,6 +300,7 @@ var getCar = function getCar(req, res) {
         } else {
           var car_ad = dbres.rows;
           res.status(200).json({
+            status: 200,
             data: {
               state: 'success',
               message: 'Success, result completed',
@@ -343,6 +356,7 @@ var getadsByOwner = function getadsByOwner(req, res) {
               pg.end();
             } else if (dbres.rows.length === 0) {
               res.status(200).json({
+                status: 200,
                 data: {
                   message: 'No car found!!'
                 }
@@ -351,6 +365,7 @@ var getadsByOwner = function getadsByOwner(req, res) {
             } else {
               var car_ad = dbres.rows;
               res.status(200).json({
+                status: 200,
                 data: {
                   state: 'success',
                   message: 'Success, result completed',
@@ -370,8 +385,8 @@ var getadsByOwner = function getadsByOwner(req, res) {
 var postCar = function postCar(req, res) {
   jwt.verify(req.token, process.env.JWT_KEY, function (err, authData) {
     if (err) {
-      res.status(403).json({
-        status: 403,
+      res.status(401).json({
+        status: 401,
         error: {
           message: 'error..invalid token'
         }
@@ -459,7 +474,8 @@ var patchCar = function patchCar(req, res) {
   // eslint-disable-next-line no-unused-vars
   jwt.verify(req.token, process.env.JWT_KEY, function (err, authData) {
     if (err) {
-      res.status(403).json({
+      res.status(401).json({
+        status: 401,
         error: {
           message: 'error..invalid token'
         }
@@ -505,6 +521,7 @@ var patchCar = function patchCar(req, res) {
               pg.end();
             } else if (dbres.rows.length === 0) {
               res.status(200).json({
+                status: 200,
                 data: {
                   message: 'No ad found'
                 }
@@ -563,7 +580,8 @@ var deleteCar = function deleteCar(req, res) {
     var email = authData.user.email;
 
     if (err) {
-      res.status(403).json({
+      res.status(401).json({
+        status: 401,
         error: {
           message: 'error..invalid token'
         }
@@ -608,6 +626,7 @@ var deleteCar = function deleteCar(req, res) {
               pg.end();
             } else if (resdb.rowCount === 0) {
               res.status(200).json({
+                status: 200,
                 data: {
                   message: 'Ad not found!!'
                 }
@@ -615,6 +634,7 @@ var deleteCar = function deleteCar(req, res) {
               pg.end();
             } else {
               res.status(200).json({
+                status: 200,
                 data: {
                   message: 'AD successfully deleted'
                 }
