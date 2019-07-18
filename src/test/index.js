@@ -277,4 +277,50 @@ describe('TEST API ENDPOINTS', () => {
         });
     });
   });
+  describe('TEST CAR ORDERS ENDPOINTS', () => {
+    it('should update a car order', (done) => {
+      const order = {
+        status: 'rejected',
+      };
+      supertest(index)
+        .patch('/api/v1/cars/66/carorders')
+        .set('Authorization', `Bearer ${token}`)
+        .send(order)
+        .expect('Content-type', /json/)
+        .end((err, res) => {
+          console.log(res.body);
+          res.body.data.message.should.equal('Order Updated');
+          res.body.data.status.should.equal(200);
+          res.error.should.equal(false);
+          done();
+        });
+    });
+    it('should get all user car orders', (done) => {
+      supertest(index)
+        .get('/api/v1/cars/carorders/')
+        .set('Authorization', `Bearer ${token}`)
+        .expect('Content-type', /json/)
+        .end((err, res) => {
+          console.log(res.body);
+          res.body.data.message.should.equal('orders retrieved');
+          res.body.status.should.equal(200);
+          res.error.should.equal(false);
+          done();
+        });
+    });
+    it('should get a car order', (done) => {
+      supertest(index)
+        .get('/api/v1/cars/66/carorders/')
+        .set('Authorization', `Bearer ${token}`)
+        .expect('Content-type', /json/)
+        .end((err, res) => {
+          console.log(res.body);
+          res.body.data.message.should.equal('order retrieved');
+          res.body.status.should.equal(200);
+          res.error.should.equal(false);
+          done();
+        });
+    });
+  });
 });
+  

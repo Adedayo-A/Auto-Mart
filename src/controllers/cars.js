@@ -363,14 +363,6 @@ const getadsByOwner = (req, res) => {
 
 // POST CAR
 const postCar = (req, res) => {
-  const newAd = req.body;
-  const created_on = Date.now();
-  const price = newAd.price;
-  let door = newAd.door;
-  door = door || null;
-  let image_url = newAd.image_url;
-  image_url = image_url || '';
-  let owner;
   jwt.verify(req.token, process.env.JWT_KEY, (err, authData) => {
     if (err) {
       res.status(403).json({
@@ -380,6 +372,14 @@ const postCar = (req, res) => {
         },
       });
     } else {
+      const newAd = req.body;
+      const created_on = Date.now();
+      const price = newAd.price;
+      let door = newAd.door;
+      door = door || null;
+      let image_url = newAd.image_url;
+      image_url = image_url || '';
+      let owner;
       const email = authData.user.email;
       const pg = new Client({
         connectionString: process.env.db_URL,
@@ -633,15 +633,15 @@ const getCarOrders = (req, res) => {
   jwt.verify(req.token, process.env.JWT_KEY, (err, authData) => {
     if (err) {
       res.status(401).json({
+        status: 401,
         error: {
-          status: 401,
           message: 'error..invalid token',
         },
       });
     } else {
       const email = authData.user.email;
       let curruser;
-      let query = 'SELECT id FROM user WHERE email = $1';
+      let query = 'SELECT id FROM users WHERE LOWER(email) = LOWER($1)';
       let value = [email];
       const pg = new Client({
         connectionString: process.env.db_URL,
@@ -655,12 +655,84 @@ const getCarOrders = (req, res) => {
               message: 'error..',
             },
           });
-          console.error(err);
           pg.end();
         } else {
           curruser = resdb.rows[0].id;
-          query = 'SELECT * FROM purchaseorder WHERE car_owner = $1'
+          query = 'SELECT * FROM purchaseorder WHERE car_owner = $1';
           value = [curruser];
+          pg.query(query, value, (err, respo) => {
+            // console.log(respo);
+            if (err) {
+              console.error(err);
+              res.status(500).json({
+                error: {
+                  status: 500,
+                  message: 'error..',
+                },
+              });
+              pg.end();
+            } else if (respo.rows.length === 0) {
+              res.status(200).json({
+                status: 200,
+                data: {
+                  state: 'success',
+                  status: 200,
+                  message: 'you do not have car orders yet',
+                },
+              });
+              pg.end();
+            } else {
+              const mycar_orders = respo.rows;
+              res.status(200).json({
+                status: 200,
+                data: {
+                  state: 'success',
+                  status: 200,
+                  message: 'orders retrieved',
+                  mycar_orders,
+                },
+              });
+              pg.end();
+            }
+          });
+        }
+      });
+    }
+  });
+};
+
+// GET A CAR ORDER
+const getACarOrder = (req, res) => {
+  jwt.verify(req.token, process.env.JWT_KEY, (err, authData) => {
+    if (err) {
+      res.status(401).json({
+        status: 401,
+        error: {
+          message: 'error..invalid token',
+        },
+      });
+    } else {
+      const email = authData.user.email;
+      let curruser;
+      let query = 'SELECT id FROM users WHERE LOWER(email) = LOWER($1)';
+      let value = [email];
+      const pg = new Client({
+        connectionString: process.env.db_URL,
+      });
+      pg.connect();
+      pg.query(query, value, (err, resdb) => {
+        if (err) {
+          res.status(401).json({
+            error: {
+              status: 401,
+              message: 'error..',
+            },
+          });
+          pg.end();
+        } else {
+          curruser = resdb.rows[0].id;
+          query = 'SELECT car_owner FROM purchaseorder WHERE id = $1';
+          value = [req.params.id];
           pg.query(query, value, (err, respo) => {
             if (err) {
               res.status(500).json({
@@ -671,16 +743,41 @@ const getCarOrders = (req, res) => {
               });
               console.error(err);
               pg.end();
+            } else if (respo.rows[0].car_owner === curruser) {
+              query = 'SELECT * FROM purchaseorder WHERE id = $1';
+              value = [req.params.id];
+              pg.query(query, value, (err, response) => {
+              // console.log(respo);
+                if (err) {
+                  console.error(err);
+                  res.status(500).json({
+                    error: {
+                      status: 500,
+                      message: 'error..',
+                    },
+                  });
+                  pg.end();
+                } else {
+                  const car_ord = response.rows[0];
+                  res.status(200).json({
+                    status: 200,
+                    data: {
+                      state: 'success',
+                      message: 'order retrieved',
+                      car_ord,
+                    },
+                  });
+                  pg.end();
+                }
+              });
             } else {
-              const my_car_orders = respo.rows;
-              res.status(403).json({
-                data: {
-                  state: 'success',
-                  status: 200,
-                  message: 'orders retrieved',
-                  my_car_orders,
+              res.status(401).json({
+                status: 401,
+                error: {
+                  message: 'not permitted..',
                 },
               });
+              pg.end();
             }
           });
         }
@@ -694,8 +791,8 @@ const updateCarOrders = (req, res) => {
   jwt.verify(req.token, process.env.JWT_KEY, (err, authData) => {
     if (err) {
       res.status(401).json({
+        status: 401,
         error: {
-          status: 401,
           message: 'error..invalid token',
         },
       });
@@ -719,29 +816,31 @@ const updateCarOrders = (req, res) => {
           pg.end();
         } else {
           const curruser = resdb.rows[0].id;
-          console.log(curruser);
+          console.log(req.body);
+          const orderid = req.params.id;
+          console.log(orderid);
           const status = req.body.status;
-          const orderid = req.params.id;        
-          query = 'SELECT car_owner FROM purchaseorder WHERE car_id = $1';
-          value = [curruser];
+          query = 'SELECT car_owner FROM purchaseorder WHERE id = $1';
+          value = [orderid];
           pg.query(query, value, (err, resdbo) => {
             if (err) {
               console.error(err);
               res.status(500).json({
+                status: 500,
                 error: {
-                  status: 500,
                   message: 'error..',
                 },
               });
               pg.end();
-            } else if (resdbo.rows.length === 0) {
+            } else if (resdbo.rows[0].car_owner !== curruser) {
               res.status(401).json({
                 status: 401,
                 error: {
                   status: 401,
-                  message: 'This is not your order! you cannot update this ad..',
+                  message: 'You are not permitted to update this ad..',
                 },
               });
+              pg.end();
             } else {
               query = 'UPDATE purchaseorder SET status=LOWER($1) WHERE id = $2';
               value = [status, orderid];
@@ -758,7 +857,8 @@ const updateCarOrders = (req, res) => {
                   });
                   pg.end();
                 } else {
-                  res.status(200).json({
+                  res.json({
+                    status: 200,
                     data: {
                       status: 200,
                       message: 'Order Updated',
@@ -784,4 +884,5 @@ module.exports = {
   getadsByOwner,
   getCarOrders,
   updateCarOrders,
+  getACarOrder,
 };

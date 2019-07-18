@@ -25,7 +25,8 @@ var getCar = carControllers.getCar,
     deleteCar = carControllers.deleteCar,
     getadsByOwner = carControllers.getadsByOwner,
     getCarOrders = carControllers.getCarOrders,
-    updateCarOrders = carControllers.updateCarOrders;
+    updateCarOrders = carControllers.updateCarOrders,
+    getACarOrder = carControllers.getACarOrder;
 var signUp = userControllers.signUp,
     verifyUser = userControllers.verifyUser,
     updateUser = userControllers.updateUser,
@@ -54,8 +55,9 @@ router.patch('/car/:id/status', tokenAuth, patchCar);
 router.patch('/car/:id/price', tokenAuth, patchCar);
 router["delete"]('/api/v1/car/:id/', tokenAuth, deleteCar);
 router["delete"]('/car/:id/', tokenAuth, deleteCar);
-router.get('/api/v1/car/carorders', tokenAuth, getCarOrders);
-router.patch('/api/v1/car/:id/carorders', tokenAuth, updateCarOrders); // USERS API ROUTES
+router.get('/api/v1/cars/carorders/', tokenAuth, getCarOrders);
+router.get('/api/v1/cars/:id/carorders/', tokenAuth, getACarOrder);
+router.patch('/api/v1/cars/:id/carorders/', tokenAuth, updateCarOrders); // USERS API ROUTES
 
 router.patch('/api/v1/users/auth/update', tokenAuth, updateUser);
 router.post('/api/v1/users/auth/signup', validateInfo, signUp);

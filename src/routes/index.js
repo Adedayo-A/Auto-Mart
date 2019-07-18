@@ -11,7 +11,7 @@ const middlewares = require('../middlewares/user.js');
 
 // const { tokenAuth } = middleControllers;
 const {
-  getCar, getCars, postCar, patchCar, deleteCar, getadsByOwner, getCarOrders, updateCarOrders,
+  getCar, getCars, postCar, patchCar, deleteCar, getadsByOwner, getCarOrders, updateCarOrders, getACarOrder,
 } = carControllers;
 
 const {
@@ -44,8 +44,9 @@ router.patch('/car/:id/status', tokenAuth, patchCar);
 router.patch('/car/:id/price', tokenAuth, patchCar);
 router.delete('/api/v1/car/:id/', tokenAuth, deleteCar);
 router.delete('/car/:id/', tokenAuth, deleteCar);
-router.get('/api/v1/car/carorders', tokenAuth, getCarOrders);
-router.patch('/api/v1/car/:id/carorders', tokenAuth, updateCarOrders);
+router.get('/api/v1/cars/carorders/', tokenAuth, getCarOrders);
+router.get('/api/v1/cars/:id/carorders/', tokenAuth, getACarOrder);
+router.patch('/api/v1/cars/:id/carorders/', tokenAuth, updateCarOrders);
 
 
 // USERS API ROUTES
