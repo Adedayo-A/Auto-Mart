@@ -162,7 +162,7 @@ var getCars = function getCars(req, res) {
         }
       } else if (req.query.body_type) {
         // eslint-disable-next-line consistent-return
-        var _query5 = 'SELECT * FROM carads WHERE LOWER(body_type) = LOWER($1) AND LOWER(status)=LOWER($2)';
+        var _query5 = 'SELECT * FROM carads WHERE LOWER(body_type)=LOWER($1) AND status=LOWER($2)';
         var _value5 = [req.query.body_type, 'available'];
         pg.query(_query5, _value5, function (err, dbres) {
           if (err) {

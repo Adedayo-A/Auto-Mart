@@ -156,8 +156,8 @@ const getCars = (req, res) => {
           });
         }
       } else if (req.query.body_type) {
-      // eslint-disable-next-line consistent-return
-        const query = 'SELECT * FROM carads WHERE LOWER(body_type) = LOWER($1) AND LOWER(status)=LOWER($2)';
+        // eslint-disable-next-line consistent-return
+        const query = 'SELECT * FROM carads WHERE LOWER(body_type)=LOWER($1) AND status=LOWER($2)';
         const value = [req.query.body_type, 'available'];
         pg.query(query, value, (err, dbres) => {
           if (err) {
