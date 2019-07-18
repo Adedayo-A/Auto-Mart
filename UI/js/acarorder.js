@@ -92,11 +92,11 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // GET SPECIFIC ORDER
-    const geta_car_order = () => {
+    // GET A SPECIFIC CAR ORDER
+    const getaCarOrder = () => {
         const postId = window.location.search.slice(1).split("&")[0].split("=")[1];
         console.log(postId);
-        path = `/api/v1/order/${postId}`;
+        path = `/api/v1/cars/${postId}/carorders/`;
         httpGet(path, (err, response, xhttp) => {
             if (err) {
                 toastr.error('An error occured');
@@ -104,21 +104,19 @@ document.addEventListener('DOMContentLoaded', () => {
             } else if (response.status === 401) {
                 toastr.info('session expired');
                 window.location.href = "signinpage.html";
-            } else if (response.data.state === 'success') {
-                console.log(response);
+            } else if (response.status === 200) {
                 // toastr.info(response.data.message);
-                const orderdetails = response.data.order;
+                const orderdetails = response.data.car_ord;
                 let output = '';
-                for (var i in orderdetails) {
-                    const accept = '<button class="accept"> Accept </button>'
-                    const reject = '<button class="reject"> Reject </button>'
-                    const image = orderdetails[i].image || 'N/A';
-                    const carId = orderdetails[i].car_id || 'N/A';
-                    const manufacturer = orderdetails[i].manufacturer || 'N/A';
-                    const model = orderdetails[i].model || 'N/A';
-                    const isaccepted = orderdetails[i].status == 'accepted';
-                    const priceOffered = orderdetails[i].amount || 'N/A';
-                    const orderId = orderdetails[i].id || 'N/A';
+                    const accept = '<button class="accept" value="accepted"> Accept </button>'
+                    const reject = '<button class="reject" value="reject"> Reject </button>'
+                    const image = orderdetails.image || 'N/A';
+                    const carId = orderdetails.car_id || 'N/A';
+                    const manufacturer = orderdetails.manufacturer || 'N/A';
+                    const model = orderdetails.model || 'N/A';
+                    const isaccepted = orderdetails.status == 'accepted';
+                    const priceOffered = orderdetails.amount || 'N/A';
+                    const orderId = orderdetails.id || 'N/A';
                     output += `<div class="div-result-wrap wrap-all">
                         <div class="wrapper-result one">
                             <div class="card-pictures">
@@ -129,7 +127,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                     <h4 class="first-heading-card-stories"> Car id: ${carId} </h4>
                                     <h4 class="first-heading-card-stories"> Manufacturer: ${manufacturer} </h4>
                                     <h4 class="first-heading-card-stories"> Model: ${model} </h4>
-                                    <h4 class="first-heading-card-stories"> Status of Order: ${orderdetails[i].status} </h4>
+                                    <h4 class="first-heading-card-stories"> Status of Order: ${orderdetails.status} </h4>
                                     <h3 class="heading-price-card-stories"> Price Offered: ${priceOffered} </h3>
                                 </div>
                             </div>
@@ -139,19 +137,20 @@ document.addEventListener('DOMContentLoaded', () => {
                                 </p>
                         </div>
                     </div>`
-                }
                 document.querySelector('.section-result').innerHTML = output;
+                
                 const statusAccept = () => {
                     console.log('here');
                     const adId = window.location.search.slice(1).split("&")[0].split("=")[1];
-                    const path = `/api/v1/car/${adId}/carorders`;
-                    const accept = document.querySelector('.accept').value;
-                    console.log(accept);
+                    console.log(adId);
+                    const path = `/api/v1/cars/${adId}/carorders`;  // '/api/v1/car/:id/carorders
+                    const status = document.querySelector('.accept').value;
                     const data = {
-                        status: accept,
+                        status,
                     }
 
                     httpPatch( path, data, (err, response, xhttp) => {
+                        console.log(response);
                         if (err) {
                             toastr.error('An error occured');
                             console.log(err);
@@ -164,10 +163,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 const statusReject = () => {
                     console.log('here');
                     const adId = window.location.search.slice(1).split("&")[0].split("=")[1];
-                    const path = `/api/v1/car/:${adId}/carorders`;
-                    const reject = document.querySelector('.reject').value;
+                    console.log(adId);
+                    const path = `/api/v1/cars/${adId}/carorders`;       
+                    const status = document.querySelector('.reject').value;
                     const data = {
-                        status: reject,
+                        status
                     }
 
                     httpPatch( path, data, (err, response, xhttp) => {
@@ -176,7 +176,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             console.log(err);
                         } else {
                             toastr.success(response.data.message);
-                            window.location.href = 'mycarorders.html';
+                            // window.location.href = 'mycarorders.html';
                         }
                     });
                 }
@@ -187,9 +187,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 
             } else {
                 console.log(response);
-                toastr.info(response.message);
+                // toastr.info(response.message);
             }
         });
     }
-    geta_car_order(); 
+    getaCarOrder(); 
 });

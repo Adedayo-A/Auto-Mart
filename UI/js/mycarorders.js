@@ -85,7 +85,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // GET MY ORDER
     const getUserAds = () => {
-        const path = '/api/v1/order/user';
+        const path = '/api/v1/cars/carorders/';
         httpGet(path, (err, response, xhttp) => {
             if (err) {
                 toastr.error('An error occured');
@@ -96,7 +96,7 @@ document.addEventListener('DOMContentLoaded', () => {
             } else if (response.data.state === 'success') {
                 console.log(response);
                 toastr.info(response.data.message);
-                const orderdetails = response.data.orders;
+                const orderdetails = response.data.mycar_orders;
                 let output = '';
                 for (var i in orderdetails) {
                     const accept = '<button class="edit"> Accept </button>'
@@ -111,7 +111,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     output += `<div class="div-result-wrap wrap-all">
                         <div class="wrapper-result one">
                             <div class="card-pictures">
-                                <a href="an_order.html?orderid=${orderId}">
+                                <a href="acarorder.html?orderid=${orderId}">
                                     <img src= ${image} />
                                 </a>
                             </div>
