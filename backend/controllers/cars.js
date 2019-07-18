@@ -7,7 +7,38 @@
 var _require = require('pg'),
     Client = _require.Client;
 
-var jwt = require('jsonwebtoken'); // GET REQUESTS
+var jwt = require('jsonwebtoken');
+
+var respondErr = function respondErr(err, res) {
+  console.log(err);
+  res.status(500).json({
+    status: 500,
+    error: {
+      message: 'error encountered'
+    }
+  });
+};
+
+var responseSuccess = function responseSuccess(res, car_ad) {
+  res.status(200).json({
+    status: 200,
+    data: {
+      status: 200,
+      state: 'success',
+      message: 'result completed',
+      car_ad: car_ad
+    }
+  });
+};
+
+var nocarfound = function nocarfound(res) {
+  res.status(200).json({
+    status: 200,
+    data: {
+      message: 'No car found!!!'
+    }
+  });
+}; // GET REQUESTS
 
 
 var getCars = function getCars(req, res) {
@@ -33,31 +64,13 @@ var getCars = function getCars(req, res) {
         var value = [req.query.min_price, req.query.max_price, 'available'];
         pg.query(query, value, function (err, dbres) {
           if (err) {
-            console.log(err);
-            res.status(500).json({
-              error: {
-                message: 'error encountered'
-              }
-            });
+            respondErr(err, res);
             pg.end();
           } else if (dbres.rows.length === 0) {
-            res.status(200).json({
-              status: 200,
-              data: {
-                message: 'No car found!!'
-              }
-            });
+            nocarfound(res);
             pg.end();
           } else {
-            var car_ad = dbres.rows;
-            res.status(200).json({
-              status: 200,
-              data: {
-                state: 'success',
-                message: 'result completed',
-                car_ad: car_ad
-              }
-            });
+            responseSuccess(res, dbres.rows);
             pg.end();
           }
         });
@@ -67,31 +80,13 @@ var getCars = function getCars(req, res) {
         var _value = ['available', req.query.state];
         pg.query(_query, _value, function (err, dbres) {
           if (err) {
-            console.log(err);
-            res.status(500).json({
-              error: {
-                message: 'error encountered'
-              }
-            });
+            respondErr(err, res);
             pg.end();
           } else if (dbres.rows.length === 0) {
-            res.status(200).json({
-              status: 200,
-              data: {
-                message: 'No car found!!!'
-              }
-            });
+            nocarfound(res);
             pg.end();
           } else {
-            var car_ad = dbres.rows;
-            res.status(200).json({
-              status: 200,
-              data: {
-                state: 'success',
-                message: 'result completed',
-                car_ad: car_ad
-              }
-            });
+            responseSuccess(res, dbres.rows);
             pg.end();
           }
         });
@@ -101,31 +96,13 @@ var getCars = function getCars(req, res) {
         var _value2 = ['available'];
         pg.query(_query2, _value2, function (err, dbres) {
           if (err) {
-            console.log(err);
-            res.status(500).json({
-              error: {
-                message: 'error encountered'
-              }
-            });
+            respondErr(err, res);
             pg.end();
           } else if (dbres.rows.length === 0) {
-            res.status(200).json({
-              status: 200,
-              data: {
-                message: 'No car found!!!'
-              }
-            });
+            nocarfound(res);
             pg.end();
           } else {
-            var car_ad = dbres.rows;
-            res.status(200).json({
-              status: 200,
-              data: {
-                state: 'success',
-                message: 'result completed',
-                car_ad: car_ad
-              }
-            });
+            responseSuccess(res, dbres.rows);
             pg.end();
           }
         });
@@ -135,34 +112,13 @@ var getCars = function getCars(req, res) {
         var _value3 = [req.query.body_type];
         pg.query(_query3, _value3, function (err, dbres) {
           if (err) {
-            console.log(err);
-            res.status(500).json({
-              status: 500,
-              error: {
-                message: 'error encountered'
-              }
-            });
+            respondErr(err, res);
             pg.end();
           } else if (dbres.rows.length === 0) {
-            res.status(200).json({
-              status: 200,
-              data: {
-                status: 200,
-                message: 'No car found!!!'
-              }
-            });
+            nocarfound(res);
             pg.end();
           } else {
-            var car_ad = dbres.rows;
-            res.status(200).json({
-              status: 200,
-              data: {
-                status: 200,
-                state: 'success',
-                message: 'result completed',
-                car_ad: car_ad
-              }
-            });
+            responseSuccess(res, dbres.rows);
             pg.end();
           }
         });
@@ -172,31 +128,13 @@ var getCars = function getCars(req, res) {
         var _value4 = [req.query.manufacturer, req.query.status];
         pg.query(_query4, _value4, function (err, dbres) {
           if (err) {
-            console.log(err);
-            res.status(500).json({
-              error: {
-                message: 'error encountered'
-              }
-            });
+            respondErr(err, res);
             pg.end();
           } else if (dbres.rows.length === 0) {
-            res.status(200).json({
-              status: 200,
-              data: {
-                message: 'No car found!!!'
-              }
-            });
+            nocarfound(res);
             pg.end();
           } else {
-            var car_ad = dbres.rows;
-            res.status(200).json({
-              status: 200,
-              data: {
-                state: 'success',
-                message: 'result completed',
-                car_ad: car_ad
-              }
-            });
+            responseSuccess(res, dbres.rows);
             pg.end();
           }
         });
@@ -207,12 +145,8 @@ var getCars = function getCars(req, res) {
 
         pg.query(_query5, _value5, function (err, dbres) {
           if (err) {
-            res.status(500).json({
-              error: {
-                message: 'error..'
-              }
-            });
-            console.error(err);
+            respondErr(err, res);
+            pg.end();
           } else if (dbres.rows[0].is_admin === false) {
             res.status(403).json({
               error: {
@@ -221,33 +155,15 @@ var getCars = function getCars(req, res) {
             });
             pg.end();
           } else {
-            _query5 = 'SELECT * FROM LOWER(carads)';
+            _query5 = 'SELECT * FROM carads';
             pg.query(_query5, function (err, resdb) {
               if (err) {
-                res.status(500).json({
-                  error: {
-                    message: 'error..'
-                  }
-                });
-                console.error(err);
+                respondErr(err, res);
               } else if (resdb.rows.length === 0) {
-                res.status(200).json({
-                  status: 200,
-                  data: {
-                    message: 'No ads found!'
-                  }
-                });
+                nocarfound(res);
                 pg.end();
               } else {
-                var car_ad = resdb.rows;
-                res.status(200).json({
-                  status: 200,
-                  data: {
-                    state: 'success',
-                    message: 'result completed',
-                    car_ad: car_ad
-                  }
-                });
+                responseSuccess(res, resdb.rows);
                 pg.end();
               }
             });

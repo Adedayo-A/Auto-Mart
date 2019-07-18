@@ -5,6 +5,37 @@ const { Client } = require('pg');
 
 const jwt = require('jsonwebtoken');
 
+const respondErr = (err, res) => {
+  console.log(err);
+  res.status(500).json({
+    status: 500,
+    error: {
+      message: 'error encountered',
+    },
+  });
+};
+
+const responseSuccess = (res, car_ad) => {
+  res.status(200).json({
+    status: 200,
+    data: {
+      status: 200,
+      state: 'success',
+      message: 'result completed',
+      car_ad,
+    },
+  });
+};
+
+const nocarfound = (res) => {
+  res.status(200).json({
+    status: 200,
+    data: {
+      message: 'No car found!!!',
+    },
+  });
+};
+
 // GET REQUESTS
 const getCars = (req, res) => {
   // PRICE-RANGE AND STATUS-AVAILABLE
@@ -28,31 +59,13 @@ const getCars = (req, res) => {
         const value = [req.query.min_price, req.query.max_price, 'available'];
         pg.query(query, value, (err, dbres) => {
           if (err) {
-            console.log(err);
-            res.status(500).json({
-              error: {
-                message: 'error encountered',
-              },
-            });
+            respondErr(err, res);
             pg.end();
           } else if (dbres.rows.length === 0) {
-            res.status(200).json({
-              status: 200,
-              data: {
-                message: 'No car found!!',
-              },
-            });
+            nocarfound(res);
             pg.end();
           } else {
-            const car_ad = dbres.rows;
-            res.status(200).json({
-              status: 200,
-              data: {
-                state: 'success',
-                message: 'result completed',
-                car_ad,
-              },
-            });
+            responseSuccess(res, dbres.rows);
             pg.end();
           }
         });
@@ -62,31 +75,13 @@ const getCars = (req, res) => {
         const value = ['available', req.query.state];
         pg.query(query, value, (err, dbres) => {
           if (err) {
-            console.log(err);
-            res.status(500).json({
-              error: {
-                message: 'error encountered',
-              },
-            });
+            respondErr(err, res);
             pg.end();
           } else if (dbres.rows.length === 0) {
-            res.status(200).json({
-              status: 200,
-              data: {
-                message: 'No car found!!!',
-              },
-            });
+            nocarfound(res);
             pg.end();
           } else {
-            const car_ad = dbres.rows;
-            res.status(200).json({
-              status: 200,
-              data: {
-                state: 'success',
-                message: 'result completed',
-                car_ad,
-              },
-            });
+            responseSuccess(res, dbres.rows);
             pg.end();
           }
         });
@@ -96,31 +91,13 @@ const getCars = (req, res) => {
         const value = ['available'];
         pg.query(query, value, (err, dbres) => {
           if (err) {
-            console.log(err);
-            res.status(500).json({
-              error: {
-                message: 'error encountered',
-              },
-            });
+            respondErr(err, res);
             pg.end();
           } else if (dbres.rows.length === 0) {
-            res.status(200).json({
-              status: 200,
-              data: {
-                message: 'No car found!!!',
-              },
-            });
+            nocarfound(res);
             pg.end();
           } else {
-            const car_ad = dbres.rows;
-            res.status(200).json({
-              status: 200,
-              data: {
-                state: 'success',
-                message: 'result completed',
-                car_ad,
-              },
-            });
+            responseSuccess(res, dbres.rows);
             pg.end();
           }
         });
@@ -130,34 +107,13 @@ const getCars = (req, res) => {
         const value = [req.query.body_type];
         pg.query(query, value, (err, dbres) => {
           if (err) {
-            console.log(err);
-            res.status(500).json({
-              status: 500,
-              error: {
-                message: 'error encountered',
-              },
-            });
+            respondErr(err, res);
             pg.end();
           } else if (dbres.rows.length === 0) {
-            res.status(200).json({
-              status: 200,
-              data: {
-                status: 200,
-                message: 'No car found!!!',
-              },
-            });
+            nocarfound(res);
             pg.end();
           } else {
-            const car_ad = dbres.rows;
-            res.status(200).json({
-              status: 200,
-              data: {
-                status: 200,
-                state: 'success',
-                message: 'result completed',
-                car_ad,
-              },
-            });
+            responseSuccess(res, dbres.rows);
             pg.end();
           }
         });
@@ -167,31 +123,13 @@ const getCars = (req, res) => {
         const value = [req.query.manufacturer, req.query.status];
         pg.query(query, value, (err, dbres) => {
           if (err) {
-            console.log(err);
-            res.status(500).json({
-              error: {
-                message: 'error encountered',
-              },
-            });
+            respondErr(err, res);
             pg.end();
           } else if (dbres.rows.length === 0) {
-            res.status(200).json({
-              status: 200,
-              data: {
-                message: 'No car found!!!',
-              },
-            });
+            nocarfound(res);
             pg.end();
           } else {
-            const car_ad = dbres.rows;
-            res.status(200).json({
-              status: 200,
-              data: {
-                state: 'success',
-                message: 'result completed',
-                car_ad,
-              },
-            });
+            responseSuccess(res, dbres.rows);
             pg.end();
           }
         });
@@ -202,12 +140,8 @@ const getCars = (req, res) => {
         // eslint-disable-next-line consistent-return
         pg.query(query, value, (err, dbres) => {
           if (err) {
-            res.status(500).json({
-              error: {
-                message: 'error..',
-              },
-            });
-            console.error(err);
+            respondErr(err, res);
+            pg.end();
           } else if (dbres.rows[0].is_admin === false) {
             res.status(403).json({
               error: {
@@ -216,33 +150,15 @@ const getCars = (req, res) => {
             });
             pg.end();
           } else {
-            query = 'SELECT * FROM LOWER(carads)';
+            query = 'SELECT * FROM carads';
             pg.query(query, (err, resdb) => {
               if (err) {
-                res.status(500).json({
-                  error: {
-                    message: 'error..',
-                  },
-                });
-                console.error(err);
+                respondErr(err, res);
               } else if (resdb.rows.length === 0) {
-                res.status(200).json({
-                  status: 200,
-                  data: {
-                    message: 'No ads found!',
-                  },
-                });
+                nocarfound(res);
                 pg.end();
               } else {
-                const car_ad = resdb.rows;
-                res.status(200).json({
-                  status: 200,
-                  data: {
-                    state: 'success',
-                    message: 'result completed',
-                    car_ad,
-                  },
-                });
+                responseSuccess(res, resdb.rows);
                 pg.end();
               }
             });
