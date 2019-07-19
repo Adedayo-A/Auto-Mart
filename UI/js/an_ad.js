@@ -125,6 +125,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     const door = cars[i].door || 'N/A';
                     const description = cars[i].description || 'N/A';
                     const status = cars[i].status || 'N/A';
+                    const sold = cars[i].status == 'sold';
+                    const mkpuchaseorder = '<button class="viewone"><a href="purchase-order.html?adId=${adId}">Make a purchase order</a></button>';
+                    const postflag = '<button class="editone"><a href="flag.html?adId=${adId}">Flag</a></button>';
+                    
                     output += 
                      `<div class="div-result-wrap wrap-all">
                             <div class="wrapper-result one">
@@ -146,10 +150,10 @@ document.addEventListener('DOMContentLoaded', () => {
                                             <span> Availability: ${status} </span>
                                         </p>
                                         <p>
-                                            <button class="viewone"><a href="purchase-order.html?adId=${adId}">Make a purchase order</a></button>
+                                            ${!sold ? mkpuchaseorder: ''}
+                                            ${!sold ? postflag: ''}
                                         </p>
                                         <p>
-                                            <button class="editone"><a href="flag.html?adId=${adId}">Flag</a></button>
                                             ${inStore.data.admin ? delButton: ''}
                                         </p>
                                     </div>

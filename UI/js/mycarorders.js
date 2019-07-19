@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
         } else if (inStore) {
             const inStore = JSON.parse(localStorage.getItem('loggedInUser'));
             console.log(inStore);
-            let firstname = inStore.username;
+            let firstname = inStore.data.username;
             const neednotUser = document.querySelectorAll('.no-user');
             neednotUser.forEach((neednouser)=> {
                 neednouser.style.display = 'none';

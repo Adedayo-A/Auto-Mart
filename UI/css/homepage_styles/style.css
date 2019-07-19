@@ -70,7 +70,7 @@
   /* DROPDOWN */
   div.arrow-up {
     position: absolute;
-    right: 80px;
+    right: 200px;
     top: 33px;
     width: 0;
     height: 0;
@@ -309,7 +309,7 @@
       }
     
       .nav ul.svg {
-        margin-right: 20px;
+        margin-right: 60px;
       }
     
       .nav .svg .img-svg {
@@ -340,7 +340,7 @@
     
       div.arrow-up {
         position: absolute;
-        right: 187px;
+        right: 68px;
         top: 36px;
         width: 0;
         height: 0;
@@ -349,9 +349,9 @@
         border-bottom: 5px solid white;
       }
       div.dropdown {
-        background-color: black;
+        /* background-color: black; */
         position: absolute;
-        right: 100px;
+        right: 30px;
         padding: 1rem;
         border: 1.5px solid #efefef;
         animation: slide-bottom 2s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
@@ -369,11 +369,13 @@
         text-decoration: none;
         color: white;
       }
+
       div.dropdown p.para-dropdown {
         color: white;
         margin-top: 10px;
         font-size: 10px;
       }
+
       div.dropdown .para-dropdown a {
         text-decoration: none;
         color: #A400B4;
