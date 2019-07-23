@@ -290,7 +290,7 @@ describe('TEST API ENDPOINTS', () => {
         .end((err, res) => {
           console.log(res.body);
           res.body.data.message.should.equal('Order Updated');
-          res.body.data.status.should.equal(200);
+          res.body.status.should.equal(200);
           res.error.should.equal(false);
           done();
         });
