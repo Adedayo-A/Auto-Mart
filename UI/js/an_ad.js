@@ -126,8 +126,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     const description = cars[i].description || 'N/A';
                     const status = cars[i].status || 'N/A';
                     const sold = cars[i].status == 'sold';
-                    const mkpuchaseorder = '<button class="viewone"><a href="purchase-order.html?adId=${adId}">Make a purchase order</a></button>';
-                    const postflag = '<button class="editone"><a href="flag.html?adId=${adId}">Flag</a></button>';
+                    const mkpuchaseorder = `<button class="viewone"><a href="purchase-order.html?adId=${adId}">Make a purchase order</a></button>`;
+                    const postflag = `<button class="editone"><a href="flag.html?adId=${adId}">Flag</a></button>`;
                     
                     output += 
                      `<div class="div-result-wrap wrap-all">

@@ -12,28 +12,28 @@ cloudinary.config({
 // Set The Storage Engine
 const storage = multer.diskStorage({
   destination: './public/uploads/',
-  filename: function(req, file, cb) {
-      cb(null,file.fieldname + '-' + Date.now() + path.extname(file.originalname));
-    }
-  });
-  
+  filename(req, file, cb) {
+    cb(null, `${file.fieldname}-${Date.now()}${path.extname(file.originalname)}`);
+  },
+});
+
 // Init Upload
 const upload = multer({
   storage,
-  limits: {fileSize: 1000000 },
-  fileFilter: function(req, file, cb) {
+  limits: { fileSize: 1000000 },
+  fileFilter(req, file, cb) {
     checkFileType(file, cb);
-  }
+  },
 }).single('myImage');
 
-  // Check File Type
+// Check File Type
 function checkFileType(file, cb) {
   // Allowed ext
   const filetypes = /jpeg|jpg|png|gif/;
   // Check ext
   const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
   // Check mime
-  const mimetype = filetypes.test(file.mimetype); 
+  const mimetype = filetypes.test(file.mimetype);
   if (mimetype && extname) {
     return cb(null, true);
   }
@@ -42,12 +42,12 @@ function checkFileType(file, cb) {
 
 const imgUploader = (req, res) => {
   jwt.verify(req.token, process.env.JWT_KEY, (err, authData) => {
-    const email = authData.user.email;
+    const { email } = authData.user;
     if (err) {
       res.status(401).json({
         error: {
           message: 'error..invalid token',
-        }
+        },
       });
     } else {
       upload(req, res, (err) => {

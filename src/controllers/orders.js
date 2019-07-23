@@ -167,7 +167,7 @@ const getMyOrders = (req, res) => {
                 },
               });
               pg.end();
-            }        
+            }
           });
         }
       });
@@ -258,7 +258,7 @@ const patchOrder = (req, res) => {
           pg.end();
         } else {
           currUser = dbres.rows[0].id;
-        
+
           query = 'SELECT buyer FROM purchaseorder WHERE id = $1';
           value = [req.params.id];
           // eslint-disable-next-line consistent-return
@@ -283,7 +283,7 @@ const patchOrder = (req, res) => {
               // eslint-disable-next-line prefer-destructuring
               buyer = dbresp.rows[0].buyer;
               const priceOffered = order.price_offered;
-            
+
               if (currUser === buyer) {
                 query = 'UPDATE purchaseorder SET amount=$1';
                 value = [priceOffered];
@@ -337,7 +337,7 @@ const deleteOrder = (req, res) => {
         },
       });
     } else {
-      const email = authData.user.email;
+      const { email } = authData.user;
       const pg = new Client({
         connectionString: process.env.db_URL,
       });

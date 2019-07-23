@@ -2,15 +2,18 @@
 /* eslint-disable eol-last */
 /* eslint-disable linebreak-style */
 // eslint-disable-next-line import/no-extraneous-dependencies
-const { Client } = require('pg');
-const jwt = require('jsonwebtoken');
+// const { Client } = require('pg');
+import { Client } from 'pg';
+import jwt from 'jsonwebtoken';
+import bcrypt from 'bcrypt';
+// const jwt = require('jsonwebtoken');
 // eslint-disable-next-line import/no-extraneous-dependencies
-const bcrypt = require('bcrypt');
+// const bcrypt = require('bcrypt');
 
 // const users = require('../db/Users.js');
 // class userControllers { 
 // export
-const signUp = (req, res) => {
+export const signUp = (req, res) => {
   const user = req.body;
   const myPassword = user.password;
   bcrypt.hash(myPassword, 10, (err, hash) => {
@@ -90,7 +93,7 @@ const signUp = (req, res) => {
   });
 };
 
-const verifyUser = (req, res) => {
+export const verifyUser = (req, res) => {
   // eslint-disable-next-line max-len
   const user = req.body;
   const myPassword = user.password;
@@ -168,7 +171,7 @@ const verifyUser = (req, res) => {
 };
 
 // UPDATE A USER
-const updateUser = (req, res) => {
+export const updateUser = (req, res) => {
   // eslint-disable-next-line no-unused-vars
   jwt.verify(req.token, process.env.JWT_KEY, (err, authData) => {
     // eslint-disable-next-line prefer-destructuring    
@@ -246,9 +249,7 @@ const updateUser = (req, res) => {
 };
 
 // GET A USER
-const getAUser = (req, res) => {
-  console.log(req);
-  console.log(res);
+export const getAUser = (req, res) => {
   jwt.verify(req.token, process.env.JWT_KEY, (err, authData) => {
     if (err) {
       res.status(401).json({
@@ -268,13 +269,13 @@ const getAUser = (req, res) => {
       // eslint-disable-next-line consistent-return
       pg.query(query, value, (err, dbres) => {
         if (err) {
+          console.log(err);
           res.status(403).json({
             status: 403,
             error: {
               message: 'error..',
             },
           });
-          console.log(err);
           pg.end();
         } else {
           const userdata = dbres.rows[0];
@@ -299,7 +300,7 @@ const getAUser = (req, res) => {
 };
 
 // TOKEN VERIFICATION
-const tokenVerify = (req, res) => {
+export const tokenVerify = (req, res) => {
   jwt.verify(req.body.token, process.env.JWT_KEY, (err) => {
     if (err) {
       res.json({
@@ -317,10 +318,18 @@ const tokenVerify = (req, res) => {
 };
 
 
-module.exports = {
-  signUp,
-  verifyUser,
-  updateUser,
-  getAUser,
-  tokenVerify,
-};
+// module.exports = {
+//   signUp,
+//   verifyUser,
+//   updateUser,
+//   getAUser,
+//   tokenVerify,
+// };
+
+// export default {
+//   signUp,
+//   verifyUser,
+//   updateUser,
+//   getAUser,
+//   tokenVerify,
+// };

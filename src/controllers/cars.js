@@ -65,7 +65,7 @@ const getCars = (req, res) => {
           pg.end();
         }
       };
-         
+
       if (req.query.min_price && req.query.max_price && req.query.status) {
         // eslint-disable-next-line consistent-return
         const query = 'SELECT * FROM carads WHERE price BETWEEN $1 AND $2 AND LOWER(status) = LOWER($3)';
@@ -115,6 +115,7 @@ const getCars = (req, res) => {
           pg.query(query, value, pgCallback);
         }
       } else if (req.query.body_type) {
+        console.log(req.query.body_type);
         // eslint-disable-next-line consistent-return
         const query = 'SELECT * FROM carads WHERE LOWER(body_type)=LOWER($1) AND status=LOWER($2)';
         const value = [req.query.body_type, 'available'];
@@ -320,7 +321,6 @@ const postCar = (req, res) => {
           pg.end();
         } else {
           owner = dbres.rows[0].id;
-          console.log(owner);
           query = 'INSERT INTO carads(status, price, manufacturer, model, body_type, owner, state, ext_col, int_col, transmission, mileage, door, description, image_url) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)';
           value = [
             newAd.status, price, newAd.manufacturer,
@@ -345,7 +345,6 @@ const postCar = (req, res) => {
               const id = owner;
               const manufacturer = newAd.manufacturer;
               const model = newAd.model;
-              
               res.json({
                 status: 200,
                 data: {
@@ -410,12 +409,13 @@ const patchCar = (req, res) => {
           // eslint-disable-next-line no-shadow
           pg.query(query, value, (err, dbres) => {
             if (err) {
+              console.error(err);
               res.status(403).json({
+                status: 403,
                 error: {
                   message: 'error..',
                 },
               });
-              console.error(err);
               pg.end();
             } else if (dbres.rows.length === 0) {
               res.status(200).json({
@@ -461,7 +461,7 @@ const patchCar = (req, res) => {
                     message: 'You are not permiited to update this ad!!!',
                   },
                 });
-                pg.end();  
+                pg.end();
               }
             }
           });
@@ -473,7 +473,7 @@ const patchCar = (req, res) => {
 
 
 // DELETE CAR
-const deleteCar = (req, res) => {
+export const deleteCar = (req, res) => {
   jwt.verify(req.token, process.env.JWT_KEY, (err, authData) => {
     const email = authData.user.email;
     if (err) {
@@ -493,15 +493,17 @@ const deleteCar = (req, res) => {
       // eslint-disable-next-line consistent-return
       pg.query(query, value, (err, dbres) => {
         if (err) {
+          console.error(err);
           res.status(500).json({
+            status: 500,
             error: {
               message: 'error..',
             },
           });
-          console.error(err);
           pg.end();
         } else if (dbres.rows[0].is_admin === false) {
           res.status(403).json({
+            status: 403,
             error: {
               message: 'You are not permitted to delete this Ad!!!',
             },
@@ -515,6 +517,7 @@ const deleteCar = (req, res) => {
           pg.query(query, value, (err, resdb) => {
             if (err) {
               res.status(500).json({
+                status: 500,
                 error: {
                   message: 'error..',
                 },
@@ -546,7 +549,7 @@ const deleteCar = (req, res) => {
 };
 
 // GET MY CAR ORDERS
-const getCarOrders = (req, res) => {
+export const getCarOrders = (req, res) => {
   jwt.verify(req.token, process.env.JWT_KEY, (err, authData) => {
     if (err) {
       res.status(401).json({
@@ -567,8 +570,8 @@ const getCarOrders = (req, res) => {
       pg.query(query, value, (err, resdb) => {
         if (err) {
           res.status(401).json({
+            status: 401,
             error: {
-              status: 401,
               message: 'error..',
             },
           });
@@ -582,8 +585,8 @@ const getCarOrders = (req, res) => {
             if (err) {
               console.error(err);
               res.status(500).json({
+                status: 500,
                 error: {
-                  status: 500,
                   message: 'error..',
                 },
               });
@@ -619,7 +622,7 @@ const getCarOrders = (req, res) => {
 };
 
 // GET A CAR ORDER
-const getACarOrder = (req, res) => {
+export const getACarOrder = (req, res) => {
   jwt.verify(req.token, process.env.JWT_KEY, (err, authData) => {
     if (err) {
       res.status(401).json({
@@ -639,9 +642,9 @@ const getACarOrder = (req, res) => {
       pg.connect();
       pg.query(query, value, (err, resdb) => {
         if (err) {
-          res.status(401).json({
+          res.status(500).json({
+            status: 500,
             error: {
-              status: 401,
               message: 'error..',
             },
           });
@@ -653,8 +656,8 @@ const getACarOrder = (req, res) => {
           pg.query(query, value, (err, respo) => {
             if (err) {
               res.status(500).json({
+                status: 500,
                 error: {
-                  status: 500,
                   message: 'error..',
                 },
               });
@@ -668,8 +671,8 @@ const getACarOrder = (req, res) => {
                 if (err) {
                   console.error(err);
                   res.status(500).json({
+                    status: 500,
                     error: {
-                      status: 500,
                       message: 'error..',
                     },
                   });
@@ -704,7 +707,7 @@ const getACarOrder = (req, res) => {
 };
 
 // UPDATE MY CAR ORDERS
-const updateCarOrders = (req, res) => {
+export const updateCarOrders = (req, res) => {
   jwt.verify(req.token, process.env.JWT_KEY, (err, authData) => {
     if (err) {
       res.status(401).json({
@@ -733,9 +736,7 @@ const updateCarOrders = (req, res) => {
           pg.end();
         } else {
           const curruser = resdb.rows[0].id;
-          console.log(req.body);
           const orderid = req.params.id;
-          console.log(orderid);
           const status = req.body.status;
           query = 'SELECT car_owner FROM purchaseorder WHERE id = $1';
           value = [orderid];
@@ -753,7 +754,6 @@ const updateCarOrders = (req, res) => {
               res.status(401).json({
                 status: 401,
                 error: {
-                  status: 401,
                   message: 'You are not permitted to update this ad..',
                 },
               });
@@ -768,7 +768,6 @@ const updateCarOrders = (req, res) => {
                   res.status(500).json({
                     status: 500,
                     error: {
-                      status: 500,
                       message: 'error..',
                     },
                   });
@@ -777,7 +776,6 @@ const updateCarOrders = (req, res) => {
                   res.json({
                     status: 200,
                     data: {
-                      status: 200,
                       message: 'Order Updated',
                     },
                   });
@@ -791,7 +789,7 @@ const updateCarOrders = (req, res) => {
     }
   });
 };
-  
+
 module.exports = {
   getCars,
   getCar,
