@@ -154,13 +154,16 @@
       box-shadow: none;
     }
 
-    .div-search-submit {
+    /* DEPRECATED FOR NOW */
+    /* .div-search-submit {
       display: inline-block;
-    }
+    } */
 
     .input-search-submit {
-      width: 130px;
+      width: 200px;
       height: 37px;
+      margin-top: 20px;
+      margin-left: 80px;
       border-radius: 5px;
       background: #A400B4;
       border-color: #A400B4;
@@ -178,6 +181,22 @@
 
     .wrapper-search > div {
       margin-right: 10px;
+    }
+
+    .div-sub-search-usage {
+      margin-top: 4rem;
+    }
+
+    .div-sub-search-availability {
+      margin-top: 4rem;
+    }
+
+    .div-sub-search-make {
+      margin-top: 4rem;
+    }
+
+    .div-sub-search-price {
+      margin-top: 4rem;
     }
 
     .div-sub-search-newness, .div-sub-search-usage {

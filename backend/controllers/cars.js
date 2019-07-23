@@ -1,5 +1,10 @@
 "use strict";
 
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.updateCarOrders = exports.getACarOrder = exports.getCarOrders = exports.deleteCar = void 0;
+
 /* eslint-disable prefer-destructuring */
 
 /* eslint-disable linebreak-style */
@@ -58,54 +63,34 @@ var getCars = function getCars(req, res) {
       });
       pg.connect();
 
+      var pgCallback = function pgCallback(err, dbres) {
+        if (err) {
+          respondErr(err, res);
+          pg.end();
+        } else if (dbres.rows.length === 0) {
+          nocarfound(res);
+          pg.end();
+        } else {
+          responseSuccess(res, dbres.rows);
+          pg.end();
+        }
+      };
+
       if (req.query.min_price && req.query.max_price && req.query.status) {
         // eslint-disable-next-line consistent-return
         var query = 'SELECT * FROM carads WHERE price BETWEEN $1 AND $2 AND LOWER(status) = LOWER($3)';
         var value = [req.query.min_price, req.query.max_price, 'available'];
-        pg.query(query, value, function (err, dbres) {
-          if (err) {
-            respondErr(err, res);
-            pg.end();
-          } else if (dbres.rows.length === 0) {
-            nocarfound(res);
-            pg.end();
-          } else {
-            responseSuccess(res, dbres.rows);
-            pg.end();
-          }
-        });
+        pg.query(query, value, pgCallback);
       } else if (req.query.state && req.query.status) {
         // eslint-disable-next-line consistent-return
         var _query = 'SELECT * FROM carads WHERE LOWER(status)=LOWER($1) AND LOWER(state)=LOWER($2)';
         var _value = ['available', req.query.state];
-        pg.query(_query, _value, function (err, dbres) {
-          if (err) {
-            respondErr(err, res);
-            pg.end();
-          } else if (dbres.rows.length === 0) {
-            nocarfound(res);
-            pg.end();
-          } else {
-            responseSuccess(res, dbres.rows);
-            pg.end();
-          }
-        });
+        pg.query(_query, _value, pgCallback);
       } else if (req.query.manufacturer && req.query.state) {
         // eslint-disable-next-line consistent-return
         var _query2 = 'SELECT * FROM carads WHERE LOWER(manufacturer)=LOWER($1) AND LOWER(state)=LOWER($2)';
         var _value2 = [req.query.manufacturer, req.query.state];
-        pg.query(_query2, _value2, function (err, dbres) {
-          if (err) {
-            respondErr(err, res);
-            pg.end();
-          } else if (dbres.rows.length === 0) {
-            nocarfound(res);
-            pg.end();
-          } else {
-            responseSuccess(res, dbres.rows);
-            pg.end();
-          }
-        });
+        pg.query(_query2, _value2, pgCallback);
       } else if (req.query.status) {
         // eslint-disable-next-line consistent-return
         if (req.query.status === 'sold') {
@@ -131,67 +116,25 @@ var getCars = function getCars(req, res) {
             } else {
               _query3 = 'SELECT * FROM carads WHERE LOWER(status) = LOWER($1)';
               _value3 = [req.query.status];
-              pg.query(_query3, _value3, function (err, resdb) {
-                if (err) {
-                  respondErr(err, res);
-                } else if (resdb.rows.length === 0) {
-                  nocarfound(res);
-                  pg.end();
-                } else {
-                  responseSuccess(res, resdb.rows);
-                  pg.end();
-                }
-              });
+              pg.query(_query3, _value3, pgCallback);
             }
           });
         } else {
           var _query4 = 'SELECT * FROM carads WHERE LOWER(status) = LOWER($1)';
           var _value4 = [req.query.status];
-          pg.query(_query4, _value4, function (err, dbres) {
-            if (err) {
-              respondErr(err, res);
-              pg.end();
-            } else if (dbres.rows.length === 0) {
-              nocarfound(res);
-              pg.end();
-            } else {
-              responseSuccess(res, dbres.rows);
-              pg.end();
-            }
-          });
+          pg.query(_query4, _value4, pgCallback);
         }
       } else if (req.query.body_type) {
-        // eslint-disable-next-line consistent-return
+        console.log(req.query.body_type); // eslint-disable-next-line consistent-return
+
         var _query5 = 'SELECT * FROM carads WHERE LOWER(body_type)=LOWER($1) AND status=LOWER($2)';
         var _value5 = [req.query.body_type, 'available'];
-        pg.query(_query5, _value5, function (err, dbres) {
-          if (err) {
-            respondErr(err, res);
-            pg.end();
-          } else if (dbres.rows.length === 0) {
-            nocarfound(res);
-            pg.end();
-          } else {
-            responseSuccess(res, dbres.rows);
-            pg.end();
-          }
-        });
+        pg.query(_query5, _value5, pgCallback);
       } else if (req.query.manufacturer) {
         // eslint-disable-next-line consistent-return
         var _query6 = 'SELECT * FROM carads WHERE LOWER(manufacturer) = LOWER($1) AND LOWER(status)=LOWER($2)';
         var _value6 = [req.query.manufacturer, 'available'];
-        pg.query(_query6, _value6, function (err, dbres) {
-          if (err) {
-            respondErr(err, res);
-            pg.end();
-          } else if (dbres.rows.length === 0) {
-            nocarfound(res);
-            pg.end();
-          } else {
-            responseSuccess(res, dbres.rows);
-            pg.end();
-          }
-        });
+        pg.query(_query6, _value6, pgCallback);
       } else {
         var _email = authData.user.email;
         var _query7 = 'SELECT * FROM users WHERE LOWER(email) = LOWER($1)';
@@ -210,17 +153,7 @@ var getCars = function getCars(req, res) {
             pg.end();
           } else {
             _query7 = 'SELECT * FROM carads';
-            pg.query(_query7, function (err, resdb) {
-              if (err) {
-                respondErr(err, res);
-              } else if (resdb.rows.length === 0) {
-                nocarfound(res);
-                pg.end();
-              } else {
-                responseSuccess(res, resdb.rows);
-                pg.end();
-              }
-            });
+            pg.query(_query7, _value7, pgCallback);
           }
         });
       }
@@ -398,7 +331,6 @@ var postCar = function postCar(req, res) {
           pg.end();
         } else {
           owner = dbres.rows[0].id;
-          console.log(owner);
           query = 'INSERT INTO carads(status, price, manufacturer, model, body_type, owner, state, ext_col, int_col, transmission, mileage, door, description, image_url) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)';
           value = [newAd.status, price, newAd.manufacturer, newAd.model, newAd.body_type, owner, newAd.state, newAd.ext_col, newAd.int_col, newAd.transmission, newAd.mileage, door, newAd.description, image_url]; // eslint-disable-next-line consistent-return
           // PG Query
@@ -482,12 +414,13 @@ var patchCar = function patchCar(req, res) {
 
           pg.query(query, value, function (err, dbres) {
             if (err) {
+              console.error(err);
               res.status(403).json({
+                status: 403,
                 error: {
                   message: 'error..'
                 }
               });
-              console.error(err);
               pg.end();
             } else if (dbres.rows.length === 0) {
               res.status(200).json({
@@ -566,15 +499,17 @@ var deleteCar = function deleteCar(req, res) {
 
       pg.query(query, value, function (err, dbres) {
         if (err) {
+          console.error(err);
           res.status(500).json({
+            status: 500,
             error: {
               message: 'error..'
             }
           });
-          console.error(err);
           pg.end();
         } else if (dbres.rows[0].is_admin === false) {
           res.status(403).json({
+            status: 403,
             error: {
               message: 'You are not permitted to delete this Ad!!!'
             }
@@ -588,6 +523,7 @@ var deleteCar = function deleteCar(req, res) {
           pg.query(query, value, function (err, resdb) {
             if (err) {
               res.status(500).json({
+                status: 500,
                 error: {
                   message: 'error..'
                 }
@@ -619,6 +555,8 @@ var deleteCar = function deleteCar(req, res) {
 }; // GET MY CAR ORDERS
 
 
+exports.deleteCar = deleteCar;
+
 var getCarOrders = function getCarOrders(req, res) {
   jwt.verify(req.token, process.env.JWT_KEY, function (err, authData) {
     if (err) {
@@ -640,8 +578,8 @@ var getCarOrders = function getCarOrders(req, res) {
       pg.query(query, value, function (err, resdb) {
         if (err) {
           res.status(401).json({
+            status: 401,
             error: {
-              status: 401,
               message: 'error..'
             }
           });
@@ -655,8 +593,8 @@ var getCarOrders = function getCarOrders(req, res) {
             if (err) {
               console.error(err);
               res.status(500).json({
+                status: 500,
                 error: {
-                  status: 500,
                   message: 'error..'
                 }
               });
@@ -692,6 +630,8 @@ var getCarOrders = function getCarOrders(req, res) {
 }; // GET A CAR ORDER
 
 
+exports.getCarOrders = getCarOrders;
+
 var getACarOrder = function getACarOrder(req, res) {
   jwt.verify(req.token, process.env.JWT_KEY, function (err, authData) {
     if (err) {
@@ -712,9 +652,9 @@ var getACarOrder = function getACarOrder(req, res) {
       pg.connect();
       pg.query(query, value, function (err, resdb) {
         if (err) {
-          res.status(401).json({
+          res.status(500).json({
+            status: 500,
             error: {
-              status: 401,
               message: 'error..'
             }
           });
@@ -726,8 +666,8 @@ var getACarOrder = function getACarOrder(req, res) {
           pg.query(query, value, function (err, respo) {
             if (err) {
               res.status(500).json({
+                status: 500,
                 error: {
-                  status: 500,
                   message: 'error..'
                 }
               });
@@ -741,8 +681,8 @@ var getACarOrder = function getACarOrder(req, res) {
                 if (err) {
                   console.error(err);
                   res.status(500).json({
+                    status: 500,
                     error: {
-                      status: 500,
                       message: 'error..'
                     }
                   });
@@ -777,6 +717,8 @@ var getACarOrder = function getACarOrder(req, res) {
 }; // UPDATE MY CAR ORDERS
 
 
+exports.getACarOrder = getACarOrder;
+
 var updateCarOrders = function updateCarOrders(req, res) {
   jwt.verify(req.token, process.env.JWT_KEY, function (err, authData) {
     if (err) {
@@ -806,9 +748,7 @@ var updateCarOrders = function updateCarOrders(req, res) {
           pg.end();
         } else {
           var curruser = resdb.rows[0].id;
-          console.log(req.body);
           var orderid = req.params.id;
-          console.log(orderid);
           var status = req.body.status;
           query = 'SELECT car_owner FROM purchaseorder WHERE id = $1';
           value = [orderid];
@@ -826,7 +766,6 @@ var updateCarOrders = function updateCarOrders(req, res) {
               res.status(401).json({
                 status: 401,
                 error: {
-                  status: 401,
                   message: 'You are not permitted to update this ad..'
                 }
               });
@@ -841,7 +780,6 @@ var updateCarOrders = function updateCarOrders(req, res) {
                   res.status(500).json({
                     status: 500,
                     error: {
-                      status: 500,
                       message: 'error..'
                     }
                   });
@@ -850,7 +788,6 @@ var updateCarOrders = function updateCarOrders(req, res) {
                   res.json({
                     status: 200,
                     data: {
-                      status: 200,
                       message: 'Order Updated'
                     }
                   });
@@ -865,6 +802,7 @@ var updateCarOrders = function updateCarOrders(req, res) {
   });
 };
 
+exports.updateCarOrders = updateCarOrders;
 module.exports = {
   getCars: getCars,
   getCar: getCar,
