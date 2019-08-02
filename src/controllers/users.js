@@ -1,18 +1,20 @@
-/* eslint-disable no-trailing-spaces */
+/* eslint-disable linebreak-style */
 /* eslint-disable eol-last */
 /* eslint-disable linebreak-style */
-// eslint-disable-next-line import/no-extraneous-dependencies
-// const { Client } = require('pg');
 import { Client } from 'pg';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
-// const jwt = require('jsonwebtoken');
-// eslint-disable-next-line import/no-extraneous-dependencies
-// const bcrypt = require('bcrypt');
 
-// const users = require('../db/Users.js');
-// class userControllers { 
-// export
+const respondErr = (err, res) => {
+  console.log(err);
+  res.status(500).json({
+    status: 500,
+    error: {
+      message: 'error encountered',
+    },
+  });
+};
+
 export const signUp = (req, res) => {
   const user = req.body;
   const myPassword = user.password;
@@ -27,9 +29,8 @@ export const signUp = (req, res) => {
       });
       pg.connect();
       let query = 'INSERT INTO users(email, first_name, last_name, password, address, is_admin) VALUES($1, $2, $3, $4, $5, $6)';
-      let value = [user.email, user.first_name, user.last_name, hashedPassword, 
-        user.address, user.is_admin];
-      
+      let value = [user.email, user.first_name, user.last_name, hashedPassword,
+        user.address, user.is_admin];    
       // PG Connect
       // eslint-disable-next-line consistent-return
       // eslint-disable-next-line no-unused-vars
@@ -45,13 +46,7 @@ export const signUp = (req, res) => {
             });
             pg.end();
           } else if (err) {
-            console.log(err);
-            res.status(500).json({
-              status: 500,
-              error: {
-                message: 'error encountered',
-              },
-            });
+            respondErr(err, res);
             pg.end();
           }
         } else {
@@ -60,13 +55,7 @@ export const signUp = (req, res) => {
             value = [user.email];
             pg.query(query, value, (err, dbres) => {
               if (err) {
-                console.log(err.stack);
-                res.status(500).json({
-                  status: error,
-                  error: {
-                    message: 'error encountered',
-                  },
-                });
+                respondErr(err, res);
                 pg.end();
               } else {
                 let username = dbres.rows[0].first_name;
@@ -80,7 +69,7 @@ export const signUp = (req, res) => {
                     state: 'success',
                     status: 200,
                     message: 'Sign up successful',
-                    token, 
+                    token,
                   },
                 });
                 pg.end();
@@ -110,13 +99,7 @@ export const verifyUser = (req, res) => {
  
   pg.query(query, value, (err, dbres) => {
     if (err) {
-      console.log(err.stack);
-      res.status(500).json({
-        status: 500,
-        error: {
-          message: 'error encountered',
-        },
-      });
+      respondErr(err, res);
       pg.end();
     } else if (dbres.rows.length === 0) {
       res.status(403).json({
@@ -135,13 +118,7 @@ export const verifyUser = (req, res) => {
       }
       bcrypt.compare(myPassword, dbPsw, (err, match) => {
         if (err) {
-          console.log(err.stack);
-          res.status(503).json({
-            status: 403,
-            error: {
-              message: 'error encountered',
-            },
-          });
+          respondErr(err, res);
           pg.end();
         } else if (!match) {
           res.status(403).json({
@@ -150,7 +127,7 @@ export const verifyUser = (req, res) => {
               message: 'error encountered, Invalid password',
             },
           });
-          pg.end();   
+          pg.end(); 
         } else {
           jwt.sign({ user }, process.env.JWT_KEY, { expiresIn: '20m' }, (err, token) => {
             res.status(200).json({
@@ -172,76 +149,52 @@ export const verifyUser = (req, res) => {
 
 // UPDATE A USER
 export const updateUser = (req, res) => {
-  // eslint-disable-next-line no-unused-vars
-  jwt.verify(req.token, process.env.JWT_KEY, (err, authData) => {
-    // eslint-disable-next-line prefer-destructuring    
+  const { data } = req;
+  const { email } = data.user;
+  const { token } = req;
+  const pg = new Client({
+    connectionString: process.env.db_URL,
+  });
+  pg.connect();
+  let query = 'UPDATE users SET first_name=$1, last_name=$2, address=$3 WHERE email = $4';
+  let value = [req.body.first_name, req.body.last_name, req.body.address, email];
+  // eslint-disable-next-line consistent-return
+  pg.query(query, value, (err, dbres) => {
     if (err) {
-      console.log(err);
-      res.status(401).json({
-        status: 401,
+      respondErr(err, res);
+      pg.end();
+    } else if (dbres.rowCount === 0) {
+      res.status(403).json({
         error: {
-          message: 'error..invalid token',
+          message: 'An error occured, please check input',
         },
       });
+      pg.end();
     } else {
-      // eslint-disable-next-line prefer-destructuring
-      const token = req.token;
-      const { email } = authData.user;
-      const pg = new Client({
-        connectionString: process.env.db_URL,
-      });
-      pg.connect();
-      let query = 'UPDATE users SET first_name=$1, last_name=$2, address=$3 WHERE email = $4';
-      let value = [req.body.first_name, req.body.last_name, req.body.address, email];
-      // eslint-disable-next-line consistent-return
-      pg.query(query, value, (err, dbres) => {
+      query = 'SELECT * FROM users WHERE email = $1';
+      value = [email];
+      pg.query(query, value, (err, dbresp) => {
         if (err) {
-          res.status(403).json({
-            error: {
-              message: 'error..',
-            },
-          });
-          console.log(err);
-          pg.end();
-        } else if (dbres.rowCount === 0) {
-          res.status(403).json({
-            error: {
-              message: 'An error occured, please check input',
-            },
-          });
+          respondErr(err, res);
           pg.end();
         } else {
-          query = 'SELECT * FROM users WHERE email = $1';
-          value = [email];
-          pg.query(query, value, (err, dbresp) => {
-            if (err) {
-              console.log(err.stack);
-              res.status(500).json({
-                error: {
-                  message: 'error encountered',
-                },
-              });
-              pg.end();
-            } else {
-              let username = dbresp.rows[0].first_name;
-              const { is_admin } = dbresp.rows[0];
-              if (username === null) {
-                username = 'user';
-              }
-              res.status(200).send({
-                status: 200,
-                data: {
-                  username,
-                  state: 'success',
-                  status: 200,
-                  message: 'Profile updated',
-                  token,
-                  is_admin,
-                },
-              });
-              pg.end();
-            }
+          let username = dbresp.rows[0].first_name;
+          const { is_admin } = dbresp.rows[0];
+          if (username === null) {
+            username = 'user';
+          }
+          res.status(200).send({
+            status: 200,
+            data: {
+              username,
+              state: 'success',
+              status: 200,
+              message: 'Profile updated',
+              token,
+              is_admin,
+            },
           });
+          pg.end();
         }
       });
     }
@@ -250,51 +203,35 @@ export const updateUser = (req, res) => {
 
 // GET A USER
 export const getAUser = (req, res) => {
-  jwt.verify(req.token, process.env.JWT_KEY, (err, authData) => {
+  const { data } = req;
+  const { email } = data.user;
+  const pg = new Client({
+    connectionString: process.env.db_URL,
+  });
+  pg.connect();
+  const query = 'SELECT * FROM users WHERE LOWER(email) = LOWER($1)';
+  const value = [email];
+  // eslint-disable-next-line consistent-return
+  pg.query(query, value, (err, dbres) => {
     if (err) {
-      res.status(401).json({
-        status: 401,
-        error: {
-          message: 'error..invalid token',
+      respondErr(err, res);
+      pg.end();
+    } else {
+      const userdata = dbres.rows[0];
+      const {
+        email, first_name, last_name, address, token,
+      } = userdata;
+      res.status(200).json({
+        status: 200,
+        data: {
+          email, 
+          first_name,
+          last_name,
+          address,
+          token,
         },
       });
-    } else {
-      const useremail = authData.user.email;
-      const pg = new Client({
-        connectionString: process.env.db_URL,
-      });
-      pg.connect();
-      const query = 'SELECT * FROM users WHERE LOWER(email) = LOWER($1)';
-      const value = [useremail];
-      // eslint-disable-next-line consistent-return
-      pg.query(query, value, (err, dbres) => {
-        if (err) {
-          console.log(err);
-          res.status(403).json({
-            status: 403,
-            error: {
-              message: 'error..',
-            },
-          });
-          pg.end();
-        } else {
-          const userdata = dbres.rows[0];
-          const {
-            email, first_name, last_name, address, token,
-          } = userdata;
-          res.status(200).json({
-            status: 200,
-            data: {
-              email, 
-              first_name,
-              last_name,
-              address,
-              token,
-            },
-          });
-          pg.end();
-        }
-      });
+      pg.end();
     }
   });
 };

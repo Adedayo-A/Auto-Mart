@@ -13,19 +13,21 @@ var _bcrypt = _interopRequireDefault(require("bcrypt"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
-/* eslint-disable no-trailing-spaces */
+/* eslint-disable linebreak-style */
 
 /* eslint-disable eol-last */
 
 /* eslint-disable linebreak-style */
-// eslint-disable-next-line import/no-extraneous-dependencies
-// const { Client } = require('pg');
-// const jwt = require('jsonwebtoken');
-// eslint-disable-next-line import/no-extraneous-dependencies
-// const bcrypt = require('bcrypt');
-// const users = require('../db/Users.js');
-// class userControllers { 
-// export
+var respondErr = function respondErr(err, res) {
+  console.log(err);
+  res.status(500).json({
+    status: 500,
+    error: {
+      message: 'error encountered'
+    }
+  });
+};
+
 var signUp = function signUp(req, res) {
   var user = req.body;
   var myPassword = user.password;
@@ -57,13 +59,7 @@ var signUp = function signUp(req, res) {
             });
             pg.end();
           } else if (err) {
-            console.log(err);
-            res.status(500).json({
-              status: 500,
-              error: {
-                message: 'error encountered'
-              }
-            });
+            respondErr(err, res);
             pg.end();
           }
         } else {
@@ -76,13 +72,7 @@ var signUp = function signUp(req, res) {
             value = [user.email];
             pg.query(query, value, function (err, dbres) {
               if (err) {
-                console.log(err.stack);
-                res.status(500).json({
-                  status: error,
-                  error: {
-                    message: 'error encountered'
-                  }
-                });
+                respondErr(err, res);
                 pg.end();
               } else {
                 var username = dbres.rows[0].first_name;
@@ -128,13 +118,7 @@ var verifyUser = function verifyUser(req, res) {
   var value = [userEmail];
   pg.query(query, value, function (err, dbres) {
     if (err) {
-      console.log(err.stack);
-      res.status(500).json({
-        status: 500,
-        error: {
-          message: 'error encountered'
-        }
-      });
+      respondErr(err, res);
       pg.end();
     } else if (dbres.rows.length === 0) {
       res.status(403).json({
@@ -155,13 +139,7 @@ var verifyUser = function verifyUser(req, res) {
 
       _bcrypt["default"].compare(myPassword, dbPsw, function (err, match) {
         if (err) {
-          console.log(err.stack);
-          res.status(503).json({
-            status: 403,
-            error: {
-              message: 'error encountered'
-            }
-          });
+          respondErr(err, res);
           pg.end();
         } else if (!match) {
           res.status(403).json({
@@ -199,78 +177,54 @@ var verifyUser = function verifyUser(req, res) {
 exports.verifyUser = verifyUser;
 
 var updateUser = function updateUser(req, res) {
-  // eslint-disable-next-line no-unused-vars
-  _jsonwebtoken["default"].verify(req.token, process.env.JWT_KEY, function (err, authData) {
-    // eslint-disable-next-line prefer-destructuring    
+  var data = req.data;
+  var email = data.user.email;
+  var token = req.token;
+  var pg = new _pg.Client({
+    connectionString: process.env.db_URL
+  });
+  pg.connect();
+  var query = 'UPDATE users SET first_name=$1, last_name=$2, address=$3 WHERE email = $4';
+  var value = [req.body.first_name, req.body.last_name, req.body.address, email]; // eslint-disable-next-line consistent-return
+
+  pg.query(query, value, function (err, dbres) {
     if (err) {
-      console.log(err);
-      res.status(401).json({
-        status: 401,
+      respondErr(err, res);
+      pg.end();
+    } else if (dbres.rowCount === 0) {
+      res.status(403).json({
         error: {
-          message: 'error..invalid token'
+          message: 'An error occured, please check input'
         }
       });
+      pg.end();
     } else {
-      // eslint-disable-next-line prefer-destructuring
-      var token = req.token;
-      var email = authData.user.email;
-      var pg = new _pg.Client({
-        connectionString: process.env.db_URL
-      });
-      pg.connect();
-      var query = 'UPDATE users SET first_name=$1, last_name=$2, address=$3 WHERE email = $4';
-      var value = [req.body.first_name, req.body.last_name, req.body.address, email]; // eslint-disable-next-line consistent-return
-
-      pg.query(query, value, function (err, dbres) {
+      query = 'SELECT * FROM users WHERE email = $1';
+      value = [email];
+      pg.query(query, value, function (err, dbresp) {
         if (err) {
-          res.status(403).json({
-            error: {
-              message: 'error..'
-            }
-          });
-          console.log(err);
-          pg.end();
-        } else if (dbres.rowCount === 0) {
-          res.status(403).json({
-            error: {
-              message: 'An error occured, please check input'
-            }
-          });
+          respondErr(err, res);
           pg.end();
         } else {
-          query = 'SELECT * FROM users WHERE email = $1';
-          value = [email];
-          pg.query(query, value, function (err, dbresp) {
-            if (err) {
-              console.log(err.stack);
-              res.status(500).json({
-                error: {
-                  message: 'error encountered'
-                }
-              });
-              pg.end();
-            } else {
-              var username = dbresp.rows[0].first_name;
-              var is_admin = dbresp.rows[0].is_admin;
+          var username = dbresp.rows[0].first_name;
+          var is_admin = dbresp.rows[0].is_admin;
 
-              if (username === null) {
-                username = 'user';
-              }
+          if (username === null) {
+            username = 'user';
+          }
 
-              res.status(200).send({
-                status: 200,
-                data: {
-                  username: username,
-                  state: 'success',
-                  status: 200,
-                  message: 'Profile updated',
-                  token: token,
-                  is_admin: is_admin
-                }
-              });
-              pg.end();
+          res.status(200).send({
+            status: 200,
+            data: {
+              username: username,
+              state: 'success',
+              status: 200,
+              message: 'Profile updated',
+              token: token,
+              is_admin: is_admin
             }
           });
+          pg.end();
         }
       });
     }
@@ -281,53 +235,37 @@ var updateUser = function updateUser(req, res) {
 exports.updateUser = updateUser;
 
 var getAUser = function getAUser(req, res) {
-  _jsonwebtoken["default"].verify(req.token, process.env.JWT_KEY, function (err, authData) {
-    if (err) {
-      res.status(401).json({
-        status: 401,
-        error: {
-          message: 'error..invalid token'
-        }
-      });
-    } else {
-      var useremail = authData.user.email;
-      var pg = new _pg.Client({
-        connectionString: process.env.db_URL
-      });
-      pg.connect();
-      var query = 'SELECT * FROM users WHERE LOWER(email) = LOWER($1)';
-      var value = [useremail]; // eslint-disable-next-line consistent-return
+  var data = req.data;
+  var email = data.user.email;
+  var pg = new _pg.Client({
+    connectionString: process.env.db_URL
+  });
+  pg.connect();
+  var query = 'SELECT * FROM users WHERE LOWER(email) = LOWER($1)';
+  var value = [email]; // eslint-disable-next-line consistent-return
 
-      pg.query(query, value, function (err, dbres) {
-        if (err) {
-          console.log(err);
-          res.status(403).json({
-            status: 403,
-            error: {
-              message: 'error..'
-            }
-          });
-          pg.end();
-        } else {
-          var userdata = dbres.rows[0];
-          var email = userdata.email,
-              first_name = userdata.first_name,
-              last_name = userdata.last_name,
-              address = userdata.address,
-              token = userdata.token;
-          res.status(200).json({
-            status: 200,
-            data: {
-              email: email,
-              first_name: first_name,
-              last_name: last_name,
-              address: address,
-              token: token
-            }
-          });
-          pg.end();
+  pg.query(query, value, function (err, dbres) {
+    if (err) {
+      respondErr(err, res);
+      pg.end();
+    } else {
+      var userdata = dbres.rows[0];
+      var _email = userdata.email,
+          first_name = userdata.first_name,
+          last_name = userdata.last_name,
+          address = userdata.address,
+          token = userdata.token;
+      res.status(200).json({
+        status: 200,
+        data: {
+          email: _email,
+          first_name: first_name,
+          last_name: last_name,
+          address: address,
+          token: token
         }
       });
+      pg.end();
     }
   });
 }; // TOKEN VERIFICATION

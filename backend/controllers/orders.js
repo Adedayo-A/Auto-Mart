@@ -1,104 +1,88 @@
 "use strict";
 
-var jwt = require('jsonwebtoken'); // eslint-disable-next-line import/no-extraneous-dependencies
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.deleteOrder = exports.patchOrder = exports.getAnOrder = exports.getMyOrders = exports.postOrder = void 0;
 
+var _pg = require("pg");
 
-var _require = require('pg'),
-    Client = _require.Client; // const cars = require('../db/Cars.js');
-// const orders = require('../db/Orders.js');
-
+var respondErr = function respondErr(err, res) {
+  console.log(err);
+  res.status(500).json({
+    status: 500,
+    error: {
+      message: 'error encountered'
+    }
+  });
+};
 
 var postOrder = function postOrder(req, res) {
-  // eslint-disable-next-line no-unused-vars
-  jwt.verify(req.token, process.env.JWT_KEY, function (err, authData) {
-    if (err) {
-      res.status(401).json({
-        error: {
-          status: 401,
-          message: 'error..invalid token'
-        }
-      });
-    } else {
-      var email = authData.user.email;
-      var pg = new Client({
-        connectionString: process.env.db_URL
-      });
-      pg.connect();
-      var query = 'SELECT * FROM users WHERE LOWER(email) = LOWER($1)';
-      var value = [email]; // eslint-disable-next-line consistent-return
+  var data = req.data;
+  var email = data.user.email;
+  var pg = new _pg.Client({
+    connectionString: process.env.db_URL
+  });
+  pg.connect();
+  var query = 'SELECT * FROM users WHERE LOWER(email) = LOWER($1)';
+  var value = [email]; // eslint-disable-next-line consistent-return
 
-      pg.query(query, value, function (err, dbres) {
+  pg.query(query, value, function (err, dbres) {
+    if (err) {
+      respondErr(err, res);
+      pg.end();
+    } else {
+      var buyer = dbres.rows[0].id;
+      var newOrder = req.body;
+      var car_id = req.params.id;
+      var description = newOrder.description;
+      var amount = newOrder.price_offered;
+      var status = 'pending';
+      query = 'SELECT * FROM carads WHERE id = $1';
+      value = [car_id];
+      pg.query(query, value, function (err, dbresp) {
         if (err) {
-          console.log(err);
-          res.status(500).json({
-            error: {
-              status: 500,
-              message: 'error..'
-            }
-          });
+          respondErr(err, res);
           pg.end();
         } else {
-          console.log(dbres);
-          var buyer = dbres.rows[0].id;
-          var newOrder = req.body;
-          var car_id = req.params.id;
-          var description = newOrder.description;
-          var amount = newOrder.price_offered;
-          var status = 'pending';
-          query = 'SELECT * FROM carads WHERE id = $1';
-          value = [car_id];
-          pg.query(query, value, function (err, dbresp) {
+          var image = dbresp.rows[0].image_url;
+          var manufacturer = dbresp.rows[0].manufacturer;
+          var model = dbresp.rows[0].model;
+          var car_owner = dbresp.rows[0].owner;
+          var priceofCar = dbresp.rows[0].price;
+          query = 'INSERT INTO purchaseorder(status, amount, car_id, buyer, description, image, manufacturer, model, car_owner) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9)';
+          value = [status, amount, car_id, buyer, description, image, manufacturer, model, car_owner]; // eslint-disable-next-line consistent-return
+          // PG Query
+
+          pg.query(query, value, function (err) {
             if (err) {
-              console.log(err);
-              res.status(500).json({
+              console.error(err);
+              res.status(403).json({
+                status: 403,
                 error: {
-                  status: 500,
-                  message: 'error..'
+                  message: 'Input error, Please check input!!!'
                 }
               });
               pg.end();
             } else {
-              var image = dbresp.rows[0].image_url;
-              var manufacturer = dbresp.rows[0].manufacturer;
-              var model = dbresp.rows[0].model;
-              var car_owner = dbresp.rows[0].owner;
-              var priceofCar = dbresp.rows[0].price;
-              query = 'INSERT INTO purchaseorder(status, amount, car_id, buyer, description, image, manufacturer, model, car_owner) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9)';
-              value = [status, amount, car_id, buyer, description, image, manufacturer, model, car_owner];
-              console.log(value); // eslint-disable-next-line consistent-return
-              // PG Query
-
-              pg.query(query, value, function (err) {
-                if (err) {
-                  console.error(err);
-                  res.status(403).json({
-                    status: 403,
-                    error: {
-                      message: 'Input error, Please check input!!!'
-                    }
-                  });
-                  pg.end();
-                } else {
-                  var created_on = Date.now();
-                  res.status(200).json({
-                    status: 200,
-                    data: {
-                      message: 'Posted successfully',
-                      buyer: buyer,
-                      car_id: car_id,
-                      created_on: created_on,
-                      status: status,
-                      priceofCar: priceofCar,
-                      manufacturer: manufacturer,
-                      model: model,
-                      car_owner: car_owner,
-                      image: image,
-                      amount: amount
-                    }
-                  });
-                  pg.end();
+              var created_on = Date.now();
+              res.status(200).json({
+                status: 200,
+                data: {
+                  message: 'Posted successfully',
+                  buyer: buyer,
+                  car_id: car_id,
+                  created_on: created_on,
+                  status: status,
+                  priceofCar: priceofCar,
+                  manufacturer: manufacturer,
+                  model: model,
+                  car_owner: car_owner,
+                  image: image,
+                  amount: amount
                 }
               });
+              pg.end();
             }
           });
         }
@@ -107,71 +91,51 @@ var postOrder = function postOrder(req, res) {
   });
 };
 
-var getMyOrders = function getMyOrders(req, res) {
-  jwt.verify(req.token, process.env.JWT_KEY, function (err, authData) {
-    if (err) {
-      res.status(401).json({
-        error: {
-          status: 401,
-          message: 'error..invalid token'
-        }
-      });
-    } else {
-      // eslint-disable-next-line prefer-destructuring
-      var email = authData.user.email;
-      var query;
-      var value;
-      var currUser;
-      var pg = new Client({
-        connectionString: process.env.db_URL
-      });
-      pg.connect();
-      query = 'SELECT * FROM users WHERE LOWER(email) = LOWER($1)';
-      value = [email]; // eslint-disable-next-line consistent-return
+exports.postOrder = postOrder;
 
-      pg.query(query, value, function (err, dbres) {
+var getMyOrders = function getMyOrders(req, res) {
+  var data = req.data;
+  var email = data.user.email;
+  console.log(email);
+  var query;
+  var value;
+  var currUser;
+  var pg = new _pg.Client({
+    connectionString: process.env.db_URL
+  });
+  pg.connect();
+  query = 'SELECT * FROM users WHERE LOWER(email) = LOWER($1)';
+  value = [email]; // eslint-disable-next-line consistent-return
+
+  pg.query(query, value, function (err, dbres) {
+    if (err) {
+      respondErr(err, res);
+      pg.end();
+    } else {
+      currUser = dbres.rows[0].id;
+      query = 'SELECT * FROM purchaseorder WHERE buyer = $1';
+      value = [currUser];
+      pg.query(query, value, function (err, dbresp) {
         if (err) {
-          console.error(err);
-          res.status(500).json({
-            error: {
-              status: 500,
-              message: 'error..'
+          respondErr(err, res);
+          pg.end();
+        } else if (dbresp.rows.length === 0) {
+          res.status(200).json({
+            data: {
+              message: 'No order found'
             }
           });
           pg.end();
         } else {
-          currUser = dbres.rows[0].id;
-          query = 'SELECT * FROM purchaseorder WHERE buyer = $1';
-          value = [currUser];
-          pg.query(query, value, function (err, dbresp) {
-            if (err) {
-              console.error(err);
-              res.status(500).json({
-                error: {
-                  status: 500,
-                  message: 'error..'
-                }
-              });
-              pg.end();
-            } else if (dbresp.rows.length === 0) {
-              res.status(200).json({
-                data: {
-                  message: 'No order found'
-                }
-              });
-              pg.end();
-            } else {
-              var orders = dbresp.rows;
-              res.status(200).json({
-                data: {
-                  state: 'success',
-                  message: 'result completed',
-                  orders: orders
-                }
-              });
-              pg.end();
+          var orders = dbresp.rows;
+          res.status(200).json({
+            data: {
+              state: 'success',
+              message: 'result completed',
+              orders: orders
             }
           });
+          pg.end();
         }
       });
     }
@@ -179,148 +143,106 @@ var getMyOrders = function getMyOrders(req, res) {
 }; // GET A SPECIFIC ORDER
 
 
-var getAnOrder = function getAnOrder(req, res) {
-  jwt.verify(req.token, process.env.JWT_KEY, function (err) {
-    if (err) {
-      res.status(401).json({
-        error: {
-          status: 401,
-          message: 'error..invalid token'
-        }
-      });
-    } else {
-      var orderId = req.params.orderid;
-      var pg = new Client({
-        connectionString: process.env.db_URL
-      });
-      pg.connect(); // eslint-disable-next-line consistent-return
+exports.getMyOrders = getMyOrders;
 
-      var query = 'SELECT * FROM purchaseorder WHERE id = $1';
-      var value = [orderId];
-      pg.query(query, value, function (err, dbres) {
-        if (err) {
-          console.log(err);
-          res.status(500).json({
-            error: {
-              message: 'error encountered'
-            }
-          });
-          pg.end();
-        } else {
-          var order = dbres.rows;
-          res.status(200).json({
-            data: {
-              state: 'success',
-              message: 'Success, result completed',
-              order: order
-            }
-          });
-          pg.end();
+var getAnOrder = function getAnOrder(req, res) {
+  var orderId = req.params.orderid;
+  var pg = new _pg.Client({
+    connectionString: process.env.db_URL
+  });
+  pg.connect(); // eslint-disable-next-line consistent-return
+
+  var query = 'SELECT * FROM purchaseorder WHERE id = $1';
+  var value = [orderId];
+  pg.query(query, value, function (err, dbres) {
+    if (err) {
+      respondErr(err, res);
+      pg.end();
+    } else {
+      var order = dbres.rows;
+      res.status(200).json({
+        data: {
+          state: 'success',
+          message: 'Success, result completed',
+          order: order
         }
       });
+      pg.end();
     }
   });
 }; // PATCH ORDER
 
 
-var patchOrder = function patchOrder(req, res) {
-  // eslint-disable-next-line no-unused-vars
-  jwt.verify(req.token, process.env.JWT_KEY, function (err, authData) {
-    if (err) {
-      res.status(401).json({
-        error: {
-          message: 'error..invalid token'
-        }
-      });
-    } else {
-      // eslint-disable-next-line prefer-destructuring
-      var email = authData.user.email;
-      var order = req.body;
-      var query;
-      var value;
-      var currUser;
-      var buyer;
-      var pg = new Client({
-        connectionString: process.env.db_URL
-      });
-      pg.connect();
-      query = 'SELECT id FROM users WHERE LOWER(email) = LOWER($1)';
-      value = [email]; // eslint-disable-next-line consistent-return
+exports.getAnOrder = getAnOrder;
 
-      pg.query(query, value, function (err, dbres) {
+var patchOrder = function patchOrder(req, res) {
+  var data = req.data;
+  var email = data.user.email;
+  var order = req.body;
+  var query;
+  var value;
+  var currUser;
+  var pg = new _pg.Client({
+    connectionString: process.env.db_URL
+  });
+  pg.connect();
+  query = 'SELECT id FROM users WHERE LOWER(email) = LOWER($1)';
+  value = [email]; // eslint-disable-next-line consistent-return
+
+  pg.query(query, value, function (err, dbres) {
+    if (err) {
+      respondErr(err, res);
+      pg.end();
+    } else {
+      currUser = dbres.rows[0].id;
+      query = 'SELECT buyer FROM purchaseorder WHERE id = $1';
+      value = [req.params.id]; // eslint-disable-next-line consistent-return
+
+      pg.query(query, value, function (err, dbresp) {
         if (err) {
-          console.error(err);
-          res.status(500).json({
-            status: 500,
-            error: {
-              message: 'error..'
+          respondErr(err, res);
+          pg.end();
+        } else if (dbresp.rows.length === 0) {
+          res.status(200).json({
+            status: 200,
+            data: {
+              message: 'No order found'
             }
           });
           pg.end();
         } else {
-          currUser = dbres.rows[0].id;
-          query = 'SELECT buyer FROM purchaseorder WHERE id = $1';
-          value = [req.params.id]; // eslint-disable-next-line consistent-return
+          var buyer = dbresp.rows[0].buyer;
+          var priceOffered = order.price_offered;
 
-          pg.query(query, value, function (err, dbresp) {
-            if (err) {
-              console.error(err);
-              res.status(500).json({
-                error: {
-                  message: 'error..'
-                }
-              });
-              pg.end();
-            } else if (dbresp.rows.length === 0) {
-              res.status(200).json({
-                status: 200,
-                data: {
-                  message: 'No order found'
-                }
-              });
-              pg.end();
-            } else {
-              // eslint-disable-next-line prefer-destructuring
-              buyer = dbresp.rows[0].buyer;
-              var priceOffered = order.price_offered;
+          if (currUser === buyer) {
+            query = 'UPDATE purchaseorder SET amount=$1';
+            value = [priceOffered]; // eslint-disable-next-line consistent-return
+            // eslint-disable-next-line no-unused-vars
 
-              if (currUser === buyer) {
-                query = 'UPDATE purchaseorder SET amount=$1';
-                value = [priceOffered]; // eslint-disable-next-line consistent-return
-                // eslint-disable-next-line no-unused-vars
-
-                pg.query(query, value, function (err, dbresponse) {
-                  if (err) {
-                    console.error(err);
-                    res.status(500).json({
-                      status: 500,
-                      error: {
-                        message: 'An error occured, Please check input!!!'
-                      }
-                    });
-                    pg.end();
-                  } else {
-                    res.status(200).json({
-                      status: 200,
-                      data: {
-                        status: 200,
-                        message: 'Order updated successfully!!',
-                        order: order
-                      }
-                    });
-                    pg.end();
-                  }
-                });
+            pg.query(query, value, function (err, dbresponse) {
+              if (err) {
+                respondErr(err, res);
+                pg.end();
               } else {
-                res.status(403).json({
-                  error: {
-                    message: 'You are not permiited to update this ad!!!'
+                res.status(200).json({
+                  status: 200,
+                  data: {
+                    status: 200,
+                    message: 'Order updated successfully!!',
+                    order: order
                   }
                 });
                 pg.end();
               }
-            }
-          });
+            });
+          } else {
+            res.status(403).json({
+              error: {
+                message: 'You are not permiited to update this ad!!!'
+              }
+            });
+            pg.end();
+          }
         }
       });
     }
@@ -328,90 +250,62 @@ var patchOrder = function patchOrder(req, res) {
 }; // DELETE ORDER
 
 
-var deleteOrder = function deleteOrder(req, res) {
-  jwt.verify(req.token, process.env.JWT_KEY, function (err, authData) {
-    if (err) {
-      res.status(401).json({
-        error: {
-          message: 'error..invalid token'
-        }
-      });
-    } else {
-      var email = authData.user.email;
-      var pg = new Client({
-        connectionString: process.env.db_URL
-      });
-      pg.connect();
-      var query = 'SELECT * FROM users WHERE LOWER(email) = LOWER($1)';
-      var value = [email]; // eslint-disable-next-line consistent-return
+exports.patchOrder = patchOrder;
 
-      pg.query(query, value, function (err, dbres) {
+var deleteOrder = function deleteOrder(req, res) {
+  var data = req.data;
+  var email = data.user.email;
+  console.log(email);
+  var pg = new _pg.Client({
+    connectionString: process.env.db_URL
+  });
+  pg.connect();
+  var query = 'SELECT * FROM users WHERE LOWER(email) = LOWER($1)';
+  var value = [email]; // eslint-disable-next-line consistent-return
+
+  pg.query(query, value, function (err, dbres) {
+    if (err) {
+      respondErr(err, res);
+    } else {
+      var user = dbres.rows[0].id;
+      var order = req.params.id;
+      query = 'SELECT buyer FROM purchaseorder WHERE id = $1';
+      value = [order];
+      pg.query(query, value, function (err, resp) {
         if (err) {
-          console.error(err);
-          res.status(500).json({
+          respondErr(err, res);
+          pg.end();
+        } else if (resp.rows[0].buyer === user) {
+          query = 'DELETE FROM carads WHERE id = $1';
+          value = [order]; // eslint-disable-next-line consistent-return
+          // eslint-disable-next-line no-unused-vars
+
+          pg.query(query, value, function (err, resdb) {
+            if (err) {
+              respondErr(err, res);
+              pg.end();
+            } else {
+              res.status(200).json({
+                data: {
+                  status: 200,
+                  message: 'AD successfully deleted'
+                }
+              });
+              pg.end();
+            }
+          });
+        } else {
+          res.status(403).json({
             error: {
-              message: 'error..'
+              status: 403,
+              message: 'You are not permitted to delete this Ad'
             }
           });
           pg.end();
-        } else {
-          var user = dbres.rows[0].id;
-          var order = req.params.id;
-          query = 'SELECT buyer FROM purchaseorder WHERE id = $1';
-          value = [order];
-          pg.query(query, value, function (err, resp) {
-            if (err) {
-              res.status(500).json({
-                error: {
-                  message: 'error..'
-                }
-              });
-              console.error(err);
-              pg.end();
-            } else if (resp.rows[0].buyer === user) {
-              query = 'DELETE FROM carads WHERE id = $1';
-              value = [order]; // eslint-disable-next-line consistent-return
-              // eslint-disable-next-line no-unused-vars
-
-              pg.query(query, value, function (err, resdb) {
-                if (err) {
-                  res.status(500).json({
-                    error: {
-                      message: 'error..'
-                    }
-                  });
-                  console.error(err);
-                  pg.end();
-                } else {
-                  res.status(200).json({
-                    data: {
-                      status: 200,
-                      message: 'AD successfully deleted'
-                    }
-                  });
-                  pg.end();
-                }
-              });
-            } else {
-              res.status(403).json({
-                error: {
-                  status: 403,
-                  message: 'You are not permitted to delete this Ad'
-                }
-              });
-              pg.end();
-            }
-          });
         }
       });
     }
   });
 };
 
-module.exports = {
-  getMyOrders: getMyOrders,
-  postOrder: postOrder,
-  getAnOrder: getAnOrder,
-  patchOrder: patchOrder,
-  deleteOrder: deleteOrder
-};
+exports.deleteOrder = deleteOrder;

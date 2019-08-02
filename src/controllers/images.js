@@ -1,5 +1,4 @@
 const cloudinary = require('cloudinary').v2;
-const jwt = require('jsonwebtoken');
 const multer = require('multer');
 const path = require('path');
 
@@ -17,15 +16,6 @@ const storage = multer.diskStorage({
   },
 });
 
-// Init Upload
-const upload = multer({
-  storage,
-  limits: { fileSize: 1000000 },
-  fileFilter(req, file, cb) {
-    checkFileType(file, cb);
-  },
-}).single('myImage');
-
 // Check File Type
 function checkFileType(file, cb) {
   // Allowed ext
@@ -37,62 +27,58 @@ function checkFileType(file, cb) {
   if (mimetype && extname) {
     return cb(null, true);
   }
-  cb('Error: Images Only!');
+  return cb('Error: Images Only!');
 }
 
+// Init Upload
+const upload = multer({
+  storage,
+  limits: { fileSize: 1000000 },
+  fileFilter(req, file, cb) {
+    checkFileType(file, cb);
+  },
+}).single('myImage');
+
+const respondErr = (err, res) => {
+  console.log(err);
+  res.status(500).json({
+    status: 500,
+    error: {
+      message: 'error encountered',
+    },
+  });
+};
+
 const imgUploader = (req, res) => {
-  jwt.verify(req.token, process.env.JWT_KEY, (err, authData) => {
-    const { email } = authData.user;
+  upload(req, res, (err) => {
     if (err) {
+      respondErr(err, res);
+    } else if (req.file === undefined) {
       res.status(401).json({
-        error: {
-          message: 'error..invalid token',
+        data: {
+          msg: 'Error: No File Selected!',
         },
       });
     } else {
-      upload(req, res, (err) => {
-        if (err) {
-          console.log(`error ${err}`);
-          res.status(500).json({
-            error: {
-              msg: err,
-            },
-          });
-        } else if (req.file === undefined) {
-          res.status(401).json({
+      const filepath = `public/uploads/${req.file.filename}`;
+      cloudinary.uploader.upload(filepath, { tags: 'gotemps', resource_type: 'auto' })
+        .then((file) => {
+          console.log(`Public id of the file is ${file.public_id}`);
+          console.log(`Url of the file is  ${file.url}`);
+          const imageUrl = file.url;
+          res.status(200).json({
             data: {
-              msg: 'Error: No File Selected!',
+              msg: 'File Uploaded!',
+              image_url: imageUrl,
             },
           });
-        } else {
-          const filepath = `public/uploads/${req.file.filename}`;
-          cloudinary.uploader.upload(filepath, { tags: 'gotemps', resource_type: 'auto' })
-            .then((file) => {
-              console.log(`Public id of the file is ${file.public_id}`);
-              console.log(`Url of the file is  ${file.url}`);
-              const imageUrl = file.url;
-              res.status(200).json({
-                data: {
-                  msg: 'File Uploaded!',
-                  image_url: imageUrl,
-                },
-              });
-            }).catch((err) => {
-              if (err) {
-                res.status(500).json({
-                  error: {
-                    msg: err,
-                  },
-                });
-              }
-            });
-        }
-        // }
-      });
+        }).catch((err) => {
+          if (err) {
+            respondErr(err, res);
+          }
+        });
     }
   });
 };
 
-module.exports = {
-  imgUploader,
-};
+export default imgUploader;

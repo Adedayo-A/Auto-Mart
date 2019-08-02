@@ -1,19 +1,15 @@
-// const express = require('express');
+// import {} from '../controllers/users';
 import express from 'express';
 import * as userControllers from '../controllers/users';
 import * as carControllers from '../controllers/cars';
+import * as orderControllers from '../controllers/orders';
+import postFlag from '../controllers/flags';
+import imgUploader from '../controllers/images';
+import * as middlewares from '../middlewares/user';
 
-// const carControllers = require('../controllers/cars.js');
-// import {} from '../controllers/users';
-// const userControllers = require('../controllers/users.js');
-const orderControllers = require('../controllers/orders.js');
-const flagControllers = require('../controllers/flags.js');
-const imgControllers = require('../controllers/images.js');
-const middlewares = require('../middlewares/user.js');
-
-// const { tokenAuth } = middleControllers;
 const {
-  getCar, getCars, postCar, patchCar, deleteCar, getadsByOwner, getCarOrders, updateCarOrders, getACarOrder,
+  getCar, getCars, postCar, patchCar, deleteCar, getadsByOwner,
+  getCarOrders, updateCarOrders, getACarOrder,
 } = carControllers;
 
 const {
@@ -24,50 +20,47 @@ const {
   postOrder, patchOrder, getMyOrders, getAnOrder, deleteOrder,
 } = orderControllers;
 
-const { postFlag } = flagControllers;
+// const { postFlag } = flagControllers;
 const {
-  tokenAuth, validateInfo,
+  tokenAuth, validateInfo, tokenverify,
 } = middlewares;
 
-const { imgUploader } = imgControllers;
+// const { imgUploader } = imgControllers;
 
 const router = express.Router();
 
 // CAR ADs API ROUTES
-router.get('/api/v1/car/ads', tokenAuth, getadsByOwner);
-router.get('/api/v1/car/', tokenAuth, getCars);
-router.get('/api/v1/car/:id', tokenAuth, getCar);
-router.post('/api/v1/car/', tokenAuth, postCar);
-router.patch('/api/v1/car/:id/', tokenAuth, patchCar);
-router.delete('/api/v1/car/:id/', tokenAuth, deleteCar);
-router.get('/api/v1/cars/carorders/', tokenAuth, getCarOrders);
-router.get('/api/v1/cars/:id/carorders/', tokenAuth, getACarOrder);
+router.get('/api/v1/car/ads', tokenAuth, tokenverify, getadsByOwner);
+router.get('/api/v1/car/', tokenAuth, tokenverify, getCars);
+router.get('/api/v1/car/:id', tokenAuth, tokenverify, getCar);
+router.post('/api/v1/car/', tokenAuth, tokenverify, postCar);
+router.patch('/api/v1/car/:id/', tokenAuth, tokenverify, patchCar);
+router.delete('/api/v1/car/:id/', tokenAuth, tokenverify, deleteCar);
+router.get('/api/v1/cars/carorders/', tokenAuth, tokenverify, getCarOrders);
+router.get('/api/v1/cars/:id/carorders/', tokenAuth, tokenverify, getACarOrder);
 router.patch('/api/v1/cars/:id/carorders/', tokenAuth, updateCarOrders);
 
 
 // USERS API ROUTES
-router.patch('/api/v1/users/auth/update', tokenAuth, updateUser);
+router.patch('/api/v1/users/auth/update', tokenAuth, tokenverify, updateUser);
 router.post('/api/v1/users/auth/signup', validateInfo, signUp);
 router.post('/api/v1/users/auth/signin', verifyUser);
-router.get('/api/v1/users/auth/getuser', tokenAuth, getAUser);
+router.get('/api/v1/users/auth/getuser', tokenAuth, tokenverify, getAUser);
 router.post('/api/v1/users/auth/tokenverify', tokenVerify);
 
 
 // ORDERS API ROUTES
-router.get('/api/v1/order/user', tokenAuth, getMyOrders);
-router.get('/api/v1/order/:orderid', tokenAuth, getAnOrder);
-router.post('/api/v1/order/:id', tokenAuth, postOrder);
-router.patch('/api/v1/order/:id/', tokenAuth, patchOrder);
-router.delete('/api/v1/order/:id/', tokenAuth, deleteOrder);
+router.get('/api/v1/order/user', tokenAuth, tokenverify, getMyOrders);
+router.get('/api/v1/order/:orderid', tokenAuth, tokenverify, getAnOrder);
+router.post('/api/v1/order/:id', tokenAuth, tokenverify, postOrder);
+router.patch('/api/v1/order/:id/', tokenAuth, tokenverify, patchOrder);
+router.delete('/api/v1/order/:id/', tokenAuth, tokenverify, deleteOrder);
 
 
 // FLAGS API ROUTES
-router.post('/api/v1/flag/:id', tokenAuth, postFlag);
-
+router.post('/api/v1/flag/:id', tokenAuth, tokenverify, postFlag);
 
 // IMG API ROUTES
-router.post('/api/v1/upload/', tokenAuth, imgUploader);
+router.post('/api/v1/upload/', tokenAuth, tokenverify, imgUploader);
 
-
-module.exports = router;
-// export default router
+export default router;
