@@ -1,18 +1,15 @@
-// const express = require('express');
+// import {} from '../controllers/users';
 import express from 'express';
 import * as userControllers from '../controllers/users';
 import * as carControllers from '../controllers/cars';
-
-// const carControllers = require('../controllers/cars.js');
-// import {} from '../controllers/users';
-// const userControllers = require('../controllers/users.js');
-const orderControllers = require('../controllers/orders.js');
-const flagControllers = require('../controllers/flags.js');
-const imgControllers = require('../controllers/images.js');
-const middlewares = require('../middlewares/user.js');
+import * as orderControllers from '../controllers/orders';
+import postFlag from '../controllers/flags';
+import imgUploader from '../controllers/images';
+import * as middlewares from '../middlewares/user';
 
 const {
-  getCar, getCars, postCar, patchCar, deleteCar, getadsByOwner, getCarOrders, updateCarOrders, getACarOrder,
+  getCar, getCars, postCar, patchCar, deleteCar, getadsByOwner,
+  getCarOrders, updateCarOrders, getACarOrder,
 } = carControllers;
 
 const {
@@ -23,12 +20,12 @@ const {
   postOrder, patchOrder, getMyOrders, getAnOrder, deleteOrder,
 } = orderControllers;
 
-const { postFlag } = flagControllers;
+// const { postFlag } = flagControllers;
 const {
   tokenAuth, validateInfo, tokenverify,
 } = middlewares;
 
-const { imgUploader } = imgControllers;
+// const { imgUploader } = imgControllers;
 
 const router = express.Router();
 
@@ -63,10 +60,7 @@ router.delete('/api/v1/order/:id/', tokenAuth, tokenverify, deleteOrder);
 // FLAGS API ROUTES
 router.post('/api/v1/flag/:id', tokenAuth, tokenverify, postFlag);
 
-
 // IMG API ROUTES
 router.post('/api/v1/upload/', tokenAuth, tokenverify, imgUploader);
 
-
-module.exports = router;
-// export default router
+export default router;

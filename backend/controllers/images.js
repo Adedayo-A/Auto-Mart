@@ -1,8 +1,11 @@
 "use strict";
 
-var cloudinary = require('cloudinary').v2;
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports["default"] = void 0;
 
-var jwt = require('jsonwebtoken');
+var cloudinary = require('cloudinary').v2;
 
 var multer = require('multer');
 
@@ -19,17 +22,7 @@ var storage = multer.diskStorage({
   filename: function filename(req, file, cb) {
     cb(null, "".concat(file.fieldname, "-").concat(Date.now()).concat(path.extname(file.originalname)));
   }
-}); // Init Upload
-
-var upload = multer({
-  storage: storage,
-  limits: {
-    fileSize: 1000000
-  },
-  fileFilter: function fileFilter(req, file, cb) {
-    checkFileType(file, cb);
-  }
-}).single('myImage'); // Check File Type
+}); // Check File Type
 
 function checkFileType(file, cb) {
   // Allowed ext
@@ -43,65 +36,63 @@ function checkFileType(file, cb) {
     return cb(null, true);
   }
 
-  cb('Error: Images Only!');
-}
+  return cb('Error: Images Only!');
+} // Init Upload
+
+
+var upload = multer({
+  storage: storage,
+  limits: {
+    fileSize: 1000000
+  },
+  fileFilter: function fileFilter(req, file, cb) {
+    checkFileType(file, cb);
+  }
+}).single('myImage');
+
+var respondErr = function respondErr(err, res) {
+  console.log(err);
+  res.status(500).json({
+    status: 500,
+    error: {
+      message: 'error encountered'
+    }
+  });
+};
 
 var imgUploader = function imgUploader(req, res) {
-  jwt.verify(req.token, process.env.JWT_KEY, function (err, authData) {
-    var email = authData.user.email;
-
+  upload(req, res, function (err) {
     if (err) {
+      respondErr(err, res);
+    } else if (req.file === undefined) {
       res.status(401).json({
-        error: {
-          message: 'error..invalid token'
+        data: {
+          msg: 'Error: No File Selected!'
         }
       });
     } else {
-      upload(req, res, function (err) {
+      var filepath = "public/uploads/".concat(req.file.filename);
+      cloudinary.uploader.upload(filepath, {
+        tags: 'gotemps',
+        resource_type: 'auto'
+      }).then(function (file) {
+        console.log("Public id of the file is ".concat(file.public_id));
+        console.log("Url of the file is  ".concat(file.url));
+        var imageUrl = file.url;
+        res.status(200).json({
+          data: {
+            msg: 'File Uploaded!',
+            image_url: imageUrl
+          }
+        });
+      })["catch"](function (err) {
         if (err) {
-          console.log("error ".concat(err));
-          res.status(500).json({
-            error: {
-              msg: err
-            }
-          });
-        } else if (req.file === undefined) {
-          res.status(401).json({
-            data: {
-              msg: 'Error: No File Selected!'
-            }
-          });
-        } else {
-          var filepath = "public/uploads/".concat(req.file.filename);
-          cloudinary.uploader.upload(filepath, {
-            tags: 'gotemps',
-            resource_type: 'auto'
-          }).then(function (file) {
-            console.log("Public id of the file is ".concat(file.public_id));
-            console.log("Url of the file is  ".concat(file.url));
-            var imageUrl = file.url;
-            res.status(200).json({
-              data: {
-                msg: 'File Uploaded!',
-                image_url: imageUrl
-              }
-            });
-          })["catch"](function (err) {
-            if (err) {
-              res.status(500).json({
-                error: {
-                  msg: err
-                }
-              });
-            }
-          });
-        } // }
-
+          respondErr(err, res);
+        }
       });
     }
   });
 };
 
-module.exports = {
-  imgUploader: imgUploader
-};
+var _default = imgUploader;
+exports["default"] = _default;

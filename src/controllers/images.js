@@ -1,5 +1,4 @@
 const cloudinary = require('cloudinary').v2;
-const jwt = require('jsonwebtoken');
 const multer = require('multer');
 const path = require('path');
 
@@ -17,15 +16,6 @@ const storage = multer.diskStorage({
   },
 });
 
-// Init Upload
-const upload = multer({
-  storage,
-  limits: { fileSize: 1000000 },
-  fileFilter(req, file, cb) {
-    checkFileType(file, cb);
-  },
-}).single('myImage');
-
 // Check File Type
 function checkFileType(file, cb) {
   // Allowed ext
@@ -37,8 +27,17 @@ function checkFileType(file, cb) {
   if (mimetype && extname) {
     return cb(null, true);
   }
-  cb('Error: Images Only!');
+  return cb('Error: Images Only!');
 }
+
+// Init Upload
+const upload = multer({
+  storage,
+  limits: { fileSize: 1000000 },
+  fileFilter(req, file, cb) {
+    checkFileType(file, cb);
+  },
+}).single('myImage');
 
 const respondErr = (err, res) => {
   console.log(err);
@@ -82,6 +81,4 @@ const imgUploader = (req, res) => {
   });
 };
 
-module.exports = {
-  imgUploader,
-};
+export default imgUploader;

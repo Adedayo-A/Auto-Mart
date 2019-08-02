@@ -1,6 +1,4 @@
-const jwt = require('jsonwebtoken');
-// eslint-disable-next-line import/no-extraneous-dependencies
-const { Client } = require('pg');
+import { Client } from 'pg';
 
 const respondErr = (err, res) => {
   console.log(err);
@@ -12,7 +10,7 @@ const respondErr = (err, res) => {
   });
 };
 
-const postOrder = (req, res) => {
+export const postOrder = (req, res) => {
   const { data } = req;
   const { email } = data.user;
   const pg = new Client({
@@ -47,7 +45,8 @@ const postOrder = (req, res) => {
           const car_owner = dbresp.rows[0].owner;
           const priceofCar = dbresp.rows[0].price;
           query = 'INSERT INTO purchaseorder(status, amount, car_id, buyer, description, image, manufacturer, model, car_owner) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9)';
-          value = [status, amount, car_id, buyer, description, image, manufacturer, model, car_owner];
+          value = [status, amount, car_id, buyer, description, image,
+            manufacturer, model, car_owner];
           // eslint-disable-next-line consistent-return
           // PG Query
           pg.query(query, value, (err) => {
@@ -87,7 +86,7 @@ const postOrder = (req, res) => {
   });
 };
 
-const getMyOrders = (req, res) => {
+export const getMyOrders = (req, res) => {
   const { data } = req;
   const { email } = data.user;
   console.log(email);
@@ -137,7 +136,7 @@ const getMyOrders = (req, res) => {
 };
 
 // GET A SPECIFIC ORDER
-const getAnOrder = (req, res) => {
+export const getAnOrder = (req, res) => {
   const orderId = req.params.orderid;
   const pg = new Client({
     connectionString: process.env.db_URL,
@@ -166,14 +165,13 @@ const getAnOrder = (req, res) => {
 };
 
 // PATCH ORDER
-const patchOrder = (req, res) => {
+export const patchOrder = (req, res) => {
   const { data } = req;
   const { email } = data.user;
   const order = req.body;
   let query;
   let value;
   let currUser;
-  let buyer;
 
   const pg = new Client({
     connectionString: process.env.db_URL,
@@ -205,8 +203,7 @@ const patchOrder = (req, res) => {
           });
           pg.end();
         } else {
-          // eslint-disable-next-line prefer-destructuring
-          buyer = dbresp.rows[0].buyer;
+          const { buyer } = dbresp.rows[0];
           const priceOffered = order.price_offered;
 
           if (currUser === buyer) {
@@ -245,7 +242,7 @@ const patchOrder = (req, res) => {
 };
 
 // DELETE ORDER
-const deleteOrder = (req, res) => {
+export const deleteOrder = (req, res) => {
   const { data } = req;
   const { email } = data.user;
   console.log(email);
@@ -299,13 +296,4 @@ const deleteOrder = (req, res) => {
       });
     }
   });
-};
-
-
-module.exports = {
-  getMyOrders,
-  postOrder,
-  getAnOrder,
-  patchOrder,
-  deleteOrder,
 };
