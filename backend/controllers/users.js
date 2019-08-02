@@ -1,32 +1,42 @@
 "use strict";
 
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.tokenVerify = exports.getAUser = exports.updateUser = exports.verifyUser = exports.signUp = void 0;
+
+var _pg = require("pg");
+
+var _jsonwebtoken = _interopRequireDefault(require("jsonwebtoken"));
+
+var _bcrypt = _interopRequireDefault(require("bcrypt"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
 /* eslint-disable no-trailing-spaces */
 
 /* eslint-disable eol-last */
 
 /* eslint-disable linebreak-style */
 // eslint-disable-next-line import/no-extraneous-dependencies
-var _require = require('pg'),
-    Client = _require.Client;
-
-var jwt = require('jsonwebtoken'); // eslint-disable-next-line import/no-extraneous-dependencies
-
-
-var bcrypt = require('bcrypt'); // const users = require('../db/Users.js');
+// const { Client } = require('pg');
+// const jwt = require('jsonwebtoken');
+// eslint-disable-next-line import/no-extraneous-dependencies
+// const bcrypt = require('bcrypt');
+// const users = require('../db/Users.js');
 // class userControllers { 
 // export
-
-
 var signUp = function signUp(req, res) {
   var user = req.body;
   var myPassword = user.password;
-  bcrypt.hash(myPassword, 10, function (err, hash) {
+
+  _bcrypt["default"].hash(myPassword, 10, function (err, hash) {
     // Store hash in database
     if (err) {
       console.log(err);
     } else {
       var hashedPassword = hash;
-      var pg = new Client({
+      var pg = new _pg.Client({
         connectionString: process.env.db_URL
       });
       pg.connect();
@@ -57,7 +67,7 @@ var signUp = function signUp(req, res) {
             pg.end();
           }
         } else {
-          jwt.sign({
+          _jsonwebtoken["default"].sign({
             user: user
           }, process.env.JWT_KEY, {
             expiresIn: '20m'
@@ -101,12 +111,14 @@ var signUp = function signUp(req, res) {
   });
 };
 
+exports.signUp = signUp;
+
 var verifyUser = function verifyUser(req, res) {
   // eslint-disable-next-line max-len
   var user = req.body;
   var myPassword = user.password;
   var userEmail = user.email;
-  var pg = new Client({
+  var pg = new _pg.Client({
     connectionString: process.env.db_URL
   });
   pg.connect(); // PG Connect
@@ -141,7 +153,7 @@ var verifyUser = function verifyUser(req, res) {
         username = 'user';
       }
 
-      bcrypt.compare(myPassword, dbPsw, function (err, match) {
+      _bcrypt["default"].compare(myPassword, dbPsw, function (err, match) {
         if (err) {
           console.log(err.stack);
           res.status(503).json({
@@ -160,7 +172,7 @@ var verifyUser = function verifyUser(req, res) {
           });
           pg.end();
         } else {
-          jwt.sign({
+          _jsonwebtoken["default"].sign({
             user: user
           }, process.env.JWT_KEY, {
             expiresIn: '20m'
@@ -175,6 +187,7 @@ var verifyUser = function verifyUser(req, res) {
               }
             });
           });
+
           pg.end();
         }
       });
@@ -183,9 +196,11 @@ var verifyUser = function verifyUser(req, res) {
 }; // UPDATE A USER
 
 
+exports.verifyUser = verifyUser;
+
 var updateUser = function updateUser(req, res) {
   // eslint-disable-next-line no-unused-vars
-  jwt.verify(req.token, process.env.JWT_KEY, function (err, authData) {
+  _jsonwebtoken["default"].verify(req.token, process.env.JWT_KEY, function (err, authData) {
     // eslint-disable-next-line prefer-destructuring    
     if (err) {
       console.log(err);
@@ -199,7 +214,7 @@ var updateUser = function updateUser(req, res) {
       // eslint-disable-next-line prefer-destructuring
       var token = req.token;
       var email = authData.user.email;
-      var pg = new Client({
+      var pg = new _pg.Client({
         connectionString: process.env.db_URL
       });
       pg.connect();
@@ -263,10 +278,10 @@ var updateUser = function updateUser(req, res) {
 }; // GET A USER
 
 
+exports.updateUser = updateUser;
+
 var getAUser = function getAUser(req, res) {
-  console.log(req);
-  console.log(res);
-  jwt.verify(req.token, process.env.JWT_KEY, function (err, authData) {
+  _jsonwebtoken["default"].verify(req.token, process.env.JWT_KEY, function (err, authData) {
     if (err) {
       res.status(401).json({
         status: 401,
@@ -276,7 +291,7 @@ var getAUser = function getAUser(req, res) {
       });
     } else {
       var useremail = authData.user.email;
-      var pg = new Client({
+      var pg = new _pg.Client({
         connectionString: process.env.db_URL
       });
       pg.connect();
@@ -285,13 +300,13 @@ var getAUser = function getAUser(req, res) {
 
       pg.query(query, value, function (err, dbres) {
         if (err) {
+          console.log(err);
           res.status(403).json({
             status: 403,
             error: {
               message: 'error..'
             }
           });
-          console.log(err);
           pg.end();
         } else {
           var userdata = dbres.rows[0];
@@ -318,8 +333,10 @@ var getAUser = function getAUser(req, res) {
 }; // TOKEN VERIFICATION
 
 
+exports.getAUser = getAUser;
+
 var tokenVerify = function tokenVerify(req, res) {
-  jwt.verify(req.body.token, process.env.JWT_KEY, function (err) {
+  _jsonwebtoken["default"].verify(req.body.token, process.env.JWT_KEY, function (err) {
     if (err) {
       res.json({
         status: 401,
@@ -333,12 +350,20 @@ var tokenVerify = function tokenVerify(req, res) {
       });
     }
   });
-};
+}; // module.exports = {
+//   signUp,
+//   verifyUser,
+//   updateUser,
+//   getAUser,
+//   tokenVerify,
+// };
+// export default {
+//   signUp,
+//   verifyUser,
+//   updateUser,
+//   getAUser,
+//   tokenVerify,
+// };
 
-module.exports = {
-  signUp: signUp,
-  verifyUser: verifyUser,
-  updateUser: updateUser,
-  getAUser: getAUser,
-  tokenVerify: tokenVerify
-};
+
+exports.tokenVerify = tokenVerify;

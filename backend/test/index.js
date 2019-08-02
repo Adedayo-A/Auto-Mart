@@ -209,7 +209,7 @@ describe('TEST API ENDPOINTS', function () {
       supertest(index).patch('/api/v1/cars/66/carorders').set('Authorization', "Bearer ".concat(token)).send(order).expect('Content-type', /json/).end(function (err, res) {
         console.log(res.body);
         res.body.data.message.should.equal('Order Updated');
-        res.body.data.status.should.equal(200);
+        res.body.status.should.equal(200);
         res.error.should.equal(false);
         done();
       });
