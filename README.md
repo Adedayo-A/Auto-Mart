@@ -6,7 +6,6 @@ The quest for an improved and standard car app where uniquely creating and accep
 
 #### API REFERENCE
 https://automart12.docs.apiary.io/#
-https://dashboard.heroku.com/apps/protected-basin-36541
 
 #### How should this be manually tested?
 After cloning into the Repo, cd into it and run
