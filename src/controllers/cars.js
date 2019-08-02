@@ -152,7 +152,6 @@ const getCar = (req, res) => {
   const value = [ad.id];
 
   pg.query(query, value, (err, dbres) => {
-    console.log(dbres);
     if (err) {
       respondErr(err, res);
       pg.end();
