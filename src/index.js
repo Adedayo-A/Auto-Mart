@@ -1,19 +1,13 @@
 /* eslint-disable no-tabs */
-// require('dotenv').config();
-const express = require('express');
-const cors = require('cors');
-const bodyParser = require('body-parser');
+import express from 'express';
+import cors from 'cors';
+import bodyParser from 'body-parser';
 // eslint-disable-next-line import/no-extraneous-dependencies
-const morgan = require('morgan');
-// eslint-disable-next-line import/no-extraneous-dependencies
-
-// import express from 'express';
-// import bodyParser from 'body-parser';
-// import morgan from 'morgan';
-// import cors from 'cors';
+import morgan from 'morgan';
 
 // eslint-disable-next-line import/no-extraneous-dependencies
-const route = require('./routes/index.js');
+import route from './routes/index';
+// import { Module } from 'module';
 
 const app = express();
 app.use(cors());

@@ -1,13 +1,10 @@
-/* eslint-disable prefer-destructuring */
 /* eslint-disable linebreak-style */
 // eslint-disable-next-line import/no-extraneous-dependencies
-const { Client } = require('pg');
-
-const jwt = require('jsonwebtoken');
+import { Client } from 'pg';
 
 const respondErr = (err, res) => {
   console.log(err);
-  res.status(500).json({
+  res.json({
     status: 500,
     error: {
       message: 'error encountered',
@@ -16,7 +13,7 @@ const respondErr = (err, res) => {
 };
 
 const responseSuccess = (res, car_ad) => {
-  res.status(200).json({
+  res.json({
     status: 200,
     data: {
       status: 200,
@@ -28,7 +25,7 @@ const responseSuccess = (res, car_ad) => {
 };
 
 const nocarfound = (res) => {
-  res.status(200).json({
+  res.json({
     status: 200,
     data: {
       message: 'No car found!!!',
@@ -37,9 +34,9 @@ const nocarfound = (res) => {
 };
 
 // GET REQUESTS
-const getCars = (req, res) => {
+export const getCars = (req, res) => {
+  const { data } = req;
   // PRICE-RANGE AND STATUS-AVAILABLE
-  // PG Connect
   const pg = new Client({
     connectionString: process.env.db_URL,
   });
@@ -56,7 +53,6 @@ const getCars = (req, res) => {
       pg.end();
     }
   };
-
   if (req.query.min_price && req.query.max_price && req.query.status) {
     // eslint-disable-next-line consistent-return
     const query = 'SELECT * FROM carads WHERE price BETWEEN $1 AND $2 AND LOWER(status) = LOWER($3)';
@@ -75,7 +71,7 @@ const getCars = (req, res) => {
   } else if (req.query.status) {
     // eslint-disable-next-line consistent-return
     if (req.query.status === 'sold') {
-      const email = authData.user.email;
+      const { email } = data.user;
       let query = 'SELECT is_admin FROM users WHERE LOWER(email) = LOWER($1)';
       let value = [email];
       // eslint-disable-next-line consistent-return
@@ -106,18 +102,17 @@ const getCars = (req, res) => {
       pg.query(query, value, pgCallback);
     }
   } else if (req.query.body_type) {
-    console.log(req.query.body_type);
-    // eslint-disable-next-line consistent-return
     const query = 'SELECT * FROM carads WHERE LOWER(body_type)=LOWER($1) AND status=LOWER($2)';
     const value = [req.query.body_type, 'available'];
     pg.query(query, value, pgCallback);
   } else if (req.query.manufacturer) {
+    console.log(req.query.manufacturer);
     // eslint-disable-next-line consistent-return
     const query = 'SELECT * FROM carads WHERE LOWER(manufacturer) = LOWER($1) AND LOWER(status)=LOWER($2)';
     const value = [req.query.manufacturer, 'available'];
     pg.query(query, value, pgCallback);
   } else {
-    const email = authData.user.email;
+    const { email } = data.user;
     let query = 'SELECT * FROM users WHERE LOWER(email) = LOWER($1)';
     const value = [email];
     // eslint-disable-next-line consistent-return
@@ -141,8 +136,9 @@ const getCars = (req, res) => {
 };
 
 // GET SPECIFIC CAR
-const getCar = (req, res) => {
+export const getCar = (req, res) => {
   const ad = req.params;
+  console.log(ad);
   const pg = new Client({
     connectionString: process.env.db_URL,
   });
@@ -160,7 +156,6 @@ const getCar = (req, res) => {
       res.status(200).json({
         status: 200,
         data: {
-          status: 200,
           message: 'No car found!!',
         },
       });
@@ -181,61 +176,47 @@ const getCar = (req, res) => {
 };
 
 // GET ADS BY A OWNER
-const getadsByOwner = (req, res) => {
-  jwt.verify(req.token, process.env.JWT_KEY, (err, authData) => {
+export const getadsByOwner = (req, res) => {
+  const { data } = req;
+  const { email } = data.user;
+  const pg = new Client({
+    connectionString: process.env.db_URL,
+  });
+  pg.connect();
+  let query = 'SELECT id FROM users WHERE LOWER(email) = LOWER($1)';
+  let value = [email];
+  // eslint-disable-next-line consistent-return
+  pg.query(query, value, (err, dbres) => {
     if (err) {
-      res.status(403).json({
-        error: {
-          message: 'error..invalid Token',
-        },
-      });
+      respondErr(err, res);
+      pg.end();
     } else {
-      const email = authData.user.email;
-      const pg = new Client({
-        connectionString: process.env.db_URL,
-      });
-      pg.connect();
-      let query = 'SELECT id FROM users WHERE LOWER(email) = LOWER($1)';
-      let value = [email];
-      // eslint-disable-next-line consistent-return
+      const owner = dbres.rows[0].id;
+      query = 'SELECT * FROM carads WHERE owner = $1';
+      value = [owner];
       pg.query(query, value, (err, dbres) => {
         if (err) {
-          res.status(403).json({
-            error: {
-              message: 'error..',
+          respondErr(err, res);
+          pg.end();
+        } else if (dbres.rows.length === 0) {
+          res.status(200).json({
+            status: 200,
+            data: {
+              message: 'No car found!!',
             },
           });
-          console.error(err);
           pg.end();
         } else {
-          const owner = dbres.rows[0].id;
-          query = 'SELECT * FROM carads WHERE owner = $1';
-          value = [owner];
-          pg.query(query, value, (err, dbres) => {
-            if (err) {
-              respondErr(err, res);
-              pg.end();
-            } else if (dbres.rows.length === 0) {
-              res.status(200).json({
-                status: 200,
-                data: {
-                  message: 'No car found!!',
-                },
-              });
-              pg.end();
-            } else {
-              const car_ad = dbres.rows;
-              res.status(200).json({
-                status: 200,
-                data: {
-                  state: 'success',
-                  message: 'Success, result completed',
-                  car_ad,
-                },
-              });
-              pg.end();
-            }
+          const car_ad = dbres.rows;
+          res.status(200).json({
+            status: 200,
+            data: {
+              state: 'success',
+              message: 'Success, result completed',
+              car_ad,
+            },
           });
+          pg.end();
         }
       });
     }
@@ -243,16 +224,17 @@ const getadsByOwner = (req, res) => {
 };
 
 // POST CAR
-const postCar = (req, res) => {
+export const postCar = (req, res) => {
+  const { data } = req;
   const newAd = req.body;
   const created_on = Date.now();
-  const price = newAd.price;
-  let door = newAd.door;
+  const { price } = newAd;
+  let { door } = newAd;
   door = door || null;
-  let image_url = newAd.image_url;
+  let { image_url } = newAd;
   image_url = image_url || '';
   let owner;
-  const email = authData.user.email;
+  const { email } = data.user;
   const pg = new Client({
     connectionString: process.env.db_URL,
   });
@@ -281,17 +263,14 @@ const postCar = (req, res) => {
         newAd.ext_col, newAd.int_col, newAd.transmission,
         newAd.mileage, door, newAd.description, image_url,
       ];
-      // eslint-disable-next-line consistent-return
-      // PG Query
-      // eslint-disable-next-line no-unused-vars
       pg.query(query, value, (err, dbRes) => {
         if (err) {
           respondErr(err, res);
           pg.end();
         } else {
           const id = owner;
-          const manufacturer = newAd.manufacturer;
-          const model = newAd.model;
+          const { manufacturer } = newAd;
+          const { model } = newAd;
           res.json({
             status: 200,
             data: {
@@ -312,7 +291,7 @@ const postCar = (req, res) => {
 };
 
 // PATCH CAR AD
-const patchCar = (req, res) => {
+export const patchCar = (req, res) => {
   const { data } = req;
   const { email } = data.user;
   const adId = req.params.id;
@@ -320,7 +299,6 @@ const patchCar = (req, res) => {
   let query;
   let value;
   let currUser;
-  let owner;
   const pg = new Client({
     connectionString: process.env.db_URL,
   });
@@ -351,7 +329,7 @@ const patchCar = (req, res) => {
           });
           pg.end();
         } else {
-          owner = dbres.rows[0].owner;
+          const { owner } = dbres.rows[0];
           if (currUser === owner) {
             query = 'UPDATE carads SET status=$1, price=$2 WHERE id=$3';
             value = [ad.status, ad.price, adId];
@@ -456,12 +434,7 @@ export const getCarOrders = (req, res) => {
   pg.connect();
   pg.query(query, value, (err, resdb) => {
     if (err) {
-      res.status(401).json({
-        status: 401,
-        error: {
-          message: 'error..',
-        },
-      });
+      respondErr(err, res);
       pg.end();
     } else {
       curruser = resdb.rows[0].id;
@@ -470,13 +443,7 @@ export const getCarOrders = (req, res) => {
       pg.query(query, value, (err, respo) => {
         // console.log(respo);
         if (err) {
-          console.error(err);
-          res.status(500).json({
-            status: 500,
-            error: {
-              message: 'error..',
-            },
-          });
+          respondErr(err, res);
           pg.end();
         } else if (respo.rows.length === 0) {
           res.status(200).json({
@@ -532,13 +499,7 @@ export const getACarOrder = (req, res) => {
       value = [req.params.id];
       pg.query(query, value, (err, respo) => {
         if (err) {
-          res.status(500).json({
-            status: 500,
-            error: {
-              message: 'error..',
-            },
-          });
-          console.error(err);
+          respondErr(err, res);
           pg.end();
         } else if (respo.rows[0].car_owner === curruser) {
           query = 'SELECT * FROM purchaseorder WHERE id = $1';
@@ -546,13 +507,7 @@ export const getACarOrder = (req, res) => {
           pg.query(query, value, (err, response) => {
           // console.log(respo);
             if (err) {
-              console.error(err);
-              res.status(500).json({
-                status: 500,
-                error: {
-                  message: 'error..',
-                },
-              });
+              respondErr(err, res);
               pg.end();
             } else {
               const car_ord = response.rows[0];
@@ -598,7 +553,7 @@ export const updateCarOrders = (req, res) => {
     } else {
       const curruser = resdb.rows[0].id;
       const orderid = req.params.id;
-      const status = req.body.status;
+      const { status } = req.body;
       query = 'SELECT car_owner FROM purchaseorder WHERE id = $1';
       value = [orderid];
       pg.query(query, value, (err, resdbo) => {
@@ -635,16 +590,4 @@ export const updateCarOrders = (req, res) => {
       });
     }
   });
-};
-
-module.exports = {
-  getCars,
-  getCar,
-  postCar,
-  patchCar,
-  deleteCar,
-  getadsByOwner,
-  getCarOrders,
-  updateCarOrders,
-  getACarOrder,
 };
